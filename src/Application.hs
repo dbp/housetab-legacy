@@ -14,7 +14,6 @@ module Application
 
 import            Snap.Extension
 import            Snap.Extension.Heist.Impl
-import            Snap.Extension.Timer.Impl
 import            Snap.Auth
 import            Snap.Extension.Session.CookieSession
 import            Snap.Extension.DB.MongoDB

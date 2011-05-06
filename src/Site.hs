@@ -1,27 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{-|
-
-This is where all the routes and handlers are defined for your site. The
-'site' function combines everything together and is exported by this module.
-
--}
-
 module Site
   ( site
   ) where
 
-import           Control.Applicative
-import           Data.Maybe
-import qualified Data.Text.Encoding as T
-import           Snap.Extension.Heist
-import           Snap.Extension.Timer
-import           Snap.Util.FileServe
-import           Snap.Types
-import           Text.Templating.Heist
+import            Control.Applicative
+import            Control.Monad
+import            Data.Maybe
+import qualified  Data.Text.Encoding as T
+import            Snap.Extension.Heist
+import            Snap.Util.FileServe
+import            Snap.Types
+import            Text.Templating.Heist
+import            Snap.Auth
+import            Snap.Auth.Handlers
 
-import           Application
-
+import            Application
+import            Auth
 
 ------------------------------------------------------------------------------
 -- | Renders the front page of the sample site.
@@ -30,12 +25,9 @@ import           Application
 -- Otherwise, the way the route table is currently set up, this action
 -- would be given every request.
 index :: Application ()
-index = ifTop $ heistLocal (bindSplices indexSplices) $ render "index"
-  where
-    indexSplices =
-        [ ("start-time",   startTimeSplice)
-        , ("current-time", currentTimeSplice)
-        ]
+index = do  u <- currentAuthUser
+            let e = T.decodeUtf8 $ maybe "No User" id $ join $ fmap (userEmail.fst) u
+            ifTop $ (heistLocal $ (bindString "user" e)) $ render "index"
 
 
 ------------------------------------------------------------------------------
@@ -53,5 +45,11 @@ echo = do
 site :: Application ()
 site = route [ ("/",            index)
              , ("/echo/:stuff", echo)
+             , ("/signup",      method GET $ newSignupH)
+             , ("/signup",      method POST $ signupH)
+             , ("/login",       method GET $ newSessionH ())
+             , ("/login",       method POST $ loginHandler "password" Nothing newSessionH redirHome)
+             , ("/logout",      method GET $ logoutHandler redirHome)
+
              ]
        <|> serveDirectory "resources/static"

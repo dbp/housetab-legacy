@@ -20,7 +20,7 @@ data HouseTabEntry = HouseTabEntry
     , ehowmuch :: Double
     , ewhopays :: BS.ByteString
     }
-    deriving (Show, Eq, Typeable)
+    deriving (Show, Read, Eq, Typeable)
 
 instance Val HouseTabEntry where
     val (HouseTabEntry id who what when howmuch whopays) = 
@@ -38,7 +38,7 @@ instance Val HouseTabEntry where
 
 data HouseTab = HouseTab { houseTabEntries :: [HouseTabEntry]
                          , houseTabPeople :: [Person]}
-                         deriving (Show, Eq, Typeable)
+                         deriving (Show, Read, Eq, Typeable)
 
 instance Val HouseTab where
     val (HouseTab entries people) = Doc ["entries" =: entries, "people" =: people] 
@@ -56,7 +56,7 @@ data Account = Account
     , acurrent :: Result
     , areset :: Maybe BS.ByteString -- reset token
     , aactivate :: Maybe BS.ByteString } -- activation token
-    deriving (Show, Eq, Typeable)
+    deriving (Show, Read, Eq, Typeable)
 
 instance Val Account where
     val (Account id name emails housetab current reset activate) = 
@@ -76,10 +76,10 @@ instance Val Account where
 data Date = Date { year :: Integer
                  , month :: Integer
                  , day :: Integer}
-                 deriving (Eq, Typeable)
+                 deriving (Show, Read, Eq, Typeable, Ord)
    
-instance Show Date where
-    show (Date year month day) = (show year) ++ "." ++ (show month) ++ "." ++ (show day)
+{-instance Show Date where
+    show (Date year month day) = (show year) ++ "." ++ (show month) ++ "." ++ (show day)-}
 instance Val Date where
     val (Date year month day) = Doc ["year" =: year, "month" =: month, "day" =: day] 
     cast' (Doc fields) = do
@@ -89,18 +89,29 @@ instance Val Date where
       return (Date y m d)
     cast' _ = Nothing
 
+data Percent = Percent Date Double
+  deriving (Show, Read, Eq, Typeable, Ord)
+instance Val Percent where
+    val (Percent date percent) = Doc ["date" =: date, "percent" =: percent]
+    cast' (Doc fields) = do
+      d <- B.lookup "date"    fields
+      p <- B.lookup "percent" fields
+      return (Percent d p)
+    cast' _ = Nothing
+  
+
 
 data Person = Person { name :: BS.ByteString
                      , letter :: Char
-                     , percs :: [(Date, Double)]}
-                     deriving (Show, Eq, Typeable)
+                     , percs :: [Percent]}
+                     deriving (Show, Read, Eq, Typeable, Ord)
+                     
 instance Val Person where
-    val (Person name letter percs) = Doc ["name" =: name, "letter" =: [letter], "percs" =: percents]
-     where percents = map untuple percs
+    val (Person name letter percs) = Doc ["name" =: name, "letter" =: [letter], "percs" =: percs]
     cast' (Doc fields) = do
       n <- B.lookup "name"    fields
       l <- B.lookup "letter"  fields
-      p <- liftM (catMaybes . (map tuple)) $ B.lookup "percs" fields
+      p <- B.lookup "percs" fields
       return (Person n (head l) p)
     cast' _ = Nothing
 
@@ -124,7 +135,7 @@ type Owes = Double
 
 data Result = Result {people :: [(Person, Spent, Owes)]
                      ,currentdate :: Date}
-                     deriving (Show, Eq, Typeable)
+                     deriving (Show, Read, Eq, Typeable)
 
 instance Val Result where
     val (Result p date) = Doc ["people" =: people, "currentdate" =: date]

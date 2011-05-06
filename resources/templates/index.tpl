@@ -11,22 +11,17 @@
         <a href="http://snapframework.com/docs/tutorials/heist">Heist</a>
         and the <a href="http://snapframework.com/">Snap</a> web framework.
       </p>
+      <p><a href="login">login</a></p>
+      <p><a href="logout">logout</a></p>
+      <p><a href="signup">signup</a></p>
+      
       <p>
         Echo test:
         <a href="/echo/cats">cats</a>
         <a href="/echo/dogs">dogs</a>
         <a href="/echo/fish">fish</a>
       </p>
-      <table id="info">
-        <tr>
-          <td>Config generated at:</td>
-          <td><start-time/></td>
-        </tr>
-        <tr>
-          <td>Page generated at:</td>
-          <td><current-time/></td>
-        </tr>
-      </table>
-    </div>
+      <p>Logged in as: <user/></p>
+       </div>
   </body>
 </html>
