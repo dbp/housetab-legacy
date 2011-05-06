@@ -14,24 +14,18 @@ import            Snap.Types
 import            Text.Templating.Heist
 import            Snap.Auth
 import            Snap.Auth.Handlers
+import qualified  Data.Bson as B
+
 
 import            Application
 import            Auth
 
-------------------------------------------------------------------------------
--- | Renders the front page of the sample site.
---
--- The 'ifTop' is required to limit this to the top of a route.
--- Otherwise, the way the route table is currently set up, this action
--- would be given every request.
 index :: Application ()
 index = do  u <- currentAuthUser
-            let e = T.decodeUtf8 $ maybe "No User" id $ join $ fmap (userEmail.fst) u
+            let e = T.decodeUtf8 $ maybe "No User" id $ ((B.lookup "accountName") .snd) =<< u
             ifTop $ (heistLocal $ (bindString "user" e)) $ render "index"
 
 
-------------------------------------------------------------------------------
--- | Renders the echo page.
 echo :: Application ()
 echo = do
     message <- decodedParam "stuff"
@@ -40,8 +34,6 @@ echo = do
     decodedParam p = fromMaybe "" <$> getParam p
 
 
-------------------------------------------------------------------------------
--- | The main entry point handler.
 site :: Application ()
 site = route [ ("/",            index)
              , ("/echo/:stuff", echo)

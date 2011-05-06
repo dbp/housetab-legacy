@@ -33,7 +33,8 @@ Executable housetab
     snap-auth,
     blaze-html,
     snap-extension-mongodb,
-    containers
+    containers,
+    bson
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 

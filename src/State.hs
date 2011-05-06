@@ -60,9 +60,9 @@ data Account = Account
 
 instance Val Account where
     val (Account id name emails housetab current reset activate) = 
-      Doc ["id" =: id, "name" =: name, "emails" =: emails, "housetab" =: housetab, "current" =: current, "reset" =: reset, "activate" =: activate] 
+      Doc ["_id" =: id, "name" =: name, "emails" =: emails, "housetab" =: housetab, "current" =: current, "reset" =: reset, "activate" =: activate] 
     cast' (Doc fields) = do
-      id        <- B.lookup "id"        fields
+      id        <- B.lookup "_id"        fields
       name      <- B.lookup "name"      fields
       emails    <- B.lookup "emails"    fields
       housetab  <- B.lookup "housetab"  fields
@@ -150,7 +150,7 @@ instance Val Result where
 emptyHouseTab = HouseTab [] []            
 emptyDate = Date 0 0 0
 emptyResult = Result [] emptyDate
-emptyAccount = Account "" "" [] emptyHouseTab  emptyResult Nothing Nothing
+emptyAccount = Account "" "" [] emptyHouseTab emptyResult Nothing Nothing
 
 {-------------------------------------------------------------------------------
 -- | Turn a page from the database into 'Account'
