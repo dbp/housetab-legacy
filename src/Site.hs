@@ -50,13 +50,29 @@ renderPersonResult (person,spent,owes) = do
 renderResult :: Monad m => Result -> Splice m
 renderResult (Result people date) = mapSplices renderPersonResult people
 
+renderEntry :: Monad m => (Int, HouseTabEntry) -> Splice m
+renderEntry (index, (HouseTabEntry who what when howmuch whopays)) = do
+  runChildrenWithText [("index",       T.pack $ show index)
+                      ,("entryBy",     TE.decodeUtf8 who)
+                      ,("entryWhat",   TE.decodeUtf8 what)
+                      ,("entryDate",   T.pack $ show when)
+                      ,("entryAmount", T.pack $ show howmuch)
+                      ,("entryFor",    TE.decodeUtf8 whopays)
+                      ]
+                       
+renderEntries :: Monad m => [HouseTabEntry] -> Splice m
+renderEntries entries = mapSplices renderEntry (zip [0..] entries)
+
                      
 entriesH :: Application ()
 entriesH = do u <- currentUser
               case u of
                 Nothing -> errorP "No User"
                 Just user ->
-                  (heistLocal $ (bindSplices [("result", (renderResult $ currentResult user))])) $ render "entries"
+                  (heistLocal $ (bindSplices splices)) $ render "entries"
+                    where splices = [ ("result",  (renderResult  $ currentResult user))
+                                    , ("entries", (renderEntries $ houseTabEntries user))
+                                    ]
 
 personCheck :: Validator Application Html Person
 personCheck = check "Shouldnt see this" $ \(Person n l ps) -> True
@@ -114,7 +130,7 @@ addEntryForm = mkEntry
     <*> label "For: "    ++> inputText                                      Nothing `validate` manyPeople <++ errors
     <*> label "Amount: " ++> inputTextRead "Must be a number, like 10.5."   Nothing `validate` positive   <++ errors
     <*> label "What: "   ++> inputText                                      Nothing `validate` nonEmpty   <++ errors
-    <*> label "When: "   ++> inputTextRead "Must be a date, like 2011.6.30" Nothing `validate` validDate  <++ errors
+    <*> label "Date: "   ++> inputTextRead "Must be a date, like 2011.6.30" Nothing `validate` validDate  <++ errors
   where mkEntry b f a wha whe = HouseTabEntry (B8.pack b) (B8.pack wha) whe a (B8.pack f)
 
 addEntry :: Application ()
