@@ -5,7 +5,7 @@
   </head>
   <body>
     <div id="content">
-      <form method="post">
+      <form method="post" action="/login">
         Name: <input type="text" name="name"><br>
         Password: <input type="password" name="password">
         <input type="submit" value="Login">

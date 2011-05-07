@@ -10,12 +10,17 @@ import            Control.Monad
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import            Data.Typeable
-import            Data.Maybe (catMaybes)
+import            Data.Maybe (catMaybes, listToMaybe)
+import            Data.List.Split (splitOn)
+
+-- stolen from cgi:
+maybeRead :: Read a => String -> Maybe a
+maybeRead = fmap fst . listToMaybe . reads
+
 
 data HouseTabEntry = HouseTabEntry
-    { eid :: BS.ByteString
-    , ewho  :: BS.ByteString
-    , ewhat :: BS.ByteString
+    { ewho     :: BS.ByteString
+    , ewhat    :: BS.ByteString
     , ewhen    :: Date
     , ehowmuch :: Double
     , ewhopays :: BS.ByteString
@@ -23,16 +28,15 @@ data HouseTabEntry = HouseTabEntry
     deriving (Show, Read, Eq, Typeable)
 
 instance Val HouseTabEntry where
-    val (HouseTabEntry id who what when howmuch whopays) = 
-      Doc ["id" =: id, "who" =: who, "what" =: what, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
+    val (HouseTabEntry who what when howmuch whopays) = 
+      Doc ["who" =: who, "what" =: what, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
     cast' (Doc fields) = do
-      id      <- B.lookup "id"      fields
       who     <- B.lookup "who"     fields
       what    <- B.lookup "what"    fields
       when    <- B.lookup "when"    fields
       howmuch <- B.lookup "howmuch" fields
       whopays <- B.lookup "whopays" fields      
-      return (HouseTabEntry id who what when howmuch whopays)
+      return (HouseTabEntry who what when howmuch whopays)
     cast' _ = Nothing
 
 
@@ -76,10 +80,16 @@ instance Val Account where
 data Date = Date { year :: Integer
                  , month :: Integer
                  , day :: Integer}
-                 deriving (Show, Read, Eq, Typeable, Ord)
+                 deriving (Eq, Typeable, Ord)
    
-{-instance Show Date where
-    show (Date year month day) = (show year) ++ "." ++ (show month) ++ "." ++ (show day)-}
+instance Show Date where
+    show (Date year month day) = (show year) ++ "." ++ (show month) ++ "." ++ (show day)
+instance Read Date where
+    readsPrec _ value = pd $ splitOn (".") value
+        where pd (year:month:day:[]) = mkDate (maybeRead year) (maybeRead month) (maybeRead day)
+              pd _ = []
+              mkDate (Just y) (Just m) (Just d) = [(Date y m d, "")]
+              mkDate _ _ _ = []
 instance Val Date where
     val (Date year month day) = Doc ["year" =: year, "month" =: month, "day" =: day] 
     cast' (Doc fields) = do
@@ -146,60 +156,6 @@ instance Val Result where
       return (Result p d)
     cast' _ = Nothing
 
-
-{-emptyHouseTab = HouseTab [] []            -}
 emptyDate = Date 0 0 0
 emptyResult = Result [] emptyDate
-{-emptyAccount = Account "" "" [] emptyHouseTab emptyResult Nothing Nothing-}
 
-{-------------------------------------------------------------------------------
--- | Turn a page from the database into 'Account'
-docToAccount :: Document -> Maybe Account
-docToAccount v = do
-  id <- DB.lookup "_id" v
-  name <- DB.lookup "name" v
-  salt <- DB.lookup "salt" v
-  return emptyAuthUser
-            { aid = uid 
-            , aname = name
-            , userPassword = Just $ Encrypted pass 
-            , userSalt = Just salt
-            , userActivatedAt = DB.lookup "activated_at" v
-            , userSuspendedAt = DB.lookup "suspended_at" v
-            , userPersistenceToken = DB.lookup "persistence_token" v
-            , userCreatedAt = DB.lookup "created_at" v
-            , userUpdatedAt = DB.lookup "updated_at" v
-            , userCurrentLoginAt = DB.lookup "current_login_at" v
-            , userLastLoginAt = DB.lookup "last_login_at" v
-            , userCurrentLoginIp = DB.lookup "current_login_ip" v
-            , userLastLoginIp = DB.lookup "last_login_ip" v
-            , userLoginCount = maybe 0 id $ DB.lookup "login_count" v
-            , userFailedLoginCount = maybe 0 id $ DB.lookup "failed_login_count" v
-            }
-
-
-------------------------------------------------------------------------------
--- | Turn an 'AuthUser' into a 'Document' ready to be commited to DB.
-authUserToDoc :: AuthUser -> Document
-authUserToDoc usr = fields'
-  where
-    fields' = foldr step [] fields
-    step x acc = maybe acc (: acc) x
-    decidePass (Encrypted x) = Just ("password" =: x)
-    decidePass _ = error "Can't save user without a proper password set"
-    fields = 
-      [ userId usr >>= return . ("_id" =:)    -- only if present
-      , userCreatedAt usr >>= return . ("created_at" =:)  -- only if present
-      , Just $ ("email" =: userEmail usr)
-      , userPassword usr >>= decidePass
-      , Just $ ("salt" =: userSalt usr)
-      , Just $ ("activated_at" =: userActivatedAt usr)
-      , Just $ ("suspended_at" =: userSuspendedAt usr)
-      , Just $ ("persistence_token" =: userPersistenceToken usr)
-      , Just $ ("current_login_at" =: userCurrentLoginAt usr)
-      , Just $ ("last_login_at" =: userLastLoginAt usr)
-      , Just $ ("current_login_ip" =: userCurrentLoginIp usr)
-      , Just $ ("last_login_ip" =: userLastLoginIp usr)
-      , Just $ ("login_count" =: userLoginCount usr)
-      , Just $ ("failed_login_count" =: userFailedLoginCount usr)
-      ]-}

@@ -58,23 +58,19 @@ entriesH = do u <- currentUser
                 Just user ->
                   (heistLocal $ (bindSplices [("result", (renderResult $ currentResult user))])) $ render "entries"
 
-{-equalSize :: Validator Application Html WeightedSum
-equalSize = check "Lists must be of equal size" $ \(WeightedSum l1 l2) ->
-    length l1 == length l2
-
-listForm :: (Read a, Show a) => [a] -> SnapForm Application Html BlazeFormHtml [a]
-listForm def = inputTextRead "Can't read list" (Just def) <++ errors-}
-
 personCheck :: Validator Application Html Person
 personCheck = check "Shouldnt see this" $ \(Person n l ps) -> True
 
 nonEmpty :: Validator Application Html String
 nonEmpty = check "String must not be empty." $ \s -> not $ null s
     
+lenOne :: Validator Application Html String
+lenOne = check "String must be a single character." $ \s -> length s == 1
+
 addPersonForm :: SnapForm Application Html BlazeFormHtml Person
-addPersonForm = (`validate` personCheck) $ (<++ errors) $ mkPerson
-    <$> label "Name: " ++> inputText Nothing `validate` nonEmpty <++ errors
-    <*> label "Letter: "  ++> inputText Nothing `validate` nonEmpty <++ errors
+addPersonForm = mkPerson
+    <$> label "Name: "    ++> inputText Nothing `validate` nonEmpty <++ errors
+    <*> label "Letter: "  ++> inputText Nothing `validate` lenOne <++ errors
   where mkPerson n l = Person (B8.pack n) (head l) []
 
 addPerson :: Application ()
@@ -92,9 +88,55 @@ addPerson = do u <- currentUser
                         saveAuthUser (authUser u'', additionalUserFields u'')
                         redirect "/entries"
 
+onePerson :: Validator Application Html String
+onePerson = checkM "Must be a single letter that corresponds to a person." fn
+  where fn p = do peop <- currentPeople
+                  case peop of
+                    Nothing -> return False
+                    Just people -> return $ length p == 1 && (head p) `elem` (map letter people)
+
+manyPeople :: Validator Application Html String
+manyPeople = checkM "Must be all letters that corresponds to people." fn
+  where fn p = do peop <- currentPeople
+                  case peop of
+                    Nothing -> return False
+                    Just people -> return $ and (map ((flip elem) (map letter people))  p)
+
+validDate :: Validator Application Html Date
+validDate = check "Must be a valid date, like 2011.2.25" $ \(Date y m d) -> and [y>1900,y<2100,m>=1,m<=12,d>=1,d<=31]
+
+positive :: (Ord a, Num a) => Validator Application Html a
+positive = check "Must be a positive number." $ \n -> n > 0
+
+addEntryForm :: SnapForm Application Html BlazeFormHtml HouseTabEntry
+addEntryForm = mkEntry
+    <$> label "By: "     ++> inputText                                      Nothing `validate` onePerson  <++ errors
+    <*> label "For: "    ++> inputText                                      Nothing `validate` manyPeople <++ errors
+    <*> label "Amount: " ++> inputTextRead "Must be a number, like 10.5."   Nothing `validate` positive   <++ errors
+    <*> label "What: "   ++> inputText                                      Nothing `validate` nonEmpty   <++ errors
+    <*> label "When: "   ++> inputTextRead "Must be a date, like 2011.6.30" Nothing `validate` validDate  <++ errors
+  where mkEntry b f a wha whe = HouseTabEntry (B8.pack b) (B8.pack wha) whe a (B8.pack f)
+
+addEntry :: Application ()
+addEntry = do u <- currentUser
+              case u of
+               Nothing -> errorP "No User"
+               Just user -> do
+                 r <- eitherSnapForm addEntryForm "add-entry-form"
+                 case r of
+                     Left form' -> 
+                       heistLocal (bindSplice "formdata" (return $ docContent $ renderHtml $ fst $ renderFormHtml form')) $ render "form"
+                     Right entry' -> do
+                       let u' = user {houseTabEntries = (houseTabEntries user) ++ [entry']}
+                       let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
+                       saveAuthUser (authUser u'', additionalUserFields u'')
+                       redirect "/entries"
+                      
+
 site :: Application ()
 site = route [ ("/",            index)
-             , ("/entries",     requireUser (newSessionH ()) entriesH)
+             , ("/entries",     ifTop $ requireUser (newSessionH ()) entriesH)
+             , ("/entries/add", addEntry)              
              , ("/people/add",  addPerson)
              , ("/signup",      method GET $ newSignupH)
              , ("/signup",      method POST $ signupH)

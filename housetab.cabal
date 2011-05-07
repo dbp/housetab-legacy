@@ -38,7 +38,8 @@ Executable housetab
     digestive-functors,
     digestive-functors-blaze,
     digestive-functors-snap,
-    QuickCheck
+    QuickCheck,
+    split
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 
