@@ -25,7 +25,7 @@ import            Text.Digestive.Validate
 import            Text.Blaze (Html)
 import            Text.XmlHtml (docContent)
 import            Text.Blaze.Renderer.XmlHtml (renderHtml)
-import            Data.List (null)
+import            Data.List (null, sortBy)
 
 import            Application
 import            Account
@@ -124,35 +124,62 @@ validDate = check "Must be a valid date, like 2011.2.25" $ \(Date y m d) -> and 
 positive :: (Ord a, Num a) => Validator Application Html a
 positive = check "Must be a positive number." $ \n -> n > 0
 
-addEntryForm :: SnapForm Application Html BlazeFormHtml HouseTabEntry
-addEntryForm = mkEntry
-    <$> label "By: "     ++> inputText                                      Nothing `validate` onePerson  <++ errors
-    <*> label "For: "    ++> inputText                                      Nothing `validate` manyPeople <++ errors
-    <*> label "Amount: " ++> inputTextRead "Must be a number, like 10.5."   Nothing `validate` positive   <++ errors
-    <*> label "What: "   ++> inputText                                      Nothing `validate` nonEmpty   <++ errors
-    <*> label "Date: "   ++> inputTextRead "Must be a date, like 2011.6.30" Nothing `validate` validDate  <++ errors
+entryForm :: Maybe HouseTabEntry -> SnapForm Application Html BlazeFormHtml HouseTabEntry
+entryForm e = mkEntry
+    <$> label "By: "     ++> inputText                                      (lM ewho e)        `validate` onePerson  <++ errors
+    <*> label "For: "    ++> inputText                                      (lM ewhopays e)    `validate` manyPeople <++ errors
+    <*> label "Amount: " ++> inputTextRead "Must be a number, like 10.5."   (liftM ehowmuch e) `validate` positive   <++ errors
+    <*> label "What: "   ++> inputText                                      (lM ewhat e)       `validate` nonEmpty   <++ errors
+    <*> label "Date: "   ++> inputTextRead "Must be a date, like 2011.6.30" (liftM ewhen e)    `validate` validDate  <++ errors
   where mkEntry b f a wha whe = HouseTabEntry (B8.pack b) (B8.pack wha) whe a (B8.pack f)
+        lM f = liftM (B8.unpack . f)
 
 addEntry :: Application ()
 addEntry = do u <- currentUser
               case u of
                Nothing -> errorP "No User"
                Just user -> do
-                 r <- eitherSnapForm addEntryForm "add-entry-form"
+                 r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
                  case r of
                      Left form' -> 
                        heistLocal (bindSplice "formdata" (return $ docContent $ renderHtml $ fst $ renderFormHtml form')) $ render "form"
                      Right entry' -> do
-                       let u' = user {houseTabEntries = (houseTabEntries user) ++ [entry']}
+                       let u' = user {houseTabEntries = sortEntries ((houseTabEntries user) ++ [entry'])}
                        let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
                        saveAuthUser (authUser u'', additionalUserFields u'')
-                       redirect "/entries"
-                      
+                       redirect "/entries"                    
+      where sortEntries = sortBy (\e1 e2 -> compare (ewhen e1) (ewhen e2))
+ 
+editEntry :: Application ()
+editEntry = 
+  do u <- currentUser
+     i <- getParam "index"
+     case (u,i) of
+      (Just user, Just ind) -> do
+        let index = read $ B8.unpack ind
+        r <- eitherSnapForm (entryForm (Just ((houseTabEntries user) !! index))) "edit-entry-form" 
+        -- this is creating a race condition - if someone adds a new entry that predates this entry while this person is editing
+        -- when this person saves, it will overwrite the wrong entry.
+        case r of
+            Left form' -> 
+              heistLocal (bindSplice "formdata" (return $ docContent $ renderHtml $ fst $ renderFormHtml form')) $ render "form"
+            Right entry' -> do
+              let u' = user {houseTabEntries = sortEntries (replaceAt index entry' (houseTabEntries user))}
+              let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
+              saveAuthUser (authUser u'', additionalUserFields u'')
+              redirect "/entries"
+      _ -> errorP "No User or No index"
+      
+    where sortEntries = sortBy (\e1 e2 -> compare (ewhen e1) (ewhen e2))  
+          replaceAt _ val [] = val:[]
+          replaceAt 0 val (x:xs) = val:xs
+          replaceAt index val (x:xs) = x : (replaceAt (index-1) val xs)
 
 site :: Application ()
 site = route [ ("/",            index)
              , ("/entries",     ifTop $ requireUser (newSessionH ()) entriesH)
              , ("/entries/add", addEntry)              
+             , ("/entries/edit/:index", editEntry)              
              , ("/people/add",  addPerson)
              , ("/signup",      method GET $ newSignupH)
              , ("/signup",      method POST $ signupH)

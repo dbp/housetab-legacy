@@ -25,7 +25,7 @@ getPercentage person date = fn (percs person)
       fn ((Percent d p):(Percent d' p'):xs) = if d' > date
                     then p
                     else fn $ (Percent d' p'):xs
-      fn [] = 0 -- if they have nothing assigned, assume no share.
+      fn [] = 1 -- if they have nothing assigned, assume no share.
 
 getPerson :: [Person] -> Char -> Person
 getPerson ps l = head $ filter (\p -> (letter p) == l) ps
