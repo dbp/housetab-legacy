@@ -34,7 +34,11 @@ Executable housetab
     blaze-html,
     snap-extension-mongodb,
     containers,
-    bson
+    bson,
+    digestive-functors,
+    digestive-functors-blaze,
+    digestive-functors-snap,
+    QuickCheck
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 

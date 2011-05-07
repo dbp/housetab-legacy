@@ -36,7 +36,7 @@ instance Val HouseTabEntry where
     cast' _ = Nothing
 
 
-data HouseTab = HouseTab { houseTabEntries :: [HouseTabEntry]
+{-data HouseTab = HouseTab { houseTabEntries :: [HouseTabEntry]
                          , houseTabPeople :: [Person]}
                          deriving (Show, Read, Eq, Typeable)
 
@@ -46,9 +46,9 @@ instance Val HouseTab where
       e <- B.lookup "entries"  fields
       p <- B.lookup "people" fields
       return (HouseTab e p)
-    cast' _ = Nothing
+    cast' _ = Nothing-}
 
-data Account = Account
+{-data Account = Account
     { aid :: BS.ByteString
     , aname :: BS.ByteString
     , aemails :: [BS.ByteString]
@@ -62,7 +62,7 @@ instance Val Account where
     val (Account id name emails housetab current reset activate) = 
       Doc ["_id" =: id, "name" =: name, "emails" =: emails, "housetab" =: housetab, "current" =: current, "reset" =: reset, "activate" =: activate] 
     cast' (Doc fields) = do
-      id        <- B.lookup "_id"        fields
+      id        <- B.lookup "_id"       fields
       name      <- B.lookup "name"      fields
       emails    <- B.lookup "emails"    fields
       housetab  <- B.lookup "housetab"  fields
@@ -70,7 +70,7 @@ instance Val Account where
       reset     <- B.lookup "reset"     fields      
       activate  <- B.lookup "activate"  fields      
       return (Account id name emails housetab current reset activate)
-    cast' _ = Nothing
+    cast' _ = Nothing-}
 
 
 data Date = Date { year :: Integer
@@ -147,10 +147,10 @@ instance Val Result where
     cast' _ = Nothing
 
 
-emptyHouseTab = HouseTab [] []            
+{-emptyHouseTab = HouseTab [] []            -}
 emptyDate = Date 0 0 0
 emptyResult = Result [] emptyDate
-emptyAccount = Account "" "" [] emptyHouseTab emptyResult Nothing Nothing
+{-emptyAccount = Account "" "" [] emptyHouseTab emptyResult Nothing Nothing-}
 
 {-------------------------------------------------------------------------------
 -- | Turn a page from the database into 'Account'

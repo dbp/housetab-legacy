@@ -11,16 +11,12 @@
         <a href="http://snapframework.com/docs/tutorials/heist">Heist</a>
         and the <a href="http://snapframework.com/">Snap</a> web framework.
       </p>
+      <p><a href="entries">entries</a></p>
       <p><a href="login">login</a></p>
       <p><a href="logout">logout</a></p>
       <p><a href="signup">signup</a></p>
       
-      <p>
-        Echo test:
-        <a href="/echo/cats">cats</a>
-        <a href="/echo/dogs">dogs</a>
-        <a href="/echo/fish">fish</a>
-      </p>
+
       <p>Logged in as: <user/></p>
        </div>
   </body>
