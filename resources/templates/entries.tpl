@@ -3,6 +3,7 @@
     <title>Entries</title>
   </head>
   <body>
+    <a href="/logout">logout</a><br>
     <result>
       Name: <personName/>, Letter: <personLetter/>, Spent: <personSpent/>, Owes: <personOwes/><br>
     </result>

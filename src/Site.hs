@@ -18,6 +18,7 @@ import            Snap.Auth
 import            Snap.Auth.Handlers
 import qualified  Data.Bson as B
 import            Snap.Extension.DB.MongoDB hiding (index, label, find)
+import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import            Text.Digestive.Types
 import            Text.Digestive.Blaze.Html5
@@ -33,6 +34,14 @@ import            Application
 import            Account
 import            State
 import            Lib
+
+
+requireUserBounce :: Application () -> Application ()
+requireUserBounce good = do
+    uri <- liftM rqURI getRequest
+    let loginPage = redirect (BS.concat ["/login?redirectTo=", uri])
+    requireUser loginPage good
+
 
 index :: Application ()
 index = do  u <- currentUser
@@ -179,15 +188,15 @@ editEntry =
 
 site :: Application ()
 site = route [ ("/",                 index)
-             , ("/entries",          ifTop $ requireUser (newSessionH ()) entriesH)
-             , ("/entries/add",      addEntry)              
-             , ("/entries/edit/:id", editEntry)              
-             , ("/people/add",       addPerson)
+             , ("/entries",          ifTop $ requireUserBounce entriesH)
+             , ("/entries/add",      requireUserBounce $ addEntry)              
+             , ("/entries/edit/:id", requireUserBounce $ editEntry)              
+             , ("/people/add",       requireUserBounce $ addPerson)
              , ("/signup",           method GET $ newSignupH)
              , ("/signup",           method POST $ signupH)
              , ("/login",            method GET $ newSessionH ())
-             , ("/login",            method POST $ loginHandler "password" Nothing newSessionH redirHome)
-             , ("/logout",           method GET $ logoutHandler redirHome)
+             , ("/login",            method POST $ loginHandler "password" Nothing newSessionH redirTo)
+             , ("/logout",           method GET $ logoutHandler redirTo)
 
              ]
        <|> serveDirectory "resources/static"
