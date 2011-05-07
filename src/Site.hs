@@ -6,6 +6,7 @@ module Site
 
 import            Control.Applicative
 import            Control.Monad
+import            Control.Monad.Trans (liftIO)
 import            Data.Maybe
 import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
@@ -16,7 +17,7 @@ import            Text.Templating.Heist
 import            Snap.Auth
 import            Snap.Auth.Handlers
 import qualified  Data.Bson as B
-import            Snap.Extension.DB.MongoDB hiding (index, label)
+import            Snap.Extension.DB.MongoDB hiding (index, label, find)
 import qualified  Data.ByteString.Char8 as B8
 import            Text.Digestive.Types
 import            Text.Digestive.Blaze.Html5
@@ -25,7 +26,8 @@ import            Text.Digestive.Validate
 import            Text.Blaze (Html)
 import            Text.XmlHtml (docContent)
 import            Text.Blaze.Renderer.XmlHtml (renderHtml)
-import            Data.List (null, sortBy)
+import            Data.List (null, sortBy, find)
+import            System.Random (randomRIO)
 
 import            Application
 import            Account
@@ -50,9 +52,9 @@ renderPersonResult (person,spent,owes) = do
 renderResult :: Monad m => Result -> Splice m
 renderResult (Result people date) = mapSplices renderPersonResult people
 
-renderEntry :: Monad m => (Int, HouseTabEntry) -> Splice m
-renderEntry (index, (HouseTabEntry who what when howmuch whopays)) = do
-  runChildrenWithText [("index",       T.pack $ show index)
+renderEntry :: Monad m => HouseTabEntry -> Splice m
+renderEntry (HouseTabEntry uid who what when howmuch whopays) = do
+  runChildrenWithText [("index",       T.pack $ show uid)
                       ,("entryBy",     TE.decodeUtf8 who)
                       ,("entryWhat",   TE.decodeUtf8 what)
                       ,("entryDate",   T.pack $ show when)
@@ -61,7 +63,7 @@ renderEntry (index, (HouseTabEntry who what when howmuch whopays)) = do
                       ]
                        
 renderEntries :: Monad m => [HouseTabEntry] -> Splice m
-renderEntries entries = mapSplices renderEntry (zip [0..] entries)
+renderEntries entries = mapSplices renderEntry entries
 
                      
 entriesH :: Application ()
@@ -126,12 +128,13 @@ positive = check "Must be a positive number." $ \n -> n > 0
 
 entryForm :: Maybe HouseTabEntry -> SnapForm Application Html BlazeFormHtml HouseTabEntry
 entryForm e = mkEntry
-    <$> label "By: "     ++> inputText                                      (lM ewho e)        `validate` onePerson  <++ errors
+    <$> inputHidden (liftM (show.eid) e)
+    <*> label "By: "     ++> inputText                                      (lM ewho e)        `validate` onePerson  <++ errors
     <*> label "For: "    ++> inputText                                      (lM ewhopays e)    `validate` manyPeople <++ errors
     <*> label "Amount: " ++> inputTextRead "Must be a number, like 10.5."   (liftM ehowmuch e) `validate` positive   <++ errors
     <*> label "What: "   ++> inputText                                      (lM ewhat e)       `validate` nonEmpty   <++ errors
     <*> label "Date: "   ++> inputTextRead "Must be a date, like 2011.6.30" (liftM ewhen e)    `validate` validDate  <++ errors
-  where mkEntry b f a wha whe = HouseTabEntry (B8.pack b) (B8.pack wha) whe a (B8.pack f)
+  where mkEntry i b f a wha whe = HouseTabEntry (read i) (B8.pack b) (B8.pack wha) whe a (B8.pack f)
         lM f = liftM (B8.unpack . f)
 
 addEntry :: Application ()
@@ -144,7 +147,8 @@ addEntry = do u <- currentUser
                      Left form' -> 
                        heistLocal (bindSplice "formdata" (return $ docContent $ renderHtml $ fst $ renderFormHtml form')) $ render "form"
                      Right entry' -> do
-                       let u' = user {houseTabEntries = sortEntries ((houseTabEntries user) ++ [entry'])}
+                       id <- liftIO $ randomRIO (0,1000000)
+                       let u' = user {houseTabEntries = sortEntries ((houseTabEntries user) ++ [entry' {eid = id}])}
                        let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
                        saveAuthUser (authUser u'', additionalUserFields u'')
                        redirect "/entries"                    
@@ -153,39 +157,37 @@ addEntry = do u <- currentUser
 editEntry :: Application ()
 editEntry = 
   do u <- currentUser
-     i <- getParam "index"
+     i <- getParam "id"
      case (u,i) of
-      (Just user, Just ind) -> do
-        let index = read $ B8.unpack ind
-        r <- eitherSnapForm (entryForm (Just ((houseTabEntries user) !! index))) "edit-entry-form" 
+      (Just user, Just uid') -> do
+        let uid = read $ B8.unpack uid'
+        r <- eitherSnapForm (entryForm (find ((== uid).eid) (houseTabEntries user))) "edit-entry-form" 
         -- this is creating a race condition - if someone adds a new entry that predates this entry while this person is editing
         -- when this person saves, it will overwrite the wrong entry.
         case r of
             Left form' -> 
               heistLocal (bindSplice "formdata" (return $ docContent $ renderHtml $ fst $ renderFormHtml form')) $ render "form"
             Right entry' -> do
-              let u' = user {houseTabEntries = sortEntries (replaceAt index entry' (houseTabEntries user))}
+              let u' = user {houseTabEntries = sortEntries (findReplace uid entry' (houseTabEntries user))}
               let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
               saveAuthUser (authUser u'', additionalUserFields u'')
               redirect "/entries"
       _ -> errorP "No User or No index"
-      
     where sortEntries = sortBy (\e1 e2 -> compare (ewhen e1) (ewhen e2))  
-          replaceAt _ val [] = val:[]
-          replaceAt 0 val (x:xs) = val:xs
-          replaceAt index val (x:xs) = x : (replaceAt (index-1) val xs)
+          findReplace uid val []     = val:[]
+          findReplace uid val (x:xs) = if eid x == uid then val:xs else x : (findReplace uid val xs)
 
 site :: Application ()
-site = route [ ("/",            index)
-             , ("/entries",     ifTop $ requireUser (newSessionH ()) entriesH)
-             , ("/entries/add", addEntry)              
-             , ("/entries/edit/:index", editEntry)              
-             , ("/people/add",  addPerson)
-             , ("/signup",      method GET $ newSignupH)
-             , ("/signup",      method POST $ signupH)
-             , ("/login",       method GET $ newSessionH ())
-             , ("/login",       method POST $ loginHandler "password" Nothing newSessionH redirHome)
-             , ("/logout",      method GET $ logoutHandler redirHome)
+site = route [ ("/",                 index)
+             , ("/entries",          ifTop $ requireUser (newSessionH ()) entriesH)
+             , ("/entries/add",      addEntry)              
+             , ("/entries/edit/:id", editEntry)              
+             , ("/people/add",       addPerson)
+             , ("/signup",           method GET $ newSignupH)
+             , ("/signup",           method POST $ signupH)
+             , ("/login",            method GET $ newSessionH ())
+             , ("/login",            method POST $ loginHandler "password" Nothing newSessionH redirHome)
+             , ("/logout",           method GET $ logoutHandler redirHome)
 
              ]
        <|> serveDirectory "resources/static"

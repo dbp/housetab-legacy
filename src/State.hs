@@ -19,7 +19,8 @@ maybeRead = fmap fst . listToMaybe . reads
 
 
 data HouseTabEntry = HouseTabEntry
-    { ewho     :: BS.ByteString
+    { eid      :: Int
+    , ewho     :: BS.ByteString
     , ewhat    :: BS.ByteString
     , ewhen    :: Date
     , ehowmuch :: Double
@@ -28,54 +29,17 @@ data HouseTabEntry = HouseTabEntry
     deriving (Show, Read, Eq, Typeable)
 
 instance Val HouseTabEntry where
-    val (HouseTabEntry who what when howmuch whopays) = 
-      Doc ["who" =: who, "what" =: what, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
+    val (HouseTabEntry id who what when howmuch whopays) = 
+      Doc ["id" =: id, "who" =: who, "what" =: what, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
     cast' (Doc fields) = do
+      id      <- B.lookup "id"      fields
       who     <- B.lookup "who"     fields
       what    <- B.lookup "what"    fields
       when    <- B.lookup "when"    fields
       howmuch <- B.lookup "howmuch" fields
       whopays <- B.lookup "whopays" fields      
-      return (HouseTabEntry who what when howmuch whopays)
+      return (HouseTabEntry id who what when howmuch whopays)
     cast' _ = Nothing
-
-
-{-data HouseTab = HouseTab { houseTabEntries :: [HouseTabEntry]
-                         , houseTabPeople :: [Person]}
-                         deriving (Show, Read, Eq, Typeable)
-
-instance Val HouseTab where
-    val (HouseTab entries people) = Doc ["entries" =: entries, "people" =: people] 
-    cast' (Doc fields) = do
-      e <- B.lookup "entries"  fields
-      p <- B.lookup "people" fields
-      return (HouseTab e p)
-    cast' _ = Nothing-}
-
-{-data Account = Account
-    { aid :: BS.ByteString
-    , aname :: BS.ByteString
-    , aemails :: [BS.ByteString]
-    , ahousetab :: HouseTab
-    , acurrent :: Result
-    , areset :: Maybe BS.ByteString -- reset token
-    , aactivate :: Maybe BS.ByteString } -- activation token
-    deriving (Show, Read, Eq, Typeable)
-
-instance Val Account where
-    val (Account id name emails housetab current reset activate) = 
-      Doc ["_id" =: id, "name" =: name, "emails" =: emails, "housetab" =: housetab, "current" =: current, "reset" =: reset, "activate" =: activate] 
-    cast' (Doc fields) = do
-      id        <- B.lookup "_id"       fields
-      name      <- B.lookup "name"      fields
-      emails    <- B.lookup "emails"    fields
-      housetab  <- B.lookup "housetab"  fields
-      current   <- B.lookup "current"   fields
-      reset     <- B.lookup "reset"     fields      
-      activate  <- B.lookup "activate"  fields      
-      return (Account id name emails housetab current reset activate)
-    cast' _ = Nothing-}
-
 
 data Date = Date { year :: Integer
                  , month :: Integer
