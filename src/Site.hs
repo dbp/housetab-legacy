@@ -20,10 +20,12 @@ import qualified  Data.Bson as B
 import            Snap.Extension.DB.MongoDB hiding (index, label, find)
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+
 import            Text.Digestive.Types
 import            Text.Digestive.Blaze.Html5
 import            Text.Digestive.Forms.Snap
 import            Text.Digestive.Validate
+
 import            Text.Blaze (Html)
 import            Text.XmlHtml (docContent)
 import            Text.Blaze.Renderer.XmlHtml (renderHtml)
@@ -35,6 +37,7 @@ import            Account
 import            State
 import            Lib
 import            Form
+import qualified  Utils as U
 
 
 requireUserBounce :: Application () -> Application ()
@@ -94,16 +97,29 @@ entriesH user = do
 
 addPerson :: User -> Application ()
 addPerson user = do
-   r <- eitherSnapForm addPersonForm "add-person-form"
+   r <- eitherSnapForm (personForm Nothing) "add-person-form"
    case r of
        Left form' -> 
          heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
        Right person' -> do
-         let u' = user {houseTabPeople = (houseTabPeople user) ++ [person']}
-         let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
-         saveAuthUser (authUser u'', additionalUserFields u'')
+         modPeople ([person'] ++) user
          redirect "/entries"
 
+editPerson :: User -> Application ()
+editPerson user = 
+  do l' <- getParam "letter"
+     case (l',liftM BS.length l') of
+      (Just letr, Just 1) -> do
+        let l = head $ B8.unpack letr 
+        r <- eitherSnapForm (personForm (find ((== l).letter) (houseTabPeople user))) "edit-person-form" 
+        case r of
+          Left form' -> 
+            heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+          Right person' -> do
+            liftIO $ putStrLn $ show person'
+            modPeople (U.findReplace ((== l).letter) person') user
+            redirect "/entries"
+      _ -> redirect "/entries"
 
 addEntry :: User -> Application ()
 addEntry user = do
@@ -127,11 +143,9 @@ editEntry user =
           Left form' -> 
             heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
           Right entry' -> do
-            modEntries (findReplace uid entry') user
+            modEntries (U.findReplace ((== uid).eid) entry') user
             redirect "/entries"
       Nothing -> redirect "/entries"
-    where findReplace uid val []     = val:[]
-          findReplace uid val (x:xs) = if eid x == uid then val:xs else x : (findReplace uid val xs)
 
 deleteEntry :: User -> Application ()
 deleteEntry user = 
@@ -149,17 +163,18 @@ deleteEntry user =
       Nothing -> redirect "/entries"
       
 site :: Application ()                 
-site = route [ ("/",                   index)
-             , ("/entries",            ifTop $ requireUserBounce' entriesH)
-             , ("/entries/add",        requireUserBounce' $ addEntry)              
-             , ("/entries/edit/:id",   requireUserBounce' $ editEntry)              
-             , ("/entries/delete/:id", requireUserBounce' $ deleteEntry)              
-             , ("/people/add",         requireUserBounce' $ addPerson)
-             , ("/signup",             method GET $ newSignupH)
-             , ("/signup",             method POST $ signupH)
-             , ("/login",              method GET $ newSessionH ())
-             , ("/login",              method POST $ loginHandler "password" Nothing newSessionH redirTo)
-             , ("/logout",             method GET $ logoutHandler redirTo)
+site = route [ ("/",                    index)
+             , ("/entries",             ifTop $ requireUserBounce' entriesH)
+             , ("/entries/add",         requireUserBounce' $ addEntry)              
+             , ("/entries/edit/:id",    requireUserBounce' $ editEntry)              
+             , ("/entries/delete/:id",  requireUserBounce' $ deleteEntry)              
+             , ("/people/add",          requireUserBounce' $ addPerson)
+             , ("/people/edit/:letter", requireUserBounce' $ editPerson)
+             , ("/signup",              method GET $ newSignupH)
+             , ("/signup",              method POST $ signupH)
+             , ("/login",               method GET $ newSessionH ())
+             , ("/login",               method POST $ loginHandler "password" Nothing newSessionH redirTo)
+             , ("/logout",              method GET $ logoutHandler redirTo)
 
              ]
        <|> serveDirectory "resources/static"

@@ -5,6 +5,8 @@ import            Text.Digestive.Types
 import            Text.Digestive.Blaze.Html5
 import            Text.Digestive.Forms.Snap
 import            Text.Digestive.Validate
+import            Text.Digestive.Transform
+
 import            Text.Blaze (Html)
 import            Text.XmlHtml (docContent)
 import            Text.Blaze.Renderer.XmlHtml (renderHtml)
@@ -66,10 +68,25 @@ deleteForm :: SnapForm Application Html BlazeFormHtml ()
 deleteForm = const ()
     <$> label "Are you sure you want to delete this? " ++> inputHidden Nothing
 
+zeroOne :: (Ord a, Num a) => Validator Application Html a
+zeroOne = check "Must be a number benween zero and one, like 0.2." $ \n -> n >= 0 && n <= 1
 
-addPersonForm :: SnapForm Application Html BlazeFormHtml Person
-addPersonForm = mkPerson
-    <$> label "Name: "    ++> inputText Nothing `validate` nonEmpty <++ errors
-    <*> label "Letter: "  ++> inputText Nothing `validate` lenOne <++ errors
-  where mkPerson n l = Person (B8.pack n) (head l) []
+percentForm :: Maybe Percent -> SnapForm Application Html BlazeFormHtml Percent
+percentForm p = mkPercent
+    <$> label "Date: "  ++> inputTextRead "Must be a date, like 2011.6.30" (liftM pDate p)   `validate` validDate <++ errors
+    <*> label "Value: " ++> inputTextRead "Must be a number"               (liftM pValue p)  `validate` zeroOne   <++ errors
+  where mkPercent d v = Percent d v
+        
 
+personForm :: Maybe Person -> SnapForm Application Html BlazeFormHtml Person
+personForm p = mkPerson
+    <$> label "Name: "      ++> inputText (lM name p)   `validate` nonEmpty <++ errors
+    <*> label "Letter: "    ++> inputText (liftM ((:[]).letter) p) `validate` lenOne   <++ errors
+    <*> label "Percents: "  ++> percentInput (liftM percs p)                <++ errors    
+  where mkPerson n l ps = Person (B8.pack n) (head l) ps
+        lM f = liftM (B8.unpack . f)
+        percentInput ps = inputList hiddenInt
+                                    (percentForm)
+                                    ps
+        hiddenInt = transformFormlet show inputHidden $ transformRead "Internal error"
+        

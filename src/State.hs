@@ -63,7 +63,7 @@ instance Val Date where
       return (Date y m d)
     cast' _ = Nothing
 
-data Percent = Percent Date Double
+data Percent = Percent { pDate :: Date, pValue :: Double }
   deriving (Show, Read, Eq, Typeable, Ord)
 instance Val Percent where
     val (Percent date percent) = Doc ["date" =: date, "percent" =: percent]

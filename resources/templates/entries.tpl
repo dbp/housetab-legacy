@@ -5,7 +5,7 @@
   <body>
     <a href="/logout">logout</a><br>
     <result>
-      Name: <personName/>, Letter: <personLetter/>, Spent: <personSpent/>, Owes: <personOwes/><br>
+      <a href="/people/edit/$(personLetter)">edit</a>: Name: <personName/>, Letter: <personLetter/>, Spent: <personSpent/>, Owes: <personOwes/><br>
     </result>
     <a href="/people/add">add a person</a><br>
     <a href="/entries/add">add an entry</a><br><br>

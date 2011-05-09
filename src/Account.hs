@@ -61,6 +61,14 @@ modEntries fn user = do
    saveAuthUser (authUser u'', additionalUserFields u'')
    return ()
  where sortEntries = sortBy (\e1 e2 -> compare (ewhen e1) (ewhen e2))  
+
+modPeople :: ([Person] -> [Person]) -> User -> Application ()
+modPeople fn user = do
+   let u' = user {houseTabPeople = sortPeople (fn (houseTabPeople user))}
+   let u'' = u' {currentResult = run (houseTabPeople u') (houseTabEntries u')}
+   saveAuthUser (authUser u'', additionalUserFields u'')
+   return ()
+ where sortPeople = sortBy (\p1 p2 -> compare (letter p1) (letter p2))  
  
 -- Construct your 'User' from the given parameters
 -- Make sure you do validation as well - at least for now.
