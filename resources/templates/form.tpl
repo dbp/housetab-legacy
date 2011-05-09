@@ -7,6 +7,6 @@
     <formdata/>
     <input type="submit" value="submit"/>
     
-    <p><a href="/">Return</a></p>
+    <p><a href="/entries">Return</a></p>
   </body>
 </html>

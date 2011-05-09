@@ -122,4 +122,3 @@ instance Val Result where
 
 emptyDate = Date 0 0 0
 emptyResult = Result [] emptyDate
-

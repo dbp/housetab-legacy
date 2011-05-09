@@ -10,7 +10,7 @@
     <a href="/people/add">add a person</a><br>
     <a href="/entries/add">add an entry</a><br><br>
     <entries>
-      <a href="/entries/edit/$(index)">edit</a>: By: <entryBy/>, For: <entryFor/>, Amount: <entryAmount/>, Date: <entryDate/>, What: <entryWhat/><br>
+      <a href="/entries/edit/$(index)">edit</a>, <a href="/entries/delete/$(index)">delete</a>: By: <entryBy/>, For: <entryFor/>, Amount: <entryAmount/>, Date: <entryDate/>, What: <entryWhat/><br>
     </entries>  
   </body>
 </html>
