@@ -20,6 +20,7 @@ import qualified  Data.Bson as B
 import            Snap.Extension.DB.MongoDB hiding (index, label, find)
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import            Data.Time.Clock (getCurrentTime, diffUTCTime)
 
 import            Text.Digestive.Types
 import            Text.Digestive.Blaze.Html5
@@ -55,6 +56,17 @@ requireUserBounce' good = do
       Nothing -> loginPage
       Just user -> good user
 
+logAccess :: String -> Application () -> Application ()
+logAccess name action = do
+  start <- liftIO $ getCurrentTime
+  u     <- currentUser
+  let user = maybe "Anonymous" accountName u
+  result   <- action
+  end   <- liftIO $ getCurrentTime
+  let diff = fromRational $ toRational $ diffUTCTime end start
+  withDBUnsafe $ insert "time"   ["page" =: name, "user" =: user, "time" =: (diff :: Double), "date" =: start]
+  withDBUnsafe $ repsert (select ["page" =: name, "user" =: user] "access") ["$inc" =: ["hits" := (val (1 :: Int))]]
+  return result
 
 index :: Application ()
 index = do  u <- currentUser
@@ -116,7 +128,6 @@ editPerson user =
           Left form' -> 
             heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
           Right person' -> do
-            liftIO $ putStrLn $ show person'
             modPeople (U.findReplace ((== l).letter) person') user
             redirect "/entries"
       _ -> redirect "/entries"
@@ -163,18 +174,18 @@ deleteEntry user =
       Nothing -> redirect "/entries"
       
 site :: Application ()                 
-site = route [ ("/",                    index)
-             , ("/entries",             ifTop $ requireUserBounce' entriesH)
-             , ("/entries/add",         requireUserBounce' $ addEntry)              
-             , ("/entries/edit/:id",    requireUserBounce' $ editEntry)              
-             , ("/entries/delete/:id",  requireUserBounce' $ deleteEntry)              
-             , ("/people/add",          requireUserBounce' $ addPerson)
-             , ("/people/edit/:letter", requireUserBounce' $ editPerson)
-             , ("/signup",              method GET $ newSignupH)
-             , ("/signup",              method POST $ signupH)
-             , ("/login",               method GET $ newSessionH ())
-             , ("/login",               method POST $ loginHandler "password" Nothing newSessionH redirTo)
-             , ("/logout",              method GET $ logoutHandler redirTo)
+site = route [ ("/",                    logAccess "index"           $ index)
+             , ("/entries",             logAccess "entries"         $ ifTop $ requireUserBounce' entriesH)
+             , ("/entries/add",         logAccess "entries-add"     $ requireUserBounce' $ addEntry)              
+             , ("/entries/edit/:id",    logAccess "entries-edit"    $ requireUserBounce' $ editEntry)              
+             , ("/entries/delete/:id",  logAccess "entries-delete"  $ requireUserBounce' $ deleteEntry)              
+             , ("/people/add",          logAccess "people-add"      $ requireUserBounce' $ addPerson)
+             , ("/people/edit/:letter", logAccess "people-edit"     $ requireUserBounce' $ editPerson)
+             , ("/signup",              logAccess "signup"          $ method GET $ newSignupH)
+             , ("/signup",              logAccess "signup-post"     $ method POST $ signupH)
+             , ("/login",               logAccess "login"           $ method GET $ newSessionH ())
+             , ("/login",               logAccess "login-post"      $ method POST $ loginHandler "password" Nothing newSessionH redirTo)
+             , ("/logout",              logAccess "logout"          $ method GET $ logoutHandler redirTo)
 
              ]
        <|> serveDirectory "resources/static"
