@@ -34,7 +34,8 @@ type Application = SnapExtend ApplicationState
 data ApplicationState = ApplicationState
     { templateState :: HeistState Application
     , cookieState   :: CookieSessionState
-    , mongoState    :: MongoDBState }
+    , mongoState    :: MongoDBState
+    }
 
 
 ------------------------------------------------------------------------------

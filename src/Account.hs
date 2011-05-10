@@ -7,6 +7,7 @@ import            Snap.Extension.Session.CookieSession
 import            Snap.Extension.DB.MongoDB
 import qualified  Data.Map as M
 import            Control.Monad
+import            Control.Monad.Trans
 import            Snap.Types
 import qualified  Data.ByteString as BS
 import            Snap.Extension.Heist
@@ -30,18 +31,24 @@ data User = User
   }
 
 currentUser :: Application (Maybe User)
-currentUser = do  u <- currentAuthUser
-                  return $ do 
-                    fields    <- liftM snd u
-                    auth      <- liftM fst u
-                    name      <- B.lookup "accountName"       fields
-                    emails    <- B.lookup "accountEmails"     fields
-                    entries   <- B.lookup "houseTabEntries"   fields
-                    people    <- B.lookup "houseTabPeople"    fields
-                    current   <- B.lookup "currentResult"     fields
-                    reset     <- B.lookup "accountReset"      fields      
-                    activate  <- B.lookup "accountActivate"   fields      
-                    return $ User auth name emails entries people current reset activate
+currentUser = do  u <- currentAuthUser 
+                  -- we set the accountName in the session at this point as well
+                  let resp = do fields    <- liftM snd u
+                                auth      <- liftM fst u
+                                name      <- B.lookup "accountName"       fields
+                                emails    <- B.lookup "accountEmails"     fields
+                                entries   <- B.lookup "houseTabEntries"   fields
+                                people    <- B.lookup "houseTabPeople"    fields
+                                current   <- B.lookup "currentResult"     fields
+                                reset     <- B.lookup "accountReset"      fields      
+                                activate  <- B.lookup "accountActivate"   fields      
+                                return $ User auth name emails entries people current reset activate
+                  {-liftIO $ putStrLn $ show $ liftM accountName resp-}
+                  maybe (return ()) (setInSession "accountName") (liftM accountName resp)
+                  {-nm <- getFromSession "accountName"
+                                    liftIO $ putStrLn $ show $ fromMaybe "None" nm
+                                    -}
+                  return resp 
 
 currentEntries :: Application (Maybe [HouseTabEntry])
 currentEntries = liftM (liftM houseTabEntries) currentUser

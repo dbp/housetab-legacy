@@ -11,6 +11,7 @@ import            Data.Maybe
 import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
 import            Snap.Extension.Heist
+import            Snap.Extension.Session.CookieSession
 import            Snap.Util.FileServe
 import            Snap.Types
 import            Text.Templating.Heist
@@ -59,9 +60,9 @@ requireUserBounce' good = do
 logAccess :: String -> Application () -> Application ()
 logAccess name action = do
   start <- liftIO $ getCurrentTime
-  u     <- currentUser
-  let user = maybe "Anonymous" accountName u
   result   <- action
+  u     <- getFromSession "accountName"
+  let user = fromMaybe "Anonymous" u
   end   <- liftIO $ getCurrentTime
   let diff = fromRational $ toRational $ diffUTCTime end start
   withDBUnsafe $ insert "time"   ["page" =: name, "user" =: user, "time" =: (diff :: Double), "date" =: start]

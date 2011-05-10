@@ -40,7 +40,8 @@ Executable housetab
     digestive-functors-snap,
     QuickCheck,
     split,
-    random
+    random,
+    aeson
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 
