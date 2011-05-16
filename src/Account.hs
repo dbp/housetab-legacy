@@ -10,10 +10,13 @@ import            Control.Monad
 import            Control.Monad.Trans
 import            Snap.Types
 import qualified  Data.ByteString as BS
+import qualified  Data.ByteString.Char8 as B8
+
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust)
+import            Data.Maybe (fromMaybe, fromJust, isJust)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
+import            System.Random
 
 import            Application
 import            State
@@ -43,11 +46,7 @@ currentUser = do  u <- currentAuthUser
                                 reset     <- B.lookup "accountReset"      fields      
                                 activate  <- B.lookup "accountActivate"   fields      
                                 return $ User auth name emails entries people current reset activate
-                  {-liftIO $ putStrLn $ show $ liftM accountName resp-}
                   maybe (return ()) (setInSession "accountName") (liftM accountName resp)
-                  {-nm <- getFromSession "accountName"
-                                    liftIO $ putStrLn $ show $ fromMaybe "None" nm
-                                    -}
                   return resp 
 
 currentEntries :: Application (Maybe [HouseTabEntry])
@@ -79,11 +78,11 @@ modPeople fn user = do
  
 -- Construct your 'User' from the given parameters
 -- Make sure you do validation as well - at least for now.
-makeUser ps = do
+makeUser token ps = do
   password  <- look "password"  ps
   name      <- look "name"      ps
   emails    <- look "email"    ps
-  return (User emptyAuthUser { userPassword = Just (ClearText password) } name [emails] [] [] emptyResult Nothing Nothing)
+  return (User emptyAuthUser { userPassword = Just (ClearText password) } name [emails] [] [] emptyResult Nothing (Just token))
         where look key map = liftM (BS.intercalate " ") $ M.lookup key map
 
 additionalUserFields :: User -> Document
@@ -114,9 +113,21 @@ unDoc (Doc fs) = fs
 signupH :: Application ()
 signupH = do
   ps <- getParams
-  au <- maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) (makeUser ps) 
+  token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
+  au <- maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) (makeUser token ps) 
   case au of
     Nothing -> newSignupH
     Just au' -> do setSessionUserId $ userId au'
                    redirect "/"
-          
+                   
+activateAccountH :: Application ()
+activateAccountH = do
+  token         <- getParam "token"
+  maccountName  <- getParam "account"  -- will this work?: liftM fromJust $ getParam "account"
+  -- this is not the best user experience - better to present a message saying the token is missing, probably
+  guard $ all isJust [token,maccountName]
+  let accountName = fromJust maccountName
+  
+  res <- withDB $ modify (select ["accountName" =: accountName, "accountActivate" =: token] "users") ["$set" =: ["accountActivate" =: (Nothing :: Maybe BS.ByteString)]]
+  liftIO $ putStrLn $ show res
+  either (const $ redirect "/") (const $ redirect "/login") res 

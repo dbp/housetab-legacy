@@ -57,16 +57,19 @@ requireUserBounce' good = do
       Nothing -> loginPage
       Just user -> good user
 
-logAccess :: String -> Application () -> Application ()
-logAccess name action = do
-  start <- liftIO $ getCurrentTime
-  result   <- action
-  u     <- getFromSession "accountName"
+logAccess :: Application () -> Application ()
+logAccess action = do
+  pageName  <- liftM rqURI getRequest
+  method    <- liftM (B8.pack . show . rqMethod) getRequest
+  start     <- liftIO $ getCurrentTime
+  result    <- action
+  u         <- getFromSession "accountName"
   let user = fromMaybe "Anonymous" u
-  end   <- liftIO $ getCurrentTime
+  end       <- liftIO $ getCurrentTime
   let diff = fromRational $ toRational $ diffUTCTime end start
-  withDBUnsafe $ insert "time"   ["page" =: name, "user" =: user, "time" =: (diff :: Double), "date" =: start]
-  withDBUnsafe $ repsert (select ["page" =: name, "user" =: user] "access") ["$inc" =: ["hits" := (val (1 :: Int))]]
+  
+  withDBUnsafe $ insert "time"   ["page" =: pageName, "method" =: method, "user" =: user, "time" =: (diff :: Double), "date" =: start]
+  withDBUnsafe $ repsert (select ["page" =: pageName, "method" =: method, "user" =: user] "access") ["$inc" =: ["hits" := (val (1 :: Int))]]
   return result
 
 index :: Application ()
@@ -175,18 +178,19 @@ deleteEntry user =
       Nothing -> redirect "/entries"
       
 site :: Application ()                 
-site = route [ ("/",                    logAccess "index"           $ index)
-             , ("/entries",             logAccess "entries"         $ ifTop $ requireUserBounce' entriesH)
-             , ("/entries/add",         logAccess "entries-add"     $ requireUserBounce' $ addEntry)              
-             , ("/entries/edit/:id",    logAccess "entries-edit"    $ requireUserBounce' $ editEntry)              
-             , ("/entries/delete/:id",  logAccess "entries-delete"  $ requireUserBounce' $ deleteEntry)              
-             , ("/people/add",          logAccess "people-add"      $ requireUserBounce' $ addPerson)
-             , ("/people/edit/:letter", logAccess "people-edit"     $ requireUserBounce' $ editPerson)
-             , ("/signup",              logAccess "signup"          $ method GET $ newSignupH)
-             , ("/signup",              logAccess "signup-post"     $ method POST $ signupH)
-             , ("/login",               logAccess "login"           $ method GET $ newSessionH ())
-             , ("/login",               logAccess "login-post"      $ method POST $ loginHandler "password" Nothing newSessionH redirTo)
-             , ("/logout",              logAccess "logout"          $ method GET $ logoutHandler redirTo)
+site = route [ ("/",                    logAccess $ index)
+             , ("/entries",             logAccess $ ifTop $ requireUserBounce' entriesH)
+             , ("/entries/add",         logAccess $ requireUserBounce' $ addEntry)              
+             , ("/entries/edit/:id",    logAccess $ requireUserBounce' $ editEntry)              
+             , ("/entries/delete/:id",  logAccess $ requireUserBounce' $ deleteEntry)              
+             , ("/people/add",          logAccess $ requireUserBounce' $ addPerson)
+             , ("/people/edit/:letter", logAccess $ requireUserBounce' $ editPerson)
+             , ("/signup",              logAccess $ method GET $ newSignupH)
+             , ("/signup",              logAccess $ method POST $ signupH)
+             , ("/login",               logAccess $ method GET $ newSessionH ())
+             , ("/login",               logAccess $ method POST $ loginHandler "password" Nothing newSessionH redirTo)
+             , ("/logout",              logAccess $ method GET $ logoutHandler redirTo)
+             , ("/activate",            logAccess $ activateAccountH)
 
              ]
        <|> serveDirectory "resources/static"

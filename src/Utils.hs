@@ -3,6 +3,8 @@ module Utils where
 import Data.List (null, elemIndex)
 import Test.QuickCheck
 
+eitherToMaybe = either (const Nothing) Just
+
 findReplace fn val []     = val:[]
 findReplace fn val (x:xs) = if fn x then val:xs else x : (findReplace fn val xs)
 

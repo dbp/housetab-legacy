@@ -17,6 +17,8 @@ import Secrets (postmarkToken)
 maybeAesonResult (Error _) = Nothing
 maybeAesonResult (Success a) = Just a
 
+strictifyBS = BS.concat . LBS.toChunks
+
 postmark to subject tag body = do
         resp <- simpleHTTP (Request 
                               (fromJust $ parseURI "http://api.postmarkapp.com/email")
@@ -27,7 +29,7 @@ postmark to subject tag body = do
                               , mkHeader HdrContentLength (show $ LBS.length rqbdy)]
                               rqbdy) >>= getResponseBody
         -- there has to be a cleaner way to do this...
-        let val = (parseMaybe (.: "Message")) =<< (maybeAesonResult.fromJSON) =<< (A.maybeResult $ A.parse json $ (BS.concat . LBS.toChunks) resp)
+        let val = (parseMaybe (.: "Message")) =<< (maybeAesonResult.fromJSON) =<< (A.maybeResult $ A.parse json $ strictifyBS resp)
         return $ maybe False (== ("OK"::BS.ByteString)) val
   where rqbdy = encode $ M.fromList 
                         [ ("From" :: BS.ByteString, "messages@housetab.org")

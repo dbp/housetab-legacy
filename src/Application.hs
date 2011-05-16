@@ -53,7 +53,9 @@ instance HasMongoDBState ApplicationState where
     setMongoDBState s a = a { mongoState = s }
  
 ------------------------------------------------------------------------------
-instance MonadAuth Application
+instance MonadAuth Application where
+  authAuthenticationKeys = return ["accountName", "accountActivate"] -- accountActivate means that either they need the activation token to login (which will never happen) or the activation token needs to be Nothing (what happens when they activate). Sort af an ugly hack as snap-auth doesn't have a clear way of providing conditions that need to pass for a user to login. When that changes, this should go away.
+  
 
 ------------------------------------------------------------------------------
 -- | The 'Initializer' for ApplicationState. For more on 'Initializer's, see
