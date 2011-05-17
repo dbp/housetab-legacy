@@ -40,6 +40,8 @@ import            State
 import            Lib
 import            Form
 import qualified  Utils as U
+import            Notification
+import            Common
 
 
 requireUserBounce :: Application () -> Application ()
@@ -71,14 +73,14 @@ logAccess action = do
   withDBUnsafe $ insert "time"   ["page" =: pageName, "method" =: method, "user" =: user, "time" =: (diff :: Double), "date" =: start]
   withDBUnsafe $ repsert (select ["page" =: pageName, "method" =: method, "user" =: user] "access") ["$inc" =: ["hits" := (val (1 :: Int))]]
   return result
-
+  
 index :: Application ()
 index = do  u <- currentUser
             let name = TE.decodeUtf8 $ maybe "No User" accountName u
-            ifTop $ (heistLocal $ (bindString "user" name)) $ render "index"
+            ifTop $ (heistLocal $ (bindString "user" name)) $ renderHT "index"
 
 errorP :: String -> Application ()
-errorP msg = (heistLocal $ (bindString "message" (T.pack msg))) $ render "error"
+errorP msg = (heistLocal $ (bindString "message" (T.pack msg))) $ renderHT "error"
 
 renderPersonResult :: Monad m => (Person,Spent,Owes) -> Splice m
 renderPersonResult (person,spent,owes) = do
@@ -106,7 +108,7 @@ renderEntries entries = mapSplices renderEntry entries
                      
 entriesH :: User -> Application ()
 entriesH user = do 
-   (heistLocal $ (bindSplices splices)) $ render "entries"
+   (heistLocal $ (bindSplices splices)) $ renderHT "entries"
      where splices = [ ("result",  (renderResult  $ currentResult user))
                      , ("entries", (renderEntries $ houseTabEntries user))
                      ]
@@ -116,7 +118,7 @@ addPerson user = do
    r <- eitherSnapForm (personForm Nothing) "add-person-form"
    case r of
        Left form' -> 
-         heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+         heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
        Right person' -> do
          modPeople ([person'] ++) user
          redirect "/entries"
@@ -130,7 +132,7 @@ editPerson user =
         r <- eitherSnapForm (personForm (find ((== l).letter) (houseTabPeople user))) "edit-person-form" 
         case r of
           Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
           Right person' -> do
             modPeople (U.findReplace ((== l).letter) person') user
             redirect "/entries"
@@ -141,10 +143,11 @@ addEntry user = do
          r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
          case r of
              Left form' -> 
-               heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+               heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
              Right entry' -> do
                id <- liftIO $ randomRIO (0,1000000)
                modEntries ([entry' {eid = id}] ++) user
+               setNotification "Successfully added entry."
                redirect "/entries"                    
  
 editEntry :: User -> Application ()
@@ -156,7 +159,7 @@ editEntry user =
         r <- eitherSnapForm (entryForm (find ((== uid).eid) (houseTabEntries user))) "edit-entry-form" 
         case r of
           Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
           Right entry' -> do
             modEntries (U.findReplace ((== uid).eid) entry') user
             redirect "/entries"
@@ -171,7 +174,7 @@ deleteEntry user =
         r <- eitherSnapForm deleteForm "delete-entry-form" 
         case r of
           Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ render "form"
+            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
           Right _ -> do
             modEntries (filter ((/= uid).eid)) user
             redirect "/entries"

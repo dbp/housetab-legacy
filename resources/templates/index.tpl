@@ -1,10 +1,5 @@
-<html>
-  <head>
-    <title>Snap web server</title>
-    <link rel="stylesheet" type="text/css" href="screen.css"/>
-  </head>
-  <body>
-    <div id="content">
+<apply template="base">
+
       <h1>It works!</h1>
       <p>
         This is a simple demo page served using
@@ -18,6 +13,5 @@
       
 
       <p>Logged in as: <user/></p>
-       </div>
-  </body>
-</html>
+ 
+ </apply>

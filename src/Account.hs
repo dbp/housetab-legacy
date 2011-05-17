@@ -22,6 +22,8 @@ import            Application
 import            State
 import            Lib
 import            Mail (mailActivation)
+import            Common
+
 
 data User = User
   { authUser        :: AuthUser
@@ -103,10 +105,10 @@ redirTo = do r <- getParam "redirectTo"
 
 -- Make sure you have a 'password' field in there
 newSessionH :: a -> Application ()
-newSessionH = \_ -> render "login"
+newSessionH = \_ -> renderHT "login"
 
 -- Assuming you have a signup.tpl template
-newSignupH = render "signup"
+newSignupH = renderHT "signup"
 
 unDoc (Doc fs) = fs
 
