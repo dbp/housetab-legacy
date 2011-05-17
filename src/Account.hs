@@ -21,6 +21,7 @@ import            System.Random
 import            Application
 import            State
 import            Lib
+import            Mail (mailActivation)
 
 data User = User
   { authUser        :: AuthUser
@@ -114,10 +115,13 @@ signupH :: Application ()
 signupH = do
   ps <- getParams
   token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
-  au <- maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) (makeUser token ps) 
+  let user = makeUser token ps
+  au <- maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) user 
   case au of
     Nothing -> newSignupH
-    Just au' -> do setSessionUserId $ userId au'
+    Just au' -> do --setSessionUserId $ userId au'
+                   let user' = fromJust user -- we know this won't fail. for au to be Just, so must user
+                   mailActivation token (accountName user') (accountEmails user')
                    redirect "/"
                    
 activateAccountH :: Application ()
@@ -129,5 +133,4 @@ activateAccountH = do
   let accountName = fromJust maccountName
   
   res <- withDB $ modify (select ["accountName" =: accountName, "accountActivate" =: token] "users") ["$set" =: ["accountActivate" =: (Nothing :: Maybe BS.ByteString)]]
-  liftIO $ putStrLn $ show res
   either (const $ redirect "/") (const $ redirect "/login") res 

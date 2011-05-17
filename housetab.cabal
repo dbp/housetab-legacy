@@ -41,6 +41,10 @@ Executable housetab
     QuickCheck,
     split,
     random,
+    aeson,
+    network,
+    HTTP,
+    attoparsec,
     aeson
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
