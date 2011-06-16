@@ -33,7 +33,7 @@ getPerson :: [Person] -> Char -> Person
 getPerson ps l = head $ filter (\p -> (letter p) == l) ps
 
 purchasify :: [Person] -> [HouseTabEntry] -> [Purchase]
-purchasify people ((HouseTabEntry _ who _ when howmuch whopays):xs) = 
+purchasify people ((HouseTabEntry _ _ who _ when howmuch whopays):xs) = 
     (Purchase (getPerson people (B8.head who))
               when
               howmuch 
