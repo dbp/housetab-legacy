@@ -1,10 +1,10 @@
 Name:                housetab
 Version:             0.1
-Synopsis:            Project Synopsis Here
-Description:         Project Description Here
-License:             AllRightsReserved
-Author:              Author
-Maintainer:          maintainer@example.com
+Synopsis:            HouseTab is a webapp that allows a group of people to flexibly share things.
+Description:         
+License:             BSD3
+Author:              Daniel Patterson
+Maintainer:          daniel@positionstudios.com
 Stability:           Experimental
 Category:            Web
 Build-type:          Simple
@@ -36,8 +36,7 @@ Executable housetab
     containers,
     bson,
     digestive-functors,
-    digestive-functors-blaze,
-    digestive-functors-snap,
+    digestive-functors-snap-heist,
     QuickCheck,
     split,
     random,
@@ -45,7 +44,10 @@ Executable housetab
     network,
     HTTP,
     attoparsec,
-    aeson
+    aeson,
+    heist-async,
+    snap-logging-mongodb,
+    email-postmark
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 

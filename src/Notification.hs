@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Notification where
+{-module Notification where
   
 
 import qualified Data.ByteString as BS
@@ -19,4 +19,4 @@ notificationSplice :: Splice Application
 notificationSplice = do msg <- lift $ getFromSession "notification"
                         lift $ deleteFromSession "notification"
                         return $ maybe [X.TextNode ""] ht msg
-        where ht ms = [X.Element "div" [("id", "notification")] [X.TextNode $ T.decodeUtf8 ms]]
+        where ht ms = [X.Element "div" [("id", "notification")] [X.TextNode $ T.decodeUtf8 ms]]-}

@@ -1,7 +1,9 @@
 module Lib where
 
 import Data.List (groupBy, sort, notElem)
-import State (HouseTabEntry(..), Result(..),Date(..),Percent(..),Person(..))
+import Models.Entry (HouseTabEntry(..),Date(..))
+import Models.Result (Result(..)) 
+import Models.Person (Percent(..),Person(..))
 
 import Test.QuickCheck (Arbitrary(..), arbitrary, elements, listOf, listOf1, choose, quickCheck)
 import Text.Printf (printf)
