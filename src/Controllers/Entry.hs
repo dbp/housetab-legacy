@@ -17,6 +17,7 @@ import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
+import            Data.List.Split
 import            System.Random
 
 
@@ -31,6 +32,7 @@ import            Application
 import            State
 import            Lib
 import            Mail (mailActivation)
+import            Utils
 import            Views.Site
 import            Views.Entry
 import            Views.Result
@@ -56,16 +58,10 @@ addEntry user = do
          r <- eitherSnapForm (entryForm htid) "add-entry-form"
          case r of
              Left splices' -> do
-               {-liftIO $ putStrLn "Left"
-               liftIO $ putStrLn $ show $ map fst splices'-}
                heistLocal (bindSplices splices') $ renderHT "entries/add"
-             {-Left form' -> 
-               heistLocal (bindSplices [("formdata", (formSplice form')),("target-div", return [X.TextNode "#add-form"])]) $ renderHT "form"-}
              Right entry' -> do
-               {-liftIO $ putStrLn "Right"-}
                saveHouseTabEntry entry'
                recalculateTotals user
-               {-setNotification "Successfully added entry."-}
                renderHT "entries/add_success"                
  
 {-editEntry :: User -> Application ()
@@ -98,24 +94,16 @@ deleteEntry user =
             redirect "/entries"
       Nothing -> redirect "/entries"-}
 
-validDate :: Validator Application Text Date
-validDate = check "Must be a valid date, like 2011.2.25" $ \(Date y m d) -> and [y>1900,y<2100,m>=1,m<=12,d>=1,d<=31]
-
-positive :: (Ord a, Num a) => Validator Application Text a
-positive = check "Must be a positive number." $ \n -> n > 0
-
 entryForm :: BS.ByteString -> SnapForm Application Text HeistView HouseTabEntry
 entryForm htid = mkEntry
-    <$> input "id"      Nothing
-    <*> input "by"      Nothing  `validate` onePerson <++ errors
-    <*> input "for"     Nothing  `validate` manyPeople    <++ errors 
+    <$> input "id"  Nothing
+    <*> input "by"  Nothing  `validate` onePerson <++ errors
+    <*> input "for" Nothing  `validate` manyPeople    <++ errors 
     <*> inputRead "ammount" "Invalid ammount" Nothing  <++ errors 
     <*> input "what" Nothing   <++ errors 
     <*> inputRead "date" "invalid Date" Nothing     <++ errors 
-  where mkEntry i b f a wha whe = HouseTabEntry (strMaybe i) htid (B8.pack b) (B8.pack wha) whe a (B8.pack f)
-        strMaybe s = case s of
-                      "" -> Nothing
-                      x -> Just (B8.pack x)
+  where mkEntry i b f a wha whe = HouseTabEntry (strMaybe i) htid (B8.pack b) (B8.pack wha) whe a (map B8.pack (splitOn "," f))
+
 
 
 {-deleteForm :: SnapForm Application Text HeistView ()

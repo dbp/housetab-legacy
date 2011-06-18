@@ -2,8 +2,14 @@ module Utils where
 
 import Data.List (null, elemIndex)
 import Test.QuickCheck
+import qualified  Data.ByteString.Char8 as B8
+
 
 eitherToMaybe = either (const Nothing) Just
+
+strMaybe s = case s of
+              "" -> Nothing
+              x -> Just (B8.pack x)
 
 findReplace fn val []     = val:[]
 findReplace fn val (x:xs) = if fn x then val:xs else x : (findReplace fn val xs)

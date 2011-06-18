@@ -11,7 +11,7 @@ import            Control.Monad
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import            Data.Typeable
-import            Data.Maybe (catMaybes, listToMaybe)
+import            Data.Maybe (catMaybes, listToMaybe, isNothing)
 import            Data.List.Split (splitOn)
 import            Control.Monad
 import            Control.Monad.Trans
@@ -20,31 +20,58 @@ import            Application
 
 import            Models.Entry
 
-data Percent = Percent { pDate :: Date, pValue :: Double }
+data Share = Share { sDate :: Date, sValue :: Double }
   deriving (Show, Read, Eq, Typeable, Ord)
-instance Val Percent where
-    val (Percent date percent) = Doc ["date" =: date, "percent" =: percent]
+instance Val Share where
+    val (Share date value) = Doc ["date" =: date, "value" =: value]
     cast' (Doc fields) = do
       d <- B.lookup "date"    fields
-      p <- B.lookup "percent" fields
-      return (Percent d p)
+      v <- B.lookup "value" fields
+      return (Share d v)
     cast' _ = Nothing
   
 
 
-data Person = Person { name :: BS.ByteString
-                     , letter :: Char
-                     , percs :: [Percent]}
+data Person = Person { pId    :: Maybe BS.ByteString
+                     , pHTId  :: BS.ByteString
+                     , pName  :: BS.ByteString
+                     , pShares :: [Share]}
                      deriving (Show, Read, Eq, Typeable, Ord)
-                     
+
+getHouseTabPeople :: A.AuthUser -> Application [Person]
+getHouseTabPeople au = do
+  case A.userId au of
+    Just (A.UserId uid) -> do c <- DB.withDB $ DB.find $ DB.select ["htid" =: uid] "people"
+                              case c of
+                                Left _ -> return [] -- some error occured
+                                Right curs -> do
+                                  docs <- DB.withDB $ DB.rest curs
+                                  case docs of
+                                    Left _ -> return [] -- an error occured
+                                    Right es -> return $ catMaybes $ map (cast' . Doc) es
+    Nothing -> return []
+
+getHouseTabPerson :: BS.ByteString -> Application (Maybe Person)
+getHouseTabPerson id' = do person' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: id'] "people"
+                           case person' of
+                             Left _ -> return Nothing
+                             Right person -> return $ (cast' . Doc) =<< person
+
+saveHouseTabPerson :: Person -> Application ()
+saveHouseTabPerson person = do DB.withDB $ DB.save "people" (processNew $ unDoc $ val person)
+                               return ()
+  where unDoc (Doc fields) = fields
+        processNew fields = if isNothing (B.lookup "_id" fields :: Maybe BS.ByteString) then exclude ["_id"] fields else fields 
+        
+
+
+
 instance Val Person where
-    val (Person name letter percs) = Doc ["name" =: name, "letter" =: [letter], "percs" =: percs]
+    val (Person id htid name shares) = Doc ["_id" =: id, "htid" =: htid, "name" =: name, "shares" =: shares]
     cast' (Doc fields) = do
+      i <- B.lookup "_id"  fields
+      h <- B.lookup "htid"  fields
       n <- B.lookup "name"    fields
-      l <- B.lookup "letter"  fields
-      p <- B.lookup "percs" fields
-      return (Person n (head l) p)
+      s <- B.lookup "shares" fields
+      return (Person i h n s)
     cast' _ = Nothing
-    
-
-

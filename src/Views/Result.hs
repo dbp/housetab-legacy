@@ -13,8 +13,7 @@ import            Models.Person
 
 renderPersonResult :: Monad m => (Person,Spent,Owes) -> Splice m
 renderPersonResult (person,spent,owes) = do
-  runChildrenWithText [("personName",   TE.decodeUtf8 $ name person)
-                      ,("personLetter", T.pack $ [letter person])
+  runChildrenWithText [("personName",   TE.decodeUtf8 $ pName person)
                       ,("personSpent",  T.pack $ show spent)
                       ,("personOwes",   T.pack $ show owes)]
                        

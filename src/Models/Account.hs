@@ -32,7 +32,7 @@ data User = User
   , accountName     :: BS.ByteString
   , accountEmails   :: [BS.ByteString]
   {-, houseTabEntries :: [HouseTabEntry]-}
-  , houseTabPeople  :: [Person]
+  {-, houseTabPeople  :: [Person]-}
   , currentResult    :: Result
   , accountReset    :: Maybe BS.ByteString -- reset token
   , accountActivate :: Maybe BS.ByteString -- activation token
@@ -44,14 +44,14 @@ makeUser token ps = do
   password  <- look "password"  ps
   name      <- look "name"      ps
   emails    <- look "email"    ps
-  return (User emptyAuthUser { userPassword = Just (ClearText password) } name [emails] [] emptyResult Nothing (Just token))
+  return (User emptyAuthUser { userPassword = Just (ClearText password) } name [emails] emptyResult Nothing (Just token))
         where look key map = liftM (BS.intercalate " ") $ M.lookup key map
 
 additionalUserFields :: User -> Document
 additionalUserFields u = [ "accountName"      =: accountName u
                          , "accountEmails"    =: accountEmails u
                          {-, "houseTabEntries"  =: houseTabEntries u-}
-                         , "houseTabPeople"   =: houseTabPeople u
+                         {-, "houseTabPeople"   =: houseTabPeople u-}
                          , "currentResult"    =: currentResult u
                          , "accountReset"     =: accountReset u -- reset token
                          , "accountActivate"  =: accountActivate u -- activation token
@@ -66,29 +66,30 @@ currentUser = do  u <- currentAuthUser
                                 name      <- B.lookup "accountName"       fields
                                 emails    <- B.lookup "accountEmails"     fields
                                 {-entries   <- B.lookup "houseTabEntries"   fields-}
-                                people    <- B.lookup "houseTabPeople"    fields
+                                {-people    <- B.lookup "houseTabPeople"    fields-}
                                 current   <- B.lookup "currentResult"     fields
                                 reset     <- B.lookup "accountReset"      fields      
                                 activate  <- B.lookup "accountActivate"   fields      
-                                return $ User auth name emails {-entries-} people current reset activate
+                                return $ User auth name emails {-entries-} {-people-} current reset activate
                   maybe (return ()) (setInSession "accountName") (liftM accountName resp)
                   return resp 
 
-currentPeople :: Application (Maybe [Person])
+{-currentPeople :: Application (Maybe [Person])
 currentPeople = liftM (liftM houseTabPeople) currentUser
+-}
 
-
-modPeople :: ([Person] -> [Person]) -> User -> Application ()
+{-modPeople :: ([Person] -> [Person]) -> User -> Application ()
 modPeople fn user = do
    let u' = user {houseTabPeople = sortPeople (fn (houseTabPeople user))}
    recalculateTotals u'
  where sortPeople = sortBy (\p1 p2 -> compare (letter p1) (letter p2))  
- 
+ -}
  
 recalculateTotals :: User -> Application ()
 recalculateTotals u = do 
   entries <- getHouseTabEntries (authUser u)
-  let u' = u {currentResult = run (houseTabPeople u) entries}
+  people <- getHouseTabPeople (authUser u)
+  let u' = u {currentResult = run people entries}
   saveAuthUser (authUser u', additionalUserFields u')
   return ()
 

@@ -11,7 +11,7 @@ import            Control.Monad
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import            Data.Typeable
-import            Data.Maybe (catMaybes, listToMaybe)
+import            Data.Maybe (catMaybes, listToMaybe, isNothing)
 import            Data.List.Split (splitOn)
 import            Control.Monad
 import            Control.Monad.Trans
@@ -27,7 +27,7 @@ data HouseTabEntry = HouseTabEntry
     , eWhat    :: BS.ByteString
     , eWhen    :: Date
     , eHowmuch :: Double
-    , eWhopays :: BS.ByteString
+    , eWhopays :: [BS.ByteString]
     }
     deriving (Show, Read, Eq, Typeable)
 
@@ -52,9 +52,10 @@ getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =:
                             Right entry -> return $ (cast' . Doc) =<< entry
 
 saveHouseTabEntry :: HouseTabEntry -> Application ()
-saveHouseTabEntry entry = do DB.withDB $ DB.save "entries" (unDoc $ val entry)
+saveHouseTabEntry entry = do DB.withDB $ DB.save "entries" (processNew $ unDoc $ val entry)
                              return ()
   where unDoc (Doc fields) = fields
+        processNew fields = if isNothing (B.lookup "_id" fields :: Maybe BS.ByteString) then exclude ["_id"] fields else fields 
 
 
 instance Val HouseTabEntry where

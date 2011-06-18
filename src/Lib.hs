@@ -3,7 +3,8 @@ module Lib where
 import Data.List (groupBy, sort, notElem)
 import Models.Entry (HouseTabEntry(..),Date(..))
 import Models.Result (Result(..)) 
-import Models.Person (Percent(..),Person(..))
+import Models.Person (Share(..),Person(..))
+import qualified  Data.ByteString as BS
 
 import Test.QuickCheck (Arbitrary(..), arbitrary, elements, listOf, listOf1, choose, quickCheck)
 import Text.Printf (printf)
@@ -21,23 +22,23 @@ instance Ord Purchase where
         if compare d1 d2 == EQ then compare p1 p2 else compare d1 d2
 
 getPercentage :: Person -> Date -> Double
-getPercentage person date = fn (percs person)
+getPercentage person date = fn (pShares person)
     where
-      fn ((Percent d p):[]) = p
-      fn ((Percent d p):(Percent d' p'):xs) = if d' > date
+      fn ((Share d p):[]) = p
+      fn ((Share d p):(Share d' p'):xs) = if d' > date
                     then p
-                    else fn $ (Percent d' p'):xs
+                    else fn $ (Share d' p'):xs
       fn [] = 1 -- if they have nothing assigned, assume no share.
 
-getPerson :: [Person] -> Char -> Person
-getPerson ps l = head $ filter (\p -> (letter p) == l) ps
+getPerson :: [Person] -> BS.ByteString -> Person
+getPerson ps id' = head $ filter (\p -> (pId p) == Just id') ps
 
 purchasify :: [Person] -> [HouseTabEntry] -> [Purchase]
 purchasify people ((HouseTabEntry _ _ who _ when howmuch whopays):xs) = 
-    (Purchase (getPerson people (B8.head who))
+    (Purchase (getPerson people who)
               when
               howmuch 
-              (map (getPerson people) (B8.unpack whopays))) : (purchasify people xs)
+              (map (getPerson people) whopays)) : (purchasify people xs)
 purchasify _ [] = []
 
 doTheSplit :: Purchase -> [(Person, Double)]
