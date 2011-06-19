@@ -4,6 +4,7 @@ module Models.Entry where
 
 import            Snap.Extension
 import qualified  Snap.Extension.DB.MongoDB as DB
+import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 import qualified  Snap.Auth as A
 import            Data.Bson hiding (lookup)
 import qualified  Data.Bson as B
@@ -18,24 +19,22 @@ import            Control.Monad.Trans
 import            Control.Monad.Reader
 import            Application
 
-
-
 data HouseTabEntry = HouseTabEntry
-    { eId      :: Maybe BS.ByteString
-    , eHTId    :: BS.ByteString
-    , eWho     :: BS.ByteString
+    { eId      :: Maybe ObjectId
+    , eHTId    :: ObjectId
+    , eWho     :: ObjectId
     , eWhat    :: BS.ByteString
     , eWhen    :: Date
     , eHowmuch :: Double
-    , eWhopays :: [BS.ByteString]
+    , eWhopays :: [ObjectId]
     }
-    deriving (Show, Read, Eq, Typeable)
+    deriving (Show, Eq, Typeable)
 
 
 getHouseTabEntries :: A.AuthUser -> Application [HouseTabEntry]
 getHouseTabEntries au = do
   case A.userId au of
-    Just (A.UserId uid) -> do c <- DB.withDB $ DB.find $ DB.select ["htid" =: uid] "entries"
+    Just (A.UserId uid) -> do c <- DB.withDB $ DB.find $ DB.select ["htid" =: bs2objid uid] "entries"
                               case c of
                                 Left _ -> return [] -- some error occured
                                 Right curs -> do
@@ -46,7 +45,7 @@ getHouseTabEntries au = do
     Nothing -> return []
 
 getHouseTabEntry :: BS.ByteString -> Application (Maybe HouseTabEntry)
-getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: id'] "entries"
+getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: bs2objid id'] "entries"
                           case entry' of
                             Left _ -> return Nothing
                             Right entry -> return $ (cast' . Doc) =<< entry
@@ -55,7 +54,7 @@ saveHouseTabEntry :: HouseTabEntry -> Application ()
 saveHouseTabEntry entry = do DB.withDB $ DB.save "entries" (processNew $ unDoc $ val entry)
                              return ()
   where unDoc (Doc fields) = fields
-        processNew fields = if isNothing (B.lookup "_id" fields :: Maybe BS.ByteString) then exclude ["_id"] fields else fields 
+        processNew fields = if isNothing (B.lookup "_id" fields :: Maybe ObjectId) then exclude ["_id"] fields else fields 
 
 
 instance Val HouseTabEntry where

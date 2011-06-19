@@ -4,7 +4,7 @@ module Controllers.Person where
 
 import            Snap.Auth
 import            Snap.Extension.Session.CookieSession
-import            Snap.Extension.DB.MongoDB hiding (group, sort)
+import            Snap.Extension.DB.MongoDB hiding (group, sort, Array)
 import qualified  Data.Map as M
 import            Control.Monad
 import            Control.Applicative
@@ -12,6 +12,11 @@ import            Control.Monad.Trans
 import            Snap.Types
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import qualified  Data.Text.Encoding as TE
+import qualified  Data.Text as T
+
+import            Data.Aeson
+import qualified  Data.Vector as V
 
 import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust)
@@ -57,7 +62,7 @@ manyPeople = checkM "Must be comma separated ids that corresponds to people, no 
                        peop <- getHouseTabPeople (emptyAuthUser {userId = Just uid})
                        case peop of
                          [] -> return False -- couldnt get their people. this means db error, but nothing we can do here
-                         people -> return $ and (map ((flip elem) (map (B8.unpack . fromMaybe "" . pId) people)) (splitOn "," ps)) && noDuplicates (splitOn "," ps)
+                         people -> return $ and (map ((flip elem) (map (B8.unpack . maybe "" objid2bs . pId) people)) (splitOn "," ps)) && noDuplicates (splitOn "," ps)
         noDuplicates = (all (== 1)) . (map length) . group . sort
 
 
@@ -69,11 +74,11 @@ addPerson user = do
        Left splices' -> 
          heistLocal (bindSplices splices') $ renderHT "people/add"
        Right person' -> do
-         mhtid <- authenticatedUserId
-         case mhtid of
+         mhtid <-  authenticatedUserId
+         case mhtid >>= (\(UserId h) -> bs2objid h) of
            Nothing -> renderHT "people/add_failure"  
-           Just (UserId htid) -> do saveHouseTabPerson $ person' { pHTId = htid}
-                                    renderHT "people/add_success"  
+           Just htid -> do saveHouseTabPerson $ person' { pHTId = htid}
+                           renderHT "people/add_success"  
 
 
 addShare :: User -> Application ()
@@ -96,7 +101,17 @@ addShare user = do
                     Nothing -> renderHT "people/share/add_failure" -- means they hit the wrong URL
                     Just person -> do saveHouseTabPerson $ person { pShares = share':(pShares person)}
                                       renderHT "people/share/add_success"  
-       
+                                      
+
+listPeople = do mhtid <- authenticatedUserId
+                case mhtid of
+                  Nothing -> mzero
+                  Just uid -> do people <- getHouseTabPeople (emptyAuthUser {userId = Just uid})
+                                 {-liftIO $ putStrLn $ show people-}
+                                 getResponse >>= return . setContentType "text/json" >>= putResponse
+                                 writeLBS $ encode $ Array $ V.fromList $ map renderPerson (pwithIds people)
+    where renderPerson p = object ["id" .= objid2bs (fromJust $ pId p), "name" .= TE.decodeUtf8 (pName p)]
+          pwithIds = filter (isJust . pId)
 
 {-editPerson :: User -> Application ()
 editPerson user = 
@@ -125,8 +140,9 @@ shareForm p = Share
 
 personForm :: Maybe Person -> SnapForm Application Text HeistView Person
 personForm p = mkPerson
-    <$> input "id"   (fmap B8.unpack $ pId =<< p)
+    <$> input "id"   (fmap (B8.unpack . objid2bs) $ pId =<< p)
     <*> input "name" (lM pName p)   `validate` nonEmpty <++ errors
-   where mkPerson i n = Person (strMaybe i) "" (B8.pack n) (fromMaybe [] $ liftM pShares p)
+   where mkPerson i n = Person (bs2objid $ B8.pack i) emptyObjId (B8.pack n) (fromMaybe [] $ liftM pShares p)
          lM f = liftM (B8.unpack . f)
+         emptyObjId = Oid 0 0
         

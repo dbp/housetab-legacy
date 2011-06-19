@@ -47,7 +47,8 @@ Executable housetab
     aeson,
     heist-async,
     snap-logging-mongodb,
-    email-postmark
+    email-postmark,
+    vector
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 

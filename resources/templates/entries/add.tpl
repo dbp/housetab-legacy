@@ -1,11 +1,12 @@
 <div-async name="add-entry" id="add-form">
   <h3>Add Entry</h3>
+  <people/>
   <form-async action="/entries/add" method="POST">
     <table>
       <tr><td colspan="2"><by-errors><error/><br></by-errors></td></tr>
       <tr>
         <td class="label"><label for="by">By:</label></td> 
-        <td><input name="by" type="text" value="$(by-value)" /></td>
+        <td><input class="person" name="by" type="text" value="$(by-value)" /></td>
       </tr>
       
       <tr><td colspan="2"><for-errors><error/><br></for-errors></td></tr>
@@ -31,3 +32,7 @@
     </table>
   </form-async>
 </div-async>
+
+<script type="text/javascript">
+  $("form .person").tokenInput("/people/list")
+</script>

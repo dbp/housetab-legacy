@@ -37,7 +37,7 @@ type Owes = Double
 
 data Result = Result {people :: [(Person, Spent, Owes)]
                      ,currentdate :: Date}
-                     deriving (Show, Read, Eq, Typeable)
+                     deriving (Show, Eq, Typeable)
 
 instance Val Result where
     val (Result p date) = Doc ["people" =: people, "currentdate" =: date]

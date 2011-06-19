@@ -97,12 +97,12 @@ deleteEntry user =
 entryForm :: BS.ByteString -> SnapForm Application Text HeistView HouseTabEntry
 entryForm htid = mkEntry
     <$> input "id"  Nothing
-    <*> input "by"  Nothing  `validate` onePerson <++ errors
-    <*> input "for" Nothing  `validate` manyPeople    <++ errors 
+    <*> input "by"  Nothing `validate` onePerson  `transform` mongoObjectId     <++ errors
+    <*> input "for" Nothing `validate` manyPeople `transform` mongoObjectIdMany <++ errors 
     <*> inputRead "ammount" "Invalid ammount" Nothing  <++ errors 
     <*> input "what" Nothing   <++ errors 
     <*> inputRead "date" "invalid Date" Nothing     <++ errors 
-  where mkEntry i b f a wha whe = HouseTabEntry (strMaybe i) htid (B8.pack b) (B8.pack wha) whe a (map B8.pack (splitOn "," f))
+  where mkEntry i b f a wha whe = HouseTabEntry (bs2objid $ B8.pack i) (bs2objid' htid) b (B8.pack wha) whe a f
 
 
 

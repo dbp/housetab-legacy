@@ -8,6 +8,10 @@ import            Text.Digestive.Transform
 
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
+import            Data.Bson
+import            Data.List.Split
+
 import            Data.Text (Text)
 import            Models.Entry
 import            Control.Applicative
@@ -29,3 +33,9 @@ validDate = check "Must be a valid date, like 2011.2.25" $ \(Date y m d) -> and 
 
 positive :: (Ord a, Num a) => Validator Application Text a
 positive = check "Must be a positive number." $ \n -> n > 0
+
+mongoObjectId :: Transformer Application Text String ObjectId
+mongoObjectId = transformEither (\a -> maybe (Left "Invalid Object Id Specified") Right (bs2objid (B8.pack a)))
+
+mongoObjectIdMany :: Transformer Application Text String [ObjectId]
+mongoObjectIdMany = transformEither (\a -> maybe (Left "Invalid Object Id List Specified") Right (sequence $ map (bs2objid . B8.pack) (splitOn "," a)))

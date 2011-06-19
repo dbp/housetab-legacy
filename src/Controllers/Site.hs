@@ -57,6 +57,7 @@ site = logAccess $
              , ("/entries/delete/:id",  requireUserBounce' $ deleteEntry)              -}
              , ("/people/:person/share/add",    requireUserBounce' $ addShare)
              , ("/people/add",          requireUserBounce' $ addPerson)
+             , ("/people/list",         listPeople)
              {-, ("/people/edit/:letter", requireUserBounce' $ editPerson)-}
              , ("/signup",              method GET $ newSignupH)
              , ("/signup",              method POST $ signupH)

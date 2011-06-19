@@ -22,6 +22,12 @@
         }
       }
     };
+    // now run any included javascript
+    var scripts, scriptsFinder=/<script[^>]*>([\s\S]+)<\/script>/gi;
+    while(scripts=scriptsFinder.exec(resp))
+    {
+       eval(scripts[1]);
+    }
   };
 
   // Listeners for most common interations                                            
@@ -29,12 +35,22 @@
     e = e || window.event;
     lct = e.target || e.srcElement;
 
+    if (lct && lct.nodeName === "BUTTON") {
+      bonzo(lct).addClass("processing");
+      return;
+    }
+
     var elem = nearest(lct, 'A') || htm,
         href = elem.href;
 
     switch (elem.rel) {
     case 'async':
     case 'async-post':
+      if (elem.getAttribute("data-loading-div")) {
+        if (qwery(elem.getAttribute("data-loading-div"))[0]) {
+          qwery(elem.getAttribute("data-loading-div"))[0].innerHTML = "<div class='loading'></div>";
+        }
+      };
       reqwest({
         url:href, 
         type: 'html',
@@ -58,7 +74,7 @@
     reqwest({
           url: elem.getAttribute('action') || "",
           data: reqwest.serialize(elem),
-          method: 'post',
+          method: elem.getAttribute('method') || 'post',
           type: 'html',
           success: replace_splices
         });

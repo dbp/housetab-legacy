@@ -5,6 +5,7 @@ import Models.Entry (HouseTabEntry(..),Date(..))
 import Models.Result (Result(..)) 
 import Models.Person (Share(..),Person(..))
 import qualified  Data.ByteString as BS
+import qualified  Data.Bson as B
 
 import Test.QuickCheck (Arbitrary(..), arbitrary, elements, listOf, listOf1, choose, quickCheck)
 import Text.Printf (printf)
@@ -15,7 +16,7 @@ data Purchase = Purchase { purchaser :: Person
                          , date :: Date
                          , ammount :: Double
                          , payers :: [Person]}
-              deriving (Show, Read, Eq)
+              deriving (Show, Eq)
 
 instance Ord Purchase where
     compare (Purchase p1 d1 _ _) (Purchase p2 d2 _ _) =
@@ -30,7 +31,7 @@ getPercentage person date = fn (pShares person)
                     else fn $ (Share d' p'):xs
       fn [] = 1 -- if they have nothing assigned, assume no share.
 
-getPerson :: [Person] -> BS.ByteString -> Person
+getPerson :: [Person] -> B.ObjectId -> Person
 getPerson ps id' = head $ filter (\p -> (pId p) == Just id') ps
 
 purchasify :: [Person] -> [HouseTabEntry] -> [Purchase]
