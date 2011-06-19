@@ -90,7 +90,9 @@ addShare user = do
        r <- eitherSnapForm (shareForm Nothing) "add-share-form"
        case r of
            Left splices' -> 
-             heistLocal (bindSplices splices') $ renderHT "people/share/add"
+             heistLocal 
+              (bindSplices (splices' ++ [("personId", textSplice $ TE.decodeUtf8 pid)])) $ 
+              renderHT "people/share/add"
            Right share' -> do
              mhtid <- authenticatedUserId
              mperson <- getHouseTabPerson pid
@@ -100,6 +102,7 @@ addShare user = do
                   case mperson of
                     Nothing -> renderHT "people/share/add_failure" -- means they hit the wrong URL
                     Just person -> do saveHouseTabPerson $ person { pShares = share':(pShares person)}
+                                      recalculateTotals user
                                       renderHT "people/share/add_success"  
                                       
 

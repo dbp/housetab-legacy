@@ -53,8 +53,8 @@ site = logAccess $
        route [ ("/",                    ifTop $ renderHT "index")
              , ("/entries",             ifTop $ requireUserBounce' entriesH)
              , ("/entries/add",         requireUserBounce' $ addEntry)              
-             {-, ("/entries/edit/:id",    requireUserBounce' $ editEntry)              
-             , ("/entries/delete/:id",  requireUserBounce' $ deleteEntry)              -}
+             , ("/entries/edit/:id",    requireUserBounce' $ editEntry)              
+             , ("/entries/delete/:id",  requireUserBounce' $ deleteEntry)              
              , ("/people/:person/share/add",    requireUserBounce' $ addShare)
              , ("/people/add",          requireUserBounce' $ addPerson)
              , ("/people/list",         listPeople)

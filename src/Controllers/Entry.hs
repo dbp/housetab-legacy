@@ -12,6 +12,8 @@ import            Control.Applicative
 import            Snap.Types
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import qualified  Data.Text.Encoding as TE
+import qualified  Data.Text as T
 
 import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
@@ -55,7 +57,7 @@ addEntry user = do
          let mbhtid = userId $ authUser user
          when (isNothing mbhtid) $ redirect "/"
          let (UserId htid) = fromJust mbhtid
-         r <- eitherSnapForm (entryForm htid) "add-entry-form"
+         r <- eitherSnapForm (entryForm htid Nothing) "add-entry-form"
          case r of
              Left splices' -> do
                heistLocal (bindSplices splices') $ renderHT "entries/add"
@@ -64,49 +66,60 @@ addEntry user = do
                recalculateTotals user
                renderHT "entries/add_success"                
  
-{-editEntry :: User -> Application ()
+editEntry :: User -> Application ()
 editEntry user = 
   do i <- getParam "id"
-     case i of
-      Just uid' -> do
-        let uid = read $ B8.unpack uid'
-        r <- eitherSnapForm (entryForm (find ((== uid).eid) (houseTabEntries user))) "edit-entry-form" 
+     let mbhtid = userId $ authUser user
+     when (isNothing mbhtid) $ redirect "/entries"
+     let (UserId htid) = fromJust mbhtid
+     case i >>= bs2objid of
+      Just eid -> do
+        entry <- getHouseTabEntry eid
+        r <- eitherSnapForm (entryForm htid entry) "edit-entry-form" 
         case r of
-          Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
+          Left splices' -> 
+            heistLocal (bindSplices splices') $ renderHT "entries/add"
           Right entry' -> do
-            modEntries (U.findReplace ((== uid).eid) entry') user
-            redirect "/entries"
+            saveHouseTabEntry entry'
+            heistLocal (bindSplices (renderEntry entry')) $ renderHT "entries/show"
       Nothing -> redirect "/entries"
 
 deleteEntry :: User -> Application ()
 deleteEntry user = 
   do i <- getParam "id"
-     case i of
-      Just uid' -> do
-        let uid = read $ B8.unpack uid'
-        r <- eitherSnapForm deleteForm "delete-entry-form" 
+     case i >>= bs2objid of
+      Just eid -> do
+        entry <- getHouseTabEntry eid
+        r <- eitherSnapForm (deleteForm entry) "delete-entry-form" 
         case r of
-          Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
+          Left splices' -> 
+            heistLocal (bindSplices splices') $ renderHT "entries/delete"
           Right _ -> do
-            modEntries (filter ((/= uid).eid)) user
-            redirect "/entries"
-      Nothing -> redirect "/entries"-}
+            case (entry, entry >>= eId)  of
+              (Just e, Just eid) -> do
+                deleteHouseTabEntry e
+                heistLocal (bindSplice "index" $ (textSplice . TE.decodeUtf8 . objid2bs) eid) $ 
+                  renderHT "entries/delete_success"
+              _ -> redirect "/entries"
+              
+      Nothing -> redirect "/entries"
 
-entryForm :: BS.ByteString -> SnapForm Application Text HeistView HouseTabEntry
-entryForm htid = mkEntry
-    <$> input "id"  Nothing
-    <*> input "by"  Nothing `validate` onePerson  `transform` mongoObjectId     <++ errors
-    <*> input "for" Nothing `validate` manyPeople `transform` mongoObjectIdMany <++ errors 
-    <*> inputRead "ammount" "Invalid ammount" Nothing  <++ errors 
-    <*> input "what" Nothing   <++ errors 
-    <*> inputRead "date" "invalid Date" Nothing     <++ errors 
+entryForm :: BS.ByteString -> Maybe HouseTabEntry -> SnapForm Application Text HeistView HouseTabEntry
+entryForm htid e = mkEntry
+    <$> input "id"  (lMO (e >>= eId))
+    <*> input "by"  (lMO (liftM eWho e))      `validate` onePerson  `transform` mongoObjectId     <++ errors
+    <*> input "for" (lMO' eWhopays e) `validate` manyPeople `transform` mongoObjectIdMany <++ errors 
+    <*> inputRead "ammount" "Invalid ammount" (liftM eHowmuch e)  <++ errors 
+    <*> input "what" (lm8 eWhat e)   <++ errors 
+    <*> inputRead "date" "invalid Date" (liftM eWhen e)     <++ errors 
   where mkEntry i b f a wha whe = HouseTabEntry (bs2objid $ B8.pack i) (bs2objid' htid) b (B8.pack wha) whe a f
+        lMO = liftM (B8.unpack . objid2bs)
+        lMO' f = liftM (B8.unpack . B8.intercalate "," . map objid2bs . f)
+        lm8 f = liftM (B8.unpack . f)
 
 
 
-{-deleteForm :: SnapForm Application Text HeistView ()
-deleteForm = const ()
-    <$> input "id" Nothing-}
+deleteForm :: Maybe HouseTabEntry -> SnapForm Application Text HeistView ()
+deleteForm e = const ()
+    <$> input "id" (fmap (B8.unpack . objid2bs) $ e >>= eId)
 

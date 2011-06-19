@@ -44,8 +44,8 @@ getHouseTabEntries au = do
                                     Right es -> return $ catMaybes $ map (cast' . Doc) es
     Nothing -> return []
 
-getHouseTabEntry :: BS.ByteString -> Application (Maybe HouseTabEntry)
-getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: bs2objid id'] "entries"
+getHouseTabEntry :: ObjectId -> Application (Maybe HouseTabEntry)
+getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: id'] "entries"
                           case entry' of
                             Left _ -> return Nothing
                             Right entry -> return $ (cast' . Doc) =<< entry
@@ -56,6 +56,10 @@ saveHouseTabEntry entry = do DB.withDB $ DB.save "entries" (processNew $ unDoc $
   where unDoc (Doc fields) = fields
         processNew fields = if isNothing (B.lookup "_id" fields :: Maybe ObjectId) then exclude ["_id"] fields else fields 
 
+deleteHouseTabEntry :: HouseTabEntry -> Application ()
+deleteHouseTabEntry entry = do DB.withDB $ DB.delete $ DB.select (unDoc $ val entry) "entries"
+                               return ()
+  where unDoc (Doc fields) = fields
 
 instance Val HouseTabEntry where
     val (HouseTabEntry id' htid who what when howmuch whopays) = 

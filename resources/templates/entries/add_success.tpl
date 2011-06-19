@@ -1,3 +1,3 @@
-<div-async name="add-entry" id="add-form">
-  Successfully adde entry!
+<div-async name="entry-form">
+  Successfully added entry!
 </div-async>

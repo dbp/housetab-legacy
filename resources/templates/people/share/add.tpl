@@ -1,6 +1,6 @@
 <div-async name="add-share">
   <h3>Add Share</h3>
-  <form-async action="/people/share/add" method="POST">
+  <form-async action="/people/$(personId)/share/add" method="POST">
     <table>
       <tr><td colspan="2"><date-errors><error/><br></date-errors></td></tr>
       <tr>

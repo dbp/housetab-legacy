@@ -1,10 +1,11 @@
-<div-async name="add-entry" id="add-form">
+<div-async name="entry-form">
   <h3>Add Entry</h3>
   <people/>
   <form-async action="/entries/add" method="POST">
     <table>
       <tr><td colspan="2"><by-errors><error/><br></by-errors></td></tr>
       <tr>
+        <input type="hidden" name="id" value="$(id-value)" />
         <td class="label"><label for="by">By:</label></td> 
         <td><input class="person" name="by" type="text" value="$(by-value)" /></td>
       </tr>
@@ -12,7 +13,7 @@
       <tr><td colspan="2"><for-errors><error/><br></for-errors></td></tr>
       <tr><td class="label">
         <label for="for">For:</label></td> 
-        <td><input name="for" type="text" value="$(for-value)" /></td></tr>
+        <td><input class="person" name="for" type="text" value="$(for-value)" /></td></tr>
         
         <tr><td colspan="2"><ammount-errors><error/><br></ammount-errors></td></tr>
         <tr><td class="label">
