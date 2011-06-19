@@ -54,8 +54,8 @@ getHouseTabPeople au = do
                                                    return $ catMaybes ps
     Nothing -> return []
 
-getHouseTabPerson :: BS.ByteString -> Application (Maybe Person)
-getHouseTabPerson id' = do person' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: bs2objid id'] "people"
+getHouseTabPerson :: ObjectId -> Application (Maybe Person)
+getHouseTabPerson id' = do person' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: id'] "people"
                            case person' of
                              Left _ -> return Nothing
                              Right person -> return $ (cast' . Doc) =<< person

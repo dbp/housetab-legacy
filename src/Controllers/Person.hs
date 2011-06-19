@@ -19,7 +19,7 @@ import            Data.Aeson
 import qualified  Data.Vector as V
 
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust, isJust)
+import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
 import qualified  Data.Bson as B
 import            Data.List (sortBy, sort, group)
 import            Data.List.Split
@@ -50,7 +50,7 @@ personCheck = check "Shouldnt see this" $ \(Person _ _ _ _) -> True
 
 onePerson :: Validator Application Text String
 onePerson = checkM "Must be a id that corresponds to a person." fn
-  where fn id' = do pers <- getHouseTabPerson (B8.pack id')
+  where fn id' = do pers <- maybe (return Nothing) getHouseTabPerson (bs2objid $ B8.pack id')
                     return $ isJust pers
 
 manyPeople :: Validator Application Text String
@@ -95,7 +95,7 @@ addShare user = do
               renderHT "people/share/add"
            Right share' -> do
              mhtid <- authenticatedUserId
-             mperson <- getHouseTabPerson pid
+             mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
              case mhtid of
                Nothing -> renderHT "people/share/add_failure" -- should never happen
                Just htid -> 
@@ -116,21 +116,25 @@ listPeople = do mhtid <- authenticatedUserId
     where renderPerson p = object ["id" .= objid2bs (fromJust $ pId p), "name" .= TE.decodeUtf8 (pName p)]
           pwithIds = filter (isJust . pId)
 
-{-editPerson :: User -> Application ()
+editPerson :: User -> Application ()
 editPerson user = 
-  do l' <- getParam "letter"
-     case (l',liftM BS.length l') of
-      (Just letr, Just 1) -> do
-        let l = head $ B8.unpack letr 
-        r <- eitherSnapForm (personForm (find ((== l).letter) (houseTabPeople user))) "edit-person-form" 
+  do i <- getParam "id"
+     let mbhtid = userId $ authUser user
+     when (isNothing mbhtid) $ redirect "/entries"
+     let (UserId htid) = fromJust mbhtid
+     case i >>= bs2objid of
+      Just pid -> do
+        person <- getHouseTabPerson pid
+        r <- eitherSnapForm (personForm person) "edit-person-form" 
         case r of
-          Left form' -> 
-            heistLocal (bindSplice "formdata" (formSplice form')) $ renderHT "form"
+          Left splices' -> 
+            heistLocal (bindSplices splices') $ renderHT "people/edit"
           Right person' -> do
-            modPeople (U.findReplace ((== l).letter) person') user
-            redirect "/entries"
-      _ -> redirect "/entries"
-      -}
+            maybe (return ()) (\p -> saveHouseTabPerson $ p { pName = pName person' }) person
+            recalculateTotals user
+            renderHT "people/edit_success"
+      Nothing -> redirect "/entries"
+      
 
 nonNegative :: (Ord a, Num a) => Validator Application Text a
 nonNegative = check "Must be a non-negative number (can be decimal) like 0.2." $ \n -> n >= 0
@@ -145,7 +149,6 @@ personForm :: Maybe Person -> SnapForm Application Text HeistView Person
 personForm p = mkPerson
     <$> input "id"   (fmap (B8.unpack . objid2bs) $ pId =<< p)
     <*> input "name" (lM pName p)   `validate` nonEmpty <++ errors
-   where mkPerson i n = Person (bs2objid $ B8.pack i) emptyObjId (B8.pack n) (fromMaybe [] $ liftM pShares p)
+   where mkPerson i n = Person (bs2objid $ B8.pack i) emptyObjectId (B8.pack n) (fromMaybe [] $ liftM pShares p)
          lM f = liftM (B8.unpack . f)
-         emptyObjId = Oid 0 0
         

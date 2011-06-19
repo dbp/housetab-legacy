@@ -6,6 +6,8 @@ module Views.Result where
 import            Text.Templating.Heist
 import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
+import            Data.Maybe (fromMaybe)
+import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 
 import            Models.Result
 import            Models.Person
@@ -13,7 +15,8 @@ import            Models.Person
 
 renderPersonResult :: Monad m => (Person,Spent,Owes) -> Splice m
 renderPersonResult (person,spent,owes) = do
-  runChildrenWithText [("personName",   TE.decodeUtf8 $ pName person)
+  runChildrenWithText [("personId",     TE.decodeUtf8 $ fromMaybe "" $ fmap objid2bs $ pId person)
+                      ,("personName",   TE.decodeUtf8 $ pName person)
                       ,("personSpent",  T.pack $ show spent)
                       ,("personOwes",   T.pack $ show owes)]
                        

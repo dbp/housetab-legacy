@@ -20,6 +20,8 @@ import            Text.Templating.Heist
 
 import            Application
 
+emptyObjectId = Oid 0 0
+
 
 nonEmpty :: Validator Application Text String
 nonEmpty = check "String must not be empty." $ \s -> not $ null s
