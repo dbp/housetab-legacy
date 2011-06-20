@@ -24,13 +24,13 @@
       <tr><td class="label">
         <label for="for">For:</label></td> 
         <td>
-          <box-field name="for" value="$(for-value)">
+          <box-field-multi name="for" value="$(for-value)">
             <people>
               <box-option value="$(personId)">
                 <personName/>
               </box-option>
             </people>
-          </box-field>
+          </box-field-multi>
         </td></tr>
         
         <tr><td colspan="2"><ammount-errors><error/><br></ammount-errors></td></tr>

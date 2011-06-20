@@ -21,21 +21,24 @@ import            Heist.Splices.Async
 {-import Notification (notificationSplice)-}
 import Application 
 
-type BName = ByteString
-type BValue = ByteString
-type BShow = ByteString
 boxField :: Monad m => Splice m
-boxField = do node <- getParamNode
-              case X.getAttribute "name" node of
-                Nothing -> return [] -- without a name, inputs are useless
-                Just name -> do
-                  let klass = T.concat ["box-field ",(fromMaybe "" $ X.getAttribute "class" node)]
-                  let value = fromMaybe "" $ X.getAttribute "value" node
-                  let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
-                                 , X.Element "div" [("class","display"), ("style", "width: 200px; height:20px; border: 1px solid black;")] []
-                                 , X.Element "div" [("class","box"),("style","display:none;")] (X.elementChildren node)
-                                 ]
-                  return [X.setAttribute "class" klass $ X.Element "div" (filter ((/= "name").fst) $ X.elementAttrs node) children]
+boxField = boxFieldGen "box-field" []
+
+boxFieldMulti :: Monad m => Splice m
+boxFieldMulti = boxFieldGen "box-field-multi" [X.Element "div" [("class","close")] [X.TextNode "X"]]
+
+boxFieldGen :: Monad m => T.Text -> [X.Node] -> Splice m
+boxFieldGen typ extra = do node <- getParamNode
+                           case X.getAttribute "name" node of
+                             Nothing -> return [] -- without a name, inputs are useless
+                             Just name -> do
+                               let klass = T.concat [typ, " ", (fromMaybe "" $ X.getAttribute "class" node)]
+                               let value = fromMaybe "" $ X.getAttribute "value" node
+                               let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
+                                              , X.Element "div" [("class","display"), ("style", "width: 200px; height:20px; border: 1px solid black;")] []
+                                              , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
+                                              ]
+                               return [X.setAttribute "class" klass $ X.Element "div" (filter ((/= "name").fst) $ X.elementAttrs node) children]
 
 boxOption :: Monad m => Splice m
 boxOption = do node <- getParamNode
@@ -43,7 +46,7 @@ boxOption = do node <- getParamNode
                  Nothing -> return [] -- without a value, this isn't worth much
                  Just value -> do
                    let klass = T.concat ["option ",(fromMaybe "" $ X.getAttribute "class" node)]
-                   let attributes = ("class", klass) : (filter ((flip notElem ["name","class"]).fst) $ X.elementAttrs node)
+                   let attributes = ("class", klass) : (filter ((flip notElem ["class","value"]).fst) $ X.elementAttrs node)
                    return [X.setAttribute "data-box-value" value $ X.Element "div" attributes (X.elementChildren node)]
 
 --- the following two taken from https://github.com/mightybyte/snap-heist-splices which depends on unreleased version of snap
@@ -72,5 +75,6 @@ renderHT = (heistLocal $ (bindSplices splices)) . render
                     ,-} ("ifLoggedIn", ifLoggedIn)
                   , ("ifGuest", ifGuest)
                   , ("box-field", boxField)
+                  , ("box-field-multi", boxFieldMulti)
                   , ("box-option", boxOption)
                   ] ++ heistAsyncSplices
