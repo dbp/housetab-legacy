@@ -38,6 +38,7 @@ import            Utils
 import            Views.Site
 import            Views.Entry
 import            Views.Result
+import            Views.Person
 import            Controllers.Form
 import            Controllers.Person
 import            Models.Entry
@@ -58,9 +59,10 @@ addEntry user = do
          when (isNothing mbhtid) $ redirect "/"
          let (UserId htid) = fromJust mbhtid
          r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
+         people <- maybe (return []) getPeopleSplices (bs2objid htid)
          case r of
              Left splices' -> do
-               heistLocal (bindSplices splices') $ renderHT "entries/add"
+               heistLocal (bindSplices (splices' ++ people)) $ renderHT "entries/add"
              Right entry' -> do
                case bs2objid htid of 
                  Nothing -> renderHT "entries/add_failure"                

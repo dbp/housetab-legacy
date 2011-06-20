@@ -14,4 +14,19 @@
       <apply template="entries/show"></apply>
     </entries>  
 
+    
+
+    <!-- <div class="fancyField">
+       <input type="hidden" name="fieldName" value="" />
+       <div class="display" style="width: 50px; height: 10px; border: 1px solid black;"></div>
+       <div class="box" style="display: none;">
+         <div class="option" data-value="024034270650764">
+           Buenaventura
+         </div>
+         <div class="option" data-value="427648476857">
+           Remeike
+         </div>
+       </div>
+     </div> -->
+ 
 </apply>

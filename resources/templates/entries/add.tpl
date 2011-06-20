@@ -7,7 +7,17 @@
       <tr>
         <input type="hidden" name="id" value="$(id-value)" />
         <td class="label"><label for="by">By:</label></td> 
-        <td><input class="person" name="by" type="text" value="$(by-value)" /></td>
+        <td>
+          
+          <box-field name="by" value="$(by-value)">
+            <people>
+              <box-option value="$(personId)">
+                <personName/>
+              </box-option>
+            </people>
+          </box-field>
+          
+          </td>
       </tr>
       
       <tr><td colspan="2"><for-errors><error/><br></for-errors></td></tr>
@@ -33,7 +43,3 @@
     </table>
   </form-async>
 </div-async>
-
-<script type="text/javascript">
-  $("form .person").tokenInput("/people/list")
-</script>
