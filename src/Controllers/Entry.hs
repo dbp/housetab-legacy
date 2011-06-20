@@ -47,7 +47,8 @@ import            Models.Account
 entriesH :: User -> Application ()
 entriesH user = do 
    entries <- getHouseTabEntries (authUser user)
-   (heistLocal $ (bindSplices (splices entries))) $ renderHT "entries"
+   people <- getPeopleSplices (authUser user)
+   (heistLocal $ (bindSplices ((splices entries) ++ people))) $ renderHT "entries"
      where splices es = [ ("result",  (renderResult  $ currentResult user))
                         , ("entries", (renderEntries es))
                         ]
@@ -59,7 +60,7 @@ addEntry user = do
          when (isNothing mbhtid) $ redirect "/"
          let (UserId htid) = fromJust mbhtid
          r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
-         people <- maybe (return []) getPeopleSplices (bs2objid htid)
+         people <- getPeopleSplices (authUser user)
          case r of
              Left splices' -> do
                heistLocal (bindSplices (splices' ++ people)) $ renderHT "entries/add"

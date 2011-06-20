@@ -2,8 +2,8 @@
   <a-async href="/entries/edit/$(index)">edit</a-async>, 
   <a-async href="/entries/delete/$(index)">delete</a-async>:
   <div-async name="delete-$(index)" style="display: inline;"></div-async>
-  By: <entryBy/>, 
-  For: <entryFor/>, 
+  By: <lookupName id="$(entryBy)"/>, 
+  For: <lookupName id="$(entryFor)"/>, 
   Amount: <entryAmount/>, 
   Date: <entryDate/>, 
   What: <entryWhat/>

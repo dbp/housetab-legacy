@@ -23,7 +23,15 @@
       <tr><td colspan="2"><for-errors><error/><br></for-errors></td></tr>
       <tr><td class="label">
         <label for="for">For:</label></td> 
-        <td><input class="person" name="for" type="text" value="$(for-value)" /></td></tr>
+        <td>
+          <box-field name="for" value="$(for-value)">
+            <people>
+              <box-option value="$(personId)">
+                <personName/>
+              </box-option>
+            </people>
+          </box-field>
+        </td></tr>
         
         <tr><td colspan="2"><ammount-errors><error/><br></ammount-errors></td></tr>
         <tr><td class="label">

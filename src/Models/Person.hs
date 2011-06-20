@@ -11,8 +11,11 @@ import qualified  Data.Bson as B
 import            Control.Monad
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import qualified  Data.Text.Encoding as TE
+import qualified  Data.Text as T
 import            Data.Typeable
-import            Data.Maybe (catMaybes, listToMaybe, isNothing)
+import qualified  Data.Map as M
+import            Data.Maybe (catMaybes, listToMaybe, isNothing, fromMaybe)
 import            Data.List.Split (splitOn)
 import            Control.Monad
 import            Control.Monad.Trans
@@ -67,6 +70,7 @@ saveHouseTabPerson person = do DB.withDB $ DB.save "people" (processNew $ unDoc 
         processNew fields = if isNothing (B.lookup "_id" fields :: Maybe ObjectId) then exclude ["_id"] fields else fields 
         
 
+personIdMap people = M.fromList $ map (\(Person id' _ name _) -> (TE.decodeUtf8 $ fromMaybe "" $ fmap objid2bs id', TE.decodeUtf8 name)) people
 
 
 instance Val Person where
