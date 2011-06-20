@@ -38,7 +38,7 @@ boxFieldGen typ extra = do node <- getParamNode
                                               , X.Element "div" [("class","display"), ("style", "width: 200px; height:20px; border: 1px solid black;")] []
                                               , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
                                               ]
-                               return [X.setAttribute "class" klass $ X.Element "div" (filter ((/= "name").fst) $ X.elementAttrs node) children]
+                               return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]
 
 boxOption :: Monad m => Splice m
 boxOption = do node <- getParamNode
