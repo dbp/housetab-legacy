@@ -10,6 +10,8 @@ import qualified  Data.Bson as B
 import            Control.Monad
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import            Data.Time.LocalTime
+
 import            Data.Typeable
 import            Data.Maybe (catMaybes, listToMaybe)
 import            Data.List.Split (splitOn)
@@ -18,3 +20,7 @@ import            Control.Monad.Trans
 import            Control.Monad.Reader
 import            Application
 
+{-data History = History { hId :: ObjectId
+                       , hTime :: LocalTime
+                       , 
+                       }-}

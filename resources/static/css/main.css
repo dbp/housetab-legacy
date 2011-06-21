@@ -1,0 +1,573 @@
+body {
+	margin: 0;
+}
+
+h1 {
+	font-family: 'adobe caslon pro';
+	font-weight: normal;
+	font-size: 16px;
+	text-align: center;
+	margin: 0;
+	padding-top: 28px;
+	letter-spacing: .2em;
+}
+
+
+h2 {
+	font-family: "adobe caslon pro";
+	font-weight: 500;
+	font-size: 16px;
+	margin-bottom: -.25em;
+	margin-top: .35em;
+	margin-left: .35em;
+}
+
+
+p {
+	font-family: 'times new roman';
+	font-size: 15px;
+	line-height: 1.25em;
+	margin-top: 0;
+	margin-left: .35em;
+	margin-bottom: .5em;
+}
+
+h3 {
+	font-family: "times new roman";
+	font-weight: normal;
+	font-size: 15px;
+	text-align: center;
+	font-style: italic;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+
+/*All the shit in the tippy-top*/
+
+#top {
+	width: 100%;
+	margin: 0;
+	background-image: url("/img/gridhorizontal.png");
+	}
+
+#topcontents {
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url("/img/grid.png");
+	height: 160px;
+}
+
+#topcontents h1 {
+	padding-top: 28px;
+	border-bottom: 1px solid;
+}
+
+#topcontents p {
+	font-size: 18px;
+	text-align: center;
+	margin-top: .25em;
+}
+
+#topcontents div form {
+  margin: 0px;
+}
+
+#topcontents img {
+		margin: 0;
+		margin-left: 468px;
+		margin-top: 3px;
+	}
+
+
+/*All of the shit above the navigation bar but below the tippy-top*/
+
+	#above {
+		width: 100%;
+		margin: 0;
+		background-image: url"/img/(gridhorizontal2.png");
+	}
+	
+	#abovecontents {
+		width: 960px;
+		height: 240px;
+		margin-left: auto;
+		margin-right: auto;
+		background-image: url("/img/grid.png");
+	}
+	
+	#payments-table {
+		  background: transparent url("") no-repeat 264px 0px;
+		  width: 864px;
+		  min-height: 235px;
+		  margin: 0px auto;
+	}
+	
+	.person {
+		width: 143px;
+		height: 96px;
+		border-right: 1px solid #424242;
+		border-bottom: 1px solid #424242;
+		float: left;
+	}
+		
+	.person.last {
+		border-right: 0;
+	}
+		
+	.person.bottom {
+		border-bottom: 0;
+	}
+	
+	.balance {
+		text-align: right;
+		margin-right: .35em;
+		font-size: 18px;
+		}
+	
+	
+/*The thingy that goes across the screen where the links is*/
+
+	#navbar {
+		width: 100%;
+		margin: 0;
+		background-image: url("/img/gridhorizontal3.png");
+	}
+	
+	#navbarcontents {
+		width: 960px;
+		height: 288px;
+		margin-left: auto;
+		margin-right: auto;
+		background-image: url("/img/grid.png");
+	}
+	
+	#navbarcontents1 {
+		background-image: url("/img/circles.png");
+		height: 144px;
+	}
+	
+	#settings {
+		display: inline-block;
+		background-image: url("/img/settings.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 196px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#settings:hover {
+	  background-image: url("/img/settings2.png");
+	  cursor: pointer;
+	}
+	
+	#arch {
+		display: inline-block;
+		background-image: url("/img/arch.png");
+		width: 240px;
+		height: 144px;
+		margin-left: 16px;
+		mrgin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#about:hover {
+	  background-image: url("/img/about2.png");
+	  cursor: pointer;
+	}
+	
+	
+	#about {
+		display: inline-block;
+		background-image: url("/img/about.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 16px;
+		mrgin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#navbarcontents2 {
+		background-image: url("/img/nav.png");
+		height: 120px;
+		margin: 0;
+	}
+	
+	#subnav1 {
+		height: 76px;
+		width: 356px;
+		margin: 0;
+		float: left;
+		background-image: url("/img/subnav1.png");
+	}
+	
+	#subnav2 {
+		height: 76px;
+		width: 356px;
+		margin: 0;
+		float: left;
+		background-image: url("/img/subnav2.png");
+	}
+	
+	#entries {
+		height: 75px;
+		width: 248px;
+		margin: 0;
+		margin-top: 1px;
+		float: left;
+		background-image: url("/img/entries.png");
+	}
+	
+	#subnav1 p, #subnav2 p{
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		margin-top: 33px;
+		color: #5082A0;
+		font-variant: small-caps;
+	}
+	
+	#navbarcontents2 a {
+		color: #383838;
+		text-decoration: none;
+	}
+	
+	#navbarcontents2 a:hover {
+		color: #383838;
+		text-decoration: underline;
+	}
+	
+	#subnav3 {
+		height: 24px;
+		margin: 0;
+	}
+	
+	#subnav3 p {
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		color: #5082A0;
+		font-variant: small-caps;
+		margin: 0;
+		padding-bottom: 6px;
+		display: block;
+	}
+	
+	.entry-form form {
+		margin: 0;
+		text-align: center;
+		color: white;
+		height: 16px;
+		margin-top: 72px;
+	}
+	
+	.entry-form form p, form div {
+		font-family: "times new roman";
+		font-size: 15px;
+		display: inline-block;
+		vertical-align: top;
+		margin: 0;
+		margin-right: 5px;
+		position: relative;
+	}
+	
+	.entry-form div .errors {
+	  position: absolute;
+	  top: 25px;
+	  background-color: white;
+    padding: 5px;
+	  color: black;
+    width: 100px;
+	}
+
+	.entry-form div .inp .display {
+		width: 96px;
+		height: 20px;
+		background-color: white;
+		color: black;
+	}	
+	
+	.entry-form div .inp .display:hover {
+	  cursor: pointer;
+  }
+	
+	.entry-form div .inp .box {
+	  position: absolute;
+	  top: 25px;
+	  left: 0px;
+	  background-color: white;
+	  border: 1px solid gray;
+	  padding: 5px;
+	  color: black;
+	}
+
+	.users .box .close {
+	  float: right;
+	  width: 20px;
+	  height: 20px;
+  }
+	
+	.users .box .option.selected {
+	  background-color: gray;
+	}
+	
+	.purchase .inp {
+		width: 100px;
+		height: 20px
+	}
+	
+	.category .inp {
+		width: 48px;
+		height: 20px
+	}
+	
+	.date .inp {
+		width: 72px;
+		height: 20px
+	}
+	
+	.ammount .inp {
+		width: 72px;
+		height: 20px
+	}
+
+/*All the shit below the navbar*/
+
+	#below {
+		width: 100%;
+		margin: 0;
+		background-image: url("/img/gridhorizontal2.png");
+	}
+	
+	#belowcontents {
+		width: 960px;
+		margin-left: auto;
+		margin-right: auto;
+		background-image: url("/img/grid.png");
+	}
+	
+	#purchases {
+	  margin-top: 2px;
+	}
+	
+	table
+	{
+		border-collapse:collapse;
+		margin: 0;
+		margin-left: 48px;
+		font-size: 15px;
+	}
+	
+	td
+	{
+		border-top: 1px solid;
+		border-right: 1px solid;
+		height: 21px;
+		text-align: center;
+		border-color: #A3CCE5;
+		margin: 0;
+		padding: 0;
+	}
+	
+	th {
+		font-family: "adobe caslon pro";
+		font-weight: normal;
+		color: #5082A0;
+		font-size: 16px;
+	}
+	
+	
+	
+	.delete {
+		background-image: url("/img/delete.png");
+		margin: 0;
+		width: 22px;
+		height: 21px;
+    float: left;
+ 		}
+		
+	.delete:hover {
+		background-image: url("/img/delete2.png");
+		cursor: pointer;
+	}
+		
+	.edit {
+		background-image: url("/img/edit.png");
+		margin: 0;
+		width: 22px;
+		height: 21px;
+    float: left;
+  }
+		
+	.edit:hover {
+		background-image: url("/img/edit2.png");
+		cursor: pointer;
+	}
+	
+	.col1 {
+		width: 48px;
+		padding: 0;
+		height: 21px;
+		margin: 0;
+	}
+	
+	.col1 img {
+    margin-bottom: -2px;
+  }
+	
+	.col2 {
+		width: 45px;
+		padding: none;
+	}
+	
+	.col3 {
+		width: 117px;
+	}
+	
+	.col4 {
+		width: 261px;
+	}
+	
+	.col5 {
+		width: 86px;
+		text-align: right;
+		padding-right: .5em;
+	}
+	
+	.col6 {
+		width: 87px;
+		text-align: right;
+		padding-right: .5em;
+	}
+	
+	.col7 {
+		text-align: left;
+		width: 182px;
+		border-right: none;
+		padding-left: .5em;
+	}
+	
+	#belowtop {
+		margin: 0;
+		width: 864px;
+		height: 144px;
+		margin-left: 48px;
+	
+	}
+	
+	#mod1 {
+		margin: 0;
+		background-image: url("/img/typewriter.png");
+		float: left;
+		width: 144px;
+		height: 144px;
+	}
+	
+	#mod2 {
+		margin: 0;
+		float: left;
+		width: 576px;
+		height: 144px;
+	}
+	
+	#mod2 img {
+			margin: 0;
+			margin-left: 276px;
+			margin-top: 3px;
+		}
+	
+	#mod2 p{
+		font-family: "adobe caslon pro";
+		font-size: 21px;
+		text-align: center;
+		margin-top: .25em;
+	}
+	
+	#mod3 {
+		margin: 0;
+		float: left;
+		height: 144px;
+		width: 144px;
+	}
+	
+	#mod3 h3{
+		text-align: right;
+		color: #5082A0;
+	}
+	
+	#mod3 p{
+		font-family: "adobe caslon pro";
+		font-size: 18px;
+		text-align: right;
+		margin-top: .20em;
+		color: #5082A0;
+	}
+	
+	
+	#bottom {
+		margin: 0;
+		width: 960px;
+		height: 96px;
+		background-image: url("/img/logo.png");
+	}
+	
+	#bottom p {
+		font-family: "adobe caslon pro";
+		font-size: 14px;
+		color: #A3CCE5;
+		margin: 0;
+		width: 900px;
+		text-align: right;
+		color: #5082A0;
+		padding-top: 80px;
+	}
+
+
+/*This is that weird thing I have sticking out the side of the screen. I think I'll add work or something at some point.*/
+
+	#arrows{
+		position: fixed;
+		top: 148px;
+		margin: 0;
+		right: 0;
+		height: 78px;
+		width: 24px;
+	}
+	
+	#arrow_up{
+		margin:0;
+		width: 24px;
+		height: 24px;
+		background-image: url("/img/arrow_up.png");
+	}
+	
+	#arrow_up:hover {
+	  background-image: url("/img/arrow_up_mo.png");
+	}
+	
+	#arrow_mid{
+		margin:0;
+		width: 24px;
+		height: 20px;
+		background-image: url("/img/arrow_mid.png");
+	}
+	
+	#arrow_mid:hover {
+	  background-image: url("/img/arrow_mid_mo.png");
+	}
+	
+	#arrow_down{
+		margin:0;
+		width: 24px;
+		height: 24px;
+		background-image: url("/img/arrow_down.png");
+	}
+	
+	#arrow_down:hover {
+	  background-image: url("/img/arrow_down_mo.png");
+	}

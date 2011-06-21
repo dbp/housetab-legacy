@@ -4,38 +4,57 @@
     <script type="text/javascript" charset="utf-8" src="/js/valentine.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/reqwest.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/qwery.min.js"></script>
-      <script type="text/javascript" charset="utf-8" src="/js/heist-async.js"></script>
-
-      <script type="text/javascript" charset="utf-8" src="/js/bean.min.js"></script>      
-      <script type="text/javascript" charset="utf-8" src="/js/declarative.js"></script>
-
-      <script type="text/javascript" charset="utf-8" src="/js/bonzo.min.js"></script>
-      <script type="text/javascript" charset="utf-8" src="/js/housetab.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/heist-async.js"></script>
     
-       <!-- <script type="text/javascript" src="/js/jquery-1.6.1.min.js"></script>
-       <script type="text/javascript" src="/js/jquery.tokeninput.js"></script>
-       
-       <link rel="stylesheet" href="/css/token-input.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        -->
-    <!-- <activate-async/> -->
+    <script type="text/javascript" charset="utf-8" src="/js/bean.min.js"></script>      
+    <script type="text/javascript" charset="utf-8" src="/js/declarative.js"></script>
+    
+    <script type="text/javascript" charset="utf-8" src="/js/bonzo.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/housetab.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    
     </head>
   <body>
+
+    <div id="top">
+    	<div id="topcontents">
+        <top/>
+      </div>
+    </div>
+
+    <div id="above">
+    	<div id="abovecontents">
+        <above/>
+      </div>
+    </div>
     
-    <activate-async/>
+    <div id="navbar">
+    	<div id="navbarcontents">
+        <navbar/>
+      </div>
+    </div>
     
-    <div id="navigations">
-      <ifLoggedIn>
-        <a href="/logout">logout</a> | <a href="entries">entries</a>
-      </ifLoggedIn>
-      <ifGuest>
-         <a href="login">login</a> | <a href="signup">signup</a>
-      </ifGuest>
-    </div> <!-- #navigation -->
+    <div id="below">
+    	<div id="belowcontents">
+
+        <below/>
     
-    <div id="notification">
-      <notification />
-    </div> <!-- #notification -->
-    
-    <content />
+        <div id="bottom">
+          <p>a project of position studios | powered by <a href="http://snapframework.com" target="_blank">snap</a>. 
+            grab the source: 
+            <a href="http://darcsden.com/position/housetab" target="_blank">darcsden.com/position/housetab</a>
+          </p>
+        </div>
+        
+        <div id="arrows">
+        	<a href="#top"><div id="arrow_up"></div></a>
+        	<a href="#navbar"><div id="arrow_mid"></div></a>
+        	<a href="#below"><div id="arrow_down"></div></a>
+        </div>
+
+
+    	</div>
+    </div>
   </body>
 </html>

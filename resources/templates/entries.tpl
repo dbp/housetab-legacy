@@ -1,17 +1,75 @@
 <apply template="base">
 
-    <result>
-      <a href="/people/edit/$(personId)">edit</a>: Name: <personName/>, Spent: <personSpent/>, Owes: <personOwes/><br>
-    </result>
-    <a-async href="/people/add">add a person</a-async><br><br>
-    <a-async href="/entries/add">add an entry</a-async><br><br>
-    
-    <div-async name="entry-form"></div-async>
-    <div-async name="add-person"></div-async>
-    
-    
-    <entries>
-      <apply template="entries/show"></apply>
-    </entries>  
- 
+  <bind tag="top">
+    <h1>BALANCE OF PAYMENTS</h1>
+  	<img src="/img/glyph_up.png" />
+  	<h3>total spent</h3>
+  	<p>$15,201.45</p>
+  	<apply template="people/add"></apply>
+  </bind>
+  
+  <bind tag="above">
+    <div id="payments-table">
+		  <result>
+		    <div class="person $(personClasses)">
+		      <h2><personName/> (<a href="/people/edit/$(personId)">edit</a>)</h2>
+          <p>spent $<personSpent/></p>
+          <p><personShare/>%</p>
+          <p class="balance">$<personOwes/></p>
+		    </div>
+      </result>
+    </div>		
+  </bind>
+
+  <bind tag="navbar">
+    <div id="navbarcontents1">
+  		<div id="settings"></div>
+  		<div id="arch"></div>
+  		<div id="about"></div>
+  	</div>
+  	<div id="navbarcontents2">
+  		<div id="subnav1"><p><a href="#top">See the Balance of Payments</a></p></div>
+  		<div id="entries"></div>
+  		<div id="subnav2"><p><a href="#below">See the List of Purchases</a></p></div> 
+  		<div id="subnav3"><p>Add a New Entry Below</p></div>
+  		<apply template="entries/add"></apply>
+  	</div>
+  </bind>
+  
+  <bind tag="below">
+    <div id="belowtop">
+			<div id="mod1">
+			</div>
+			
+			<div id="mod2">
+				<h1>LIST OF PURCHASES</h1>
+				<img src="/img/glyph_down.png" />
+				<h3>for the account of</h3>
+				<p>DurrutiColumn</p>
+			</div>
+			
+			<div id="mod3">
+				<h3>today's date is</h3>
+				<p>16 January 2011</p>
+			</div>
+		</div>
+
+		<div id="purchases">	
+		  <table>
+		  	<tr>
+		  		<th></th>
+		  		<th></th>
+		  		<th>Buyer</th>
+		  		<th>Purchase</th>
+		  		<th>Cost</th>
+		  		<th>Date</th>
+		  		<th>Users</th>
+		  	</tr>
+		  	
+		    <entries>
+          <apply template="entries/show"></apply>
+        </entries>
+      </table>
+    </div>
+  </bind>
 </apply>
