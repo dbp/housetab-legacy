@@ -17,6 +17,7 @@ import Control.Monad.Trans (lift)
 import Data.Maybe (fromMaybe)
 
 import            Heist.Splices.Async
+import Views.Entry
 
 {-import Notification (notificationSplice)-}
 import Application 
@@ -77,4 +78,7 @@ renderHT = (heistLocal $ (bindSplices splices)) . render
                   , ("box-field", boxField)
                   , ("box-field-multi", boxFieldMulti)
                   , ("box-option", boxOption)
+                  , ("categories", categories)
+                  , ("catName", categoryName)
+                  , ("catImage", categoryImage)
                   ] ++ heistAsyncSplices

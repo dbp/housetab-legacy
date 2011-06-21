@@ -20,13 +20,14 @@ import            Control.Monad.Reader
 import            Application
 
 data HouseTabEntry = HouseTabEntry
-    { eId      :: Maybe ObjectId
-    , eHTId    :: ObjectId
-    , eWho     :: ObjectId
-    , eWhat    :: BS.ByteString
-    , eWhen    :: Date
-    , eHowmuch :: Double
-    , eWhopays :: [ObjectId]
+    { eId       :: Maybe ObjectId
+    , eHTId     :: ObjectId
+    , eWho      :: ObjectId
+    , eWhat     :: BS.ByteString
+    , eCategory :: BS.ByteString
+    , eWhen     :: Date
+    , eHowmuch  :: Double
+    , eWhopays  :: [ObjectId]
     }
     deriving (Show, Eq, Typeable)
 
@@ -62,17 +63,18 @@ deleteHouseTabEntry entry = do DB.withDB $ DB.delete $ DB.select (unDoc $ val en
   where unDoc (Doc fields) = fields
 
 instance Val HouseTabEntry where
-    val (HouseTabEntry id' htid who what when howmuch whopays) = 
-      Doc ["_id" =: id', "htid" =: htid, "who" =: who, "what" =: what, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
+    val (HouseTabEntry id' htid who what category when howmuch whopays) = 
+      Doc ["_id" =: id', "htid" =: htid, "who" =: who, "what" =: what, "category" =: category, "when" =: when, "howmuch" =: howmuch, "whopays" =: whopays] 
     cast' (Doc fields) = do
-      id'     <- B.lookup "_id"     fields
-      htid    <- B.lookup "htid"    fields
-      who     <- B.lookup "who"     fields
-      what    <- B.lookup "what"    fields
-      when    <- B.lookup "when"    fields
-      howmuch <- B.lookup "howmuch" fields
-      whopays <- B.lookup "whopays" fields      
-      return (HouseTabEntry id' htid who what when howmuch whopays)
+      id'      <- B.lookup "_id"      fields
+      htid     <- B.lookup "htid"     fields
+      who      <- B.lookup "who"      fields
+      what     <- B.lookup "what"     fields
+      category <- B.lookup "category" fields
+      when     <- B.lookup "when"     fields
+      howmuch  <- B.lookup "howmuch"  fields
+      whopays  <- B.lookup "whopays"  fields      
+      return (HouseTabEntry id' htid who what category when howmuch whopays)
     cast' _ = Nothing
 
 -- stolen from cgi:

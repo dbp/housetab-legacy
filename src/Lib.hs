@@ -35,7 +35,7 @@ getPerson :: [Person] -> B.ObjectId -> Person
 getPerson ps id' = head $ filter (\p -> (pId p) == Just id') ps
 
 purchasify :: [Person] -> [HouseTabEntry] -> [Purchase]
-purchasify people ((HouseTabEntry _ _ who _ when howmuch whopays):xs) = 
+purchasify people ((HouseTabEntry _ _ who _ _ when howmuch whopays):xs) = 
     (Purchase (getPerson people who)
               when
               howmuch 

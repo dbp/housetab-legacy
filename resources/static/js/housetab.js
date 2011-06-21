@@ -7,6 +7,7 @@ bean.add(document, 'DOMContentLoaded', function () {
     bonzo(elem.parentNode).hide();
     d = bonzo(elem.parentNode).previous()[0];
     d.innerHTML = elem.innerHTML;
+    d.setAttribute("class", (d.getAttribute("class") || "") + " " + (elem.getAttribute("id") || ""));
     bonzo(bonzo(d).previous()[0]).attr("value", elem.getAttribute("data-box-value"));
   });
   

@@ -11,6 +11,9 @@ import qualified  Data.ByteString.Char8 as B8
 import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 import            Data.Bson
 import            Data.List.Split
+import qualified  Data.Text as T
+
+import qualified  Data.Map as M
 
 import            Data.Text (Text)
 import            Models.Entry
@@ -19,6 +22,8 @@ import            Control.Monad
 import            Text.Templating.Heist
 
 import            Application
+
+import            Views.Entry
 
 emptyObjectId = Oid 0 0
 
@@ -35,6 +40,9 @@ validDate = check "Must be a valid date, like 2011.2.25" $ \(Date y m d) -> and 
 
 positive :: (Ord a, Num a) => Validator Application Text a
 positive = check "Must be a positive number." $ \n -> n > 0
+
+isCategory :: Validator Application Text String
+isCategory = check "Invalid Category... something must have gone wrong, or you tried to do something naughty." $ \c -> (T.pack c) `elem` categoryList
 
 mongoObjectId :: Transformer Application Text String ObjectId
 mongoObjectId = transformEither (\a -> maybe (Left "Invalid Object Id Specified") Right (bs2objid (B8.pack a)))

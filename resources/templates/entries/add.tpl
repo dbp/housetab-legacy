@@ -5,7 +5,10 @@
   <div class="buyer">
     <p>Buyer:</p>
     <div class="errors"><by-errors><error/> </by-errors></div>
-    <box-field name="by" value="$(by-value)" class="inp">
+    <bind tag="by-display">
+	    <lookupName id="$(by-value)" />
+    </bind>
+    <box-field name="by" value="$(by-value)" display="$(by-display)" class="inp">
       <people>
         <box-option value="$(personId)">
           <personName/>
@@ -22,7 +25,17 @@
   
 	<div class="category">
 	  <p>Cat:</p>
-    <input type="text" name="lname" class="inp" value="" />
+	  <div class="errors"><category-errors><error/> </category-errors></div>
+	  <bind tag="category-display">
+	    <catName cat="$(category-value)" />
+    </bind>
+	  <box-field name="category" value="$(category-value)" display="$(category-display)" class="inp">
+      <categories>
+        <box-option value="$(cat)" id="$(cat)">
+        <catName cat="$(cat)"/>
+        </box-option>
+      </categories>
+    </box-field>
 	</div>
 	
 	

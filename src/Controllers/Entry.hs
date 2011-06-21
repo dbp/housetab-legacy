@@ -117,12 +117,13 @@ deleteEntry user =
 entryForm :: Maybe HouseTabEntry -> SnapForm Application Text HeistView HouseTabEntry
 entryForm e = mkEntry
     <$> input "id"  (lMO (e >>= eId))
-    <*> input "by"  (lMO (liftM eWho e))      `validate` onePerson  `transform` mongoObjectId     <++ errors
+    <*> input "by"  (lMO (liftM eWho e)) `validate` onePerson  `transform` mongoObjectId     <++ errors
     <*> input "for" (lMO' eWhopays e) `validate` manyPeople `transform` mongoObjectIdMany <++ errors 
     <*> inputRead "ammount" "Invalid ammount" (liftM eHowmuch e)  <++ errors 
     <*> input "what" (lm8 eWhat e)   <++ errors 
+    <*> input "category" (lm8 eCategory e) `validate` isCategory   <++ errors 
     <*> inputRead "date" "invalid Date" (liftM eWhen e)     <++ errors 
-  where mkEntry i b f a wha whe = HouseTabEntry (bs2objid $ B8.pack i) emptyObjectId b (B8.pack wha) whe a f
+  where mkEntry i b f a wha cat whe = HouseTabEntry (bs2objid $ B8.pack i) emptyObjectId b (B8.pack wha) (B8.pack cat) whe a f
         lMO = liftM (B8.unpack . objid2bs)
         lMO' f = liftM (B8.unpack . B8.intercalate "," . map objid2bs . f)
         lm8 f = liftM (B8.unpack . f)

@@ -1,5 +1,10 @@
 <tr-async name="entry-$(index)">
-	<td class="col1"><img src="/img/pan.png" /></td>
+	<td class="col1">
+	  <bind tag="imgSrc">
+      <catImage cat="$(entryCategory)" />
+    </bind>
+    <img src="$(imgSrc)"/>
+	  </td>
 	<td class="col2">
     <a-async href="/entries/delete/$(index)" class="delete"></a-async>
 	  <a-async href="/entries/edit/$(index)" class="edit"></a-async>
