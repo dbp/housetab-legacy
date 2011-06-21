@@ -47,6 +47,7 @@ import            Models.Account
 entriesH :: User -> Application ()
 entriesH user = do 
    entries <- getHouseTabEntries (authUser user)
+   liftIO $ putStrLn $ show $ length entries
    people <- getPeopleSplices (authUser user)
    (heistLocal $ (bindSplices ((splices entries) ++ people))) $ renderHT "entries"
      where splices es = [ ("result",  (renderResult  $ currentResult user))
@@ -70,7 +71,10 @@ addEntry user = do
                  Just h -> do
                    saveHouseTabEntry $ entry' { eHTId = h }
                    recalculateTotals user
-                   renderHT "entries/add_success"                
+                   entries <- getHouseTabEntries (authUser user)
+                   people <- getPeopleSplices (authUser user)
+                   heistLocal (bindSplices ([("entries",(renderEntries entries))] ++ people)) $
+                      renderHT "entries/add_success"                
  
 editEntry :: User -> Application ()
 editEntry user = 

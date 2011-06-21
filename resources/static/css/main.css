@@ -43,6 +43,13 @@ h3 {
 }
 
 
+/* dynomic stuff */
+.loading {
+  width: 100%;
+  height: 100%;
+  background: transparent url("/img/loading.gif") no-repeat 50% 10%;
+}
+
 /*All the shit in the tippy-top*/
 
 #top {
@@ -433,6 +440,7 @@ h3 {
 		border-color: #A3CCE5;
 		margin: 0;
 		padding: 0;
+		position: relative;
 	}
 	
 	th {
@@ -484,6 +492,16 @@ h3 {
 	.col2 {
 		width: 45px;
 		padding: none;
+	}
+	
+	.col2 .delete-box {
+	  position: absolute;
+	  top: 20px;
+	  border: 1px solid red;
+	  background-color: white;
+	  padding: 5px;
+	  width: 100px;
+	  z-index: 100;
 	}
 	
 	.col3 {

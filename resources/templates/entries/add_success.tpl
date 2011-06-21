@@ -1,3 +1,2 @@
-<div-async name="entry-form">
-  Successfully added entry!
-</div-async>
+<apply template="add"></apply>
+<apply template="all"></apply>

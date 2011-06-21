@@ -71,6 +71,11 @@
     if (!elem || elem.nodeName !== 'FORM' || !elem.getAttribute('data-async')) {
       return;
     }
+    if (elem.getAttribute("data-loading-div")) {
+      if (qwery(elem.getAttribute("data-loading-div"))[0]) {
+        qwery(elem.getAttribute("data-loading-div"))[0].innerHTML = "<div class='loading'></div>";
+      }
+    }
     reqwest({
           url: elem.getAttribute('action') || "",
           data: reqwest.serialize(elem),
