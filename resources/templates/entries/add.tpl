@@ -54,7 +54,7 @@
 	<div class="users">
 	  <p>Users:</p>
     <div class="errors"><for-errors><error/></for-errors></div>
-    <box-field-multi name="for" value="$(for-value)" class="inp">
+    <box-field-multi name="for" value="$(for-value)" display="$(for-value)" class="inp">
     <people>
       <box-option value="$(personId)">
         <personName/>

@@ -265,12 +265,16 @@ h3 {
 		display: block;
 	}
 	
+	#navbarcontents2 .entry-form form {
+		margin-top: 72px;
+	}
+	
 	.entry-form form {
 		margin: 0;
 		text-align: center;
 		color: white;
 		height: 16px;
-		margin-top: 72px;
+		position: relative;
 	}
 	
 	.entry-form form p, form div {
@@ -292,11 +296,12 @@ h3 {
     width: 100px;
 	}
 
-	.entry-form div .inp .display {
+	.entry-form div .inp .display, input {
 		width: 96px;
-		height: 20px;
+		height: 19px;
 		background-color: white;
 		color: black;
+		border: 1px solid black;
 	}	
 	
 	.entry-form div .inp .display:hover {
@@ -311,20 +316,27 @@ h3 {
 	  border: 1px solid gray;
 	  padding: 5px;
 	  color: black;
+	  z-index: 100;
 	}
 
 	.entry-form div .inp .box .option {
 	  cursor: pointer;
   }
 
-	.users .box .close {
+	/*.users */.box .close {
 	  float: right;
 	  width: 20px;
 	  height: 20px;
   }
 	
-	.users .box .option.selected {
+/*  .users */.box .option.selected {
 	  background-color: gray;
+	}
+	
+	.purchase.entry-form button {  /*edit in place*/
+	  position: absolute;
+	  right: -20px;
+	  top: 20px;
 	}
 	
 	.purchase .inp {
@@ -495,6 +507,10 @@ h3 {
 		height: 21px;
 		margin: 0;
 	}
+
+	.col1.edit {
+    width: 94px;
+	}
 	
 	.col1 img {
     margin-bottom: -2px;
@@ -521,6 +537,10 @@ h3 {
 	
 	.col4 {
 		width: 261px;
+	}
+	
+	#purchases .purchase.entry-form .col4 input {
+	  width: 250px;
 	}
 	
 	.col5 {

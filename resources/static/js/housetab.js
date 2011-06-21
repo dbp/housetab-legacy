@@ -13,6 +13,20 @@ bean.add(document, 'DOMContentLoaded', function () {
   
   // multi-select box-fields
   declare("click", ".box-field-multi .display", true, function (elem) {
+    // set up the selections, based on what is already selected
+    h = bonzo(elem).previous()[0]; // the hidden input
+    sels = h.getAttribute("value").split(",");
+    v(bonzo(elem).next()[0].childNodes).each(function(n) {
+      if (n.hasAttribute && n.hasAttribute("data-box-value")) {
+        if (sels.indexOf(n.getAttribute("data-box-value")) != -1) {
+          if (!bonzo(n).hasClass("selected")) {
+            bonzo(n).addClass("selected");
+          }
+        } else {
+          bonzo(n).removeClass("selected");
+        }
+      }
+    });
     bonzo(bonzo(elem).next()).show(); // show the box
   });
   // declare("click", ".box-field-multi .box .close", true, function (elem) {

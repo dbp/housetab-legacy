@@ -42,7 +42,7 @@ positive :: (Ord a, Num a) => Validator Application Text a
 positive = check "Must be a positive number." $ \n -> n > 0
 
 isCategory :: Validator Application Text String
-isCategory = check "Invalid Category... something must have gone wrong, or you tried to do something naughty." $ \c -> (T.pack c) `elem` categoryList
+isCategory = check "You must select a category." $ \c -> (T.pack c) `elem` categoryList
 
 mongoObjectId :: Transformer Application Text String ObjectId
 mongoObjectId = transformEither (\a -> maybe (Left "Invalid Object Id Specified") Right (bs2objid (B8.pack a)))

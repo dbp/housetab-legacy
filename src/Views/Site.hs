@@ -23,23 +23,27 @@ import Views.Entry
 import Application 
 
 boxField :: Monad m => Splice m
-boxField = boxFieldGen "box-field" []
+boxField = boxFieldGen "box-field" id []
 
 boxFieldMulti :: Monad m => Splice m
-boxFieldMulti = boxFieldGen "box-field-multi" [X.Element "div" [("class","close")] [X.TextNode "X"]]
+boxFieldMulti = boxFieldGen "box-field-multi" countSelected [X.Element "div" [("class","close")] [X.TextNode "X"]]
+  where countSelected t = T.concat [T.pack (show (if T.length t == 0 then 0 else length (T.splitOn "," t)))
+                                   ," selected."
+                                   ]
 
-boxFieldGen :: Monad m => T.Text -> [X.Node] -> Splice m
-boxFieldGen typ extra = do node <- getParamNode
-                           case X.getAttribute "name" node of
-                             Nothing -> return [] -- without a name, inputs are useless
-                             Just name -> do
-                               let klass = T.concat [typ, " ", (fromMaybe "" $ X.getAttribute "class" node)]
-                               let value = fromMaybe "" $ X.getAttribute "value" node
-                               let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
-                                              , X.Element "div" [("class","display")] []
-                                              , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
-                                              ]
-                               return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]
+boxFieldGen :: Monad m => T.Text -> (T.Text -> T.Text) -> [X.Node] -> Splice m
+boxFieldGen typ sel extra = do node <- getParamNode
+                               case X.getAttribute "name" node of
+                                 Nothing -> return [] -- without a name, inputs are useless
+                                 Just name -> do
+                                   let klass = T.concat [typ, " ", (fromMaybe "" $ X.getAttribute "class" node)]
+                                   let value = fromMaybe "" $ X.getAttribute "value" node
+                                   let display = sel $ fromMaybe "" $ X.getAttribute "display" node
+                                   let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
+                                                  , X.Element "div" [("class","display")] [X.TextNode display]
+                                                  , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
+                                                  ]
+                                   return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]
 
 boxOption :: Monad m => Splice m
 boxOption = do node <- getParamNode

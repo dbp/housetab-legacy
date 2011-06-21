@@ -1,24 +1,62 @@
-<div-async name="entry-$(id-value)">
-  <form-async action="/entries/edit/$(id-value)" method="POST">
-        <input type="hidden" name="id" value="$(id-value)" />
-        <label for="by">By:</label> <by-errors><error/><br></by-errors>
-        <input class="person" name="by" type="text" value="$(by-value)" />
-        
-        <label for="for">For:</label> <for-errors><error/><br></for-errors>
-        <input class="person" name="for" type="text" value="$(for-value)" /> 
-        
-        <label for="ammount">Ammount:</label> <ammount-errors><error/><br></ammount-errors>
-        <input name="ammount" type="text" value="$(ammount-value)" />
-        
-        <label for="what">What:</label> <what-errors><error/><br></what-errors>
-        <input name="what" type="text" value="$(what-value)" />
-        
-        <label for="date">Date:</label> <date-errors><error/><br></date-errors>
-        <input name="date" type="text" value="$(date-value)" />
-        <button type="submit" title=""/>
+<div-async name="entry-$(id-value)" class="purchase entry-form" id="entry-$(id-value)">
+  <form-async action="/entries/edit/$(id-value)" method="POST" > <!-- data-loading-div="#entry-$(id-value)" -->
+  <input type="hidden" name="id" value="$(id-value)" />
+  <div class="clearfix"/>
+
+  <div class="col1 col edit">
+	  <div class="errors"><category-errors><error/> </category-errors></div>
+	  <bind tag="category-display">
+	    <catName cat="$(category-value)" />
+    </bind>
+	  <box-field name="category" value="$(category-value)" display="$(category-display)" class="inp">
+      <categories>
+        <box-option value="$(cat)" id="$(cat)">
+        <catName cat="$(cat)"/>
+        </box-option>
+      </categories>
+    </box-field>
+	</div>
+	
+    <!-- <div class="col2 col">
+      <a-async href="/entries/delete/$(index)" class="delete"></a-async>
+      <a-async href="/entries/edit/$(index)" class="edit"></a-async>
+      <div-async name="delete-$(index)" style="display: none;"></div-async>
+    </div>
+     -->
+  	<div class="col3 col">
+  	  <bind tag="by-display">
+  	    <lookupName id="$(by-value)" />
+      </bind>
+      <box-field name="by" value="$(by-value)" display="$(by-display)" class="inp">
+        <people>
+          <box-option value="$(personId)">
+            <personName/>
+          </box-option>
+        </people>
+      </box-field>
+  	</div>
+  	<div class="col4 col">
+  	  <div class="errors"><what-errors><error/> </what-errors></div>
+      <input name="what" type="text" value="$(what-value)" class="inp" />
+  	</div>
+  	<div class="col5 col">
+  	  <div class="errors"><ammount-errors><error/> </ammount-errors></div>
+      <input name="ammount" type="text" value="$(ammount-value)" class="inp" />
+    </div>
+  	<div class="col6 col">
+  	  <div class="errors"><date-errors><error/> </date-errors></div>
+      <input name="date" type="text" value="$(date-value)" class="inp" />
+    </div>
+  	<div class="col7 col">
+      <div class="errors"><for-errors><error/></for-errors></div>
+      <box-field-multi name="for" value="$(for-value)" display="$(for-value)" class="inp">
+      <people>
+        <box-option value="$(personId)">
+          <personName/>
+        </box-option>
+      </people>
+      </box-field-multi>
+    </div>
+  <button type="submit" title=""/>
   </form-async>
 </div-async>
-
-<script type="text/javascript">
-  $("form .person").tokenInput("/people/list")
-</script>

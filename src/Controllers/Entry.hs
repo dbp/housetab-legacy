@@ -84,18 +84,20 @@ editEntry user =
      let (UserId htid) = fromJust mbhtid
      case i >>= bs2objid of
       Just eid -> do
+        people <- getPeopleSplices (authUser user)
         entry <- getHouseTabEntry eid
         r <- eitherSnapForm (entryForm entry) "edit-entry-form" 
         case r of
           Left splices' -> 
-            heistLocal (bindSplices splices') $ renderHT "entries/add"
+            heistLocal (bindSplices (splices' ++ people)) $ renderHT "entries/edit"
           Right entry' -> do
             case bs2objid htid of 
-               Nothing -> renderHT "entries/add_failure"                
+               Nothing -> redirect "/entries"               
                Just h -> do
-                 saveHouseTabEntry $ entry' { eHTId = h }
+                 let newentry = entry' { eHTId = h, eId = Just eid }
+                 saveHouseTabEntry newentry
                  recalculateTotals user
-                 heistLocal (bindSplices (renderEntry entry')) $ renderHT "entries/show"
+                 heistLocal (bindSplices (renderEntry newentry ++ people)) $ renderHT "entries/show"
       Nothing -> redirect "/entries"
 
 deleteEntry :: User -> Application ()
@@ -126,7 +128,7 @@ entryForm e = mkEntry
     <*> inputRead "ammount" "Invalid ammount" (liftM eHowmuch e)  <++ errors 
     <*> input "what" (lm8 eWhat e)   <++ errors 
     <*> input "category" (lm8 eCategory e) `validate` isCategory   <++ errors 
-    <*> inputRead "date" "invalid Date" (liftM eWhen e)     <++ errors 
+    <*> inputRead "date" "Date must be YYYY.MM.DD like 2011.6.21" (liftM eWhen e)     <++ errors 
   where mkEntry i b f a wha cat whe = HouseTabEntry (bs2objid $ B8.pack i) emptyObjectId b (B8.pack wha) (B8.pack cat) whe a f
         lMO = liftM (B8.unpack . objid2bs)
         lMO' f = liftM (B8.unpack . B8.intercalate "," . map objid2bs . f)
