@@ -420,34 +420,45 @@ h3 {
 	}
 	
 	#purchases {
-	  margin-top: 2px;
-	}
-	
-	table
-	{
-		border-collapse:collapse;
-		margin: 0;
+	  margin-top: 1px;
 		margin-left: 48px;
 		font-size: 15px;
+		width: 853px;
 	}
-	
-	td
-	{
-		border-top: 1px solid;
-		border-right: 1px solid;
-		height: 21px;
+
+	#purchases .purchase {
+	  height: 23px;
+  }
+  
+	#purchases .purchase .col {
+		border-top: 1px solid #A3CCE5;
+		border-right: 1px solid #A3CCE5;
+    height: 23px;
 		text-align: center;
-		border-color: #A3CCE5;
 		margin: 0;
 		padding: 0;
 		position: relative;
 	}
 	
-	th {
+  #purchases .purchase .deleted {
+    border-top: 1px solid red;
+    width: 100%;
+  }
+	
+	#purchases .purchase div, #purchases .heading div {
+	  float: left;
+  }
+  
+  .clearfix {
+    clear: both;
+  }
+	
+	#purchases .heading {
 		font-family: "adobe caslon pro";
 		font-weight: normal;
 		color: #5082A0;
 		font-size: 16px;
+		text-align: center;
 	}
 	
 	
@@ -514,20 +525,27 @@ h3 {
 	
 	.col5 {
 		width: 86px;
-		text-align: right;
+	}
+	
+	#purchases .purchase .col5 {
+	  text-align: right;
 		padding-right: .5em;
 	}
 	
 	.col6 {
 		width: 87px;
+	}
+	#purchases .purchase  .col6 {
 		text-align: right;
 		padding-right: .5em;
 	}
 	
-	.col7 {
-		text-align: left;
-		width: 182px;
-		border-right: none;
+	#purchases .col7 {
+	  width: 182px;
+  }
+  #purchases .purchase .col7 {
+	  border-right: 0;
+    text-align: left;
 		padding-left: .5em;
 	}
 	

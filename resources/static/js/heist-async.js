@@ -20,6 +20,12 @@
         if (rep && rep[0]) {
           rep[0].parentNode.replaceChild(elements[i],rep[0]);
         }
+      } else if (elements[i].nodeName == "TR" && elements[i].hasAttribute("data-splice-name")) {
+        var rep = qwery("tr[data-splice-name=" + elements[i].getAttribute("data-splice-name") + "]");
+        if (rep && rep[0]) {
+          rep[0].parentNode.replaceChild(elements[i],rep[0]);
+        }
+      
       }
     };
     // now run any included javascript

@@ -1,5 +1,6 @@
-<tr-async name="entry-$(index)">
-<td colspan="7">
-  Deleted entry.
-</td>
-</tr-async>
+<div-async name="entry-$(index)" class="purchase">
+<div class="clearfix"/>
+  <div class="deleted">
+    Deleted entry.
+  </div>
+</div-async>

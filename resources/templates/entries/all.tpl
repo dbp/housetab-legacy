@@ -1,17 +1,17 @@
 <div-async name="purchases" id="purchases">	
-  <table>
-  	<tr>
-  		<th></th>
-  		<th></th>
-  		<th>Buyer</th>
-  		<th>Purchase</th>
-  		<th>Cost</th>
-  		<th>Date</th>
-  		<th>Users</th>
-  	</tr>
+  <div class="heading">
+  		<div class="col1">&nbsp;</div>
+  		<div class="col2">&nbsp;</div>
+  		<div class="col3">Buyer</div>
+  		<div class="col4">Purchase</div>
+  		<div class="col5">Cost</div>
+  		<div class="col6">Date</div>
+  		<div class="col7">Users</div>
+    </div>
   	
     <entries>
       <apply template="show"></apply>
     </entries>
-  </table>
+    
+    <div class="clearfix"/>
 </div-async>
