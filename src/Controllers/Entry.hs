@@ -14,6 +14,7 @@ import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
+import            Data.Word
 
 import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
@@ -46,14 +47,34 @@ import            Models.Account
 
 entriesH :: User -> Application ()
 entriesH user = do 
-   entries <- getHouseTabEntries (authUser user)
+   entriesSplice <- entriesPage 0 user
    {-liftIO $ putStrLn $ show $ length entries-}
    people <- getPeopleSplices (authUser user)
-   (heistLocal $ (bindSplices ((splices entries) ++ people))) $ renderHT "entries"
+   (heistLocal $ (bindSplices ((splices entriesSplice) ++ people))) $ renderHT "entries"
      where splices es = [ ("result",  (renderResult  $ currentResult user))
-                        , ("entries", (renderEntries es))
+                        , ("entries", es)
+                        , ("entriesPage", textSplice $ "1")
                         , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
                         ]
+
+entriesPageH :: User -> Application ()
+entriesPageH user = do 
+   page <- getParam "page"
+   case page >>= (maybeRead . B8.unpack) of
+     Nothing -> mzero
+     Just n -> do
+       entriesSplice <- entriesPage n user
+       people <- getPeopleSplices (authUser user)
+       (heistLocal $ (bindSplices ((splices entriesSplice) ++ people))) $ renderHT "entries/page"
+         where splices es = [ ("entries", es)
+                            , ("entriesPage", textSplice $ T.pack $ show (n + 1))
+                            ]
+
+
+entriesPage :: Word32 -> User -> Application (Splice Application)
+entriesPage n user = do entries <- getHouseTabEntries n (authUser user)
+                        return (renderEntries entries)
+
 
 
 addEntry :: User -> Application ()
@@ -72,7 +93,7 @@ addEntry user = do
                  Just h -> do
                    saveHouseTabEntry $ entry' { eHTId = h }
                    recalculateTotals user
-                   entries <- getHouseTabEntries (authUser user)
+                   entries <- getHouseTabEntriesAll (authUser user)
                    people <- getPeopleSplices (authUser user)
                    heistLocal (bindSplices ([("entries",(renderEntries entries))] ++ people)) $
                       renderHT "entries/add_success"                

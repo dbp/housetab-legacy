@@ -9,9 +9,7 @@
   		<div class="col7">Users</div>
     </div>
   	
-    <entries>
-      <apply template="show"></apply>
-    </entries>
+  	<apply template="page"></apply>
     
     <div class="clearfix"/>
 </div-async>

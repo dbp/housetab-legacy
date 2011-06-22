@@ -52,6 +52,7 @@ site :: Application ()
 site = logAccess $ 
        route [ ("/",                          ifTop $ renderHT "index")
              , ("/entries",                   ifTop $ requireUserBounce' entriesH)
+             , ("/entries/page/:page",        requireUserBounce' entriesPageH)
              , ("/entries/add",               requireUserBounce' $ addEntry)              
              , ("/entries/edit/:id",          requireUserBounce' $ editEntry)              
              , ("/entries/delete/:id",        requireUserBounce' $ deleteEntry)              

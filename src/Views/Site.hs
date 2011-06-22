@@ -73,6 +73,7 @@ ifGuest = do
     node <- getParamNode
     res <- lift $ requireUser (return $ childNodes node) (return [])
     return res
+    
 
 renderHT :: ByteString -> Application ()
 renderHT = (heistLocal $ (bindSplices splices)) . render

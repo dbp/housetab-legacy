@@ -17,8 +17,9 @@ renderPersonResult :: Monad m => (Person,Spent,Owes) -> Splice m
 renderPersonResult (person,spent,owes) = do
   runChildrenWithText [("personId",     TE.decodeUtf8 $ fromMaybe "" $ fmap objid2bs $ pId person)
                       ,("personName",   TE.decodeUtf8 $ pName person)
-                      ,("personSpent",  T.pack $ show spent)
-                      ,("personOwes",   T.pack $ show owes)]
+                      ,("personSpent",  T.pack $ moneyShow spent)
+                      ,("personOwes",   T.pack $ moneyShow (negate owes))]
+          where moneyShow m = (if m < 0 then "-$" else "$") ++ show (abs $ floor m)
                        
 renderResult :: Monad m => Result -> Splice m
 renderResult (Result people date) = mapSplices renderPersonResult people

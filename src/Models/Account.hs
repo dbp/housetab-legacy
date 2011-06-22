@@ -92,7 +92,7 @@ modPeople fn user = do
  
 recalculateTotals :: User -> Application ()
 recalculateTotals u = do 
-  entries <- getHouseTabEntries (authUser u)
+  entries <- getHouseTabEntriesAll (authUser u)
   people <- getHouseTabPeople (authUser u)
   let u' = u {currentResult = run people entries}
   saveAuthUser (authUser u', additionalUserFields u')

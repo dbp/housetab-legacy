@@ -13,9 +13,9 @@
 		  <result>
 		    <div class="person $(personClasses)">
 		      <h2><personName/> (<a href="/people/edit/$(personId)">edit</a>)</h2>
-          <p>spent $<personSpent/></p>
+          <p>spent <personSpent/></p>
           <p><personShare/>%</p>
-          <p class="balance">$<personOwes/></p>
+          <p class="balance"><personOwes/></p>
 		    </div>
       </result>
     </div>		

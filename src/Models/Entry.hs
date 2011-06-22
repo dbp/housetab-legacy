@@ -14,6 +14,7 @@ import qualified  Data.ByteString.Char8 as B8
 import            Data.Typeable
 import            Data.Maybe (catMaybes, listToMaybe, isNothing)
 import            Data.List.Split (splitOn)
+import            Data.Word
 import            Control.Monad
 import            Control.Monad.Trans
 import            Control.Monad.Reader
@@ -31,19 +32,26 @@ data HouseTabEntry = HouseTabEntry
     }
     deriving (Show, Eq, Typeable)
 
+getHouseTabEntriesAll :: A.AuthUser -> Application [HouseTabEntry]
+getHouseTabEntriesAll au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries")
 
-getHouseTabEntries :: A.AuthUser -> Application [HouseTabEntry]
-getHouseTabEntries au = do
-  case A.userId au of
-    Just (A.UserId uid) -> do c <- DB.withDB $ DB.find $ DB.select ["htid" =: bs2objid uid] "entries"
-                              case c of
-                                Left _ -> return [] -- some error occured
-                                Right curs -> do
-                                  docs <- DB.withDB $ DB.rest curs
-                                  case docs of
-                                    Left _ -> return [] -- an error occured
-                                    Right es -> return $ catMaybes $ map (cast' . Doc) es
-    Nothing -> return []
+
+getHouseTabEntries :: Word32 -> A.AuthUser -> Application [HouseTabEntry]
+getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.limit = 30, DB.skip = page * 30}
+  
+  
+getHouseTabEntriesGen :: A.AuthUser -> (BS.ByteString -> DB.Query) -> Application [HouseTabEntry]
+getHouseTabEntriesGen au q = do
+    case A.userId au of
+      Just (A.UserId uid) -> do c <- DB.withDB $ DB.find (q uid)
+                                case c of
+                                  Left _ -> return [] -- some error occured
+                                  Right curs -> do
+                                    docs <- DB.withDB $ DB.rest curs
+                                    case docs of
+                                      Left _ -> return [] -- an error occured
+                                      Right es -> return $ catMaybes $ map (cast' . Doc) es
+      Nothing -> return []
 
 getHouseTabEntry :: ObjectId -> Application (Maybe HouseTabEntry)
 getHouseTabEntry id' = do entry' <- DB.withDB $ DB.findOne $ DB.select ["_id" =: id'] "entries"
