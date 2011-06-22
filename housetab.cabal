@@ -70,7 +70,7 @@ Executable housetab
     HTTP,
     attoparsec,
     aeson,
-    heist-async,
+    heist-async >= 0.2,
     snap-logging-mongodb,
     email-postmark,
     vector
