@@ -1,6 +1,6 @@
 <apply template="base">
 
-  <bind tag="below">
+  <bind tag="above">
     <form method="post">
       Name: <input type="text" name="accountName"><br>
       Password: <input type="password" name="password">

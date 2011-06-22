@@ -49,3 +49,7 @@ mongoObjectId = transformEither (\a -> maybe (Left "Invalid Object Id Specified"
 
 mongoObjectIdMany :: Transformer Application Text String [ObjectId]
 mongoObjectIdMany = transformEither (\a -> maybe (Left "Invalid Object Id List Specified") Right (sequence $ map (bs2objid . B8.pack) (splitOn "," a)))
+
+-- | regex validation sucks, so don't even try.
+validEmail :: Validator Application Text String
+validEmail = check "Must be a vaid email, like info@housetab.org" $ \e -> '@' `elem` e && '.' `elem` e

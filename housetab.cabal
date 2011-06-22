@@ -1,5 +1,5 @@
 Name:                housetab
-Version:             0.1
+Version:             0.2
 Synopsis:            HouseTab is a webapp that allows a group of people to flexibly share things.
 Description:         
 License:             BSD3
@@ -13,6 +13,31 @@ Cabal-version:       >=1.2
 Flag development
   Description: Whether to build the server in development (interpreted) mode
   Default: False
+
+Executable housetab-importer
+  hs-source-dirs: src
+  main-is: Importer.hs
+  Build-depends:
+    base >= 4 && < 5,
+    bytestring >= 0.9.1 && < 0.10,
+    MonadCatchIO-transformers >= 0.2.1 && < 0.3,
+    mtl >= 2 && < 3,
+    text >= 0.11 && < 0.12,
+    time >= 1.1 && < 1.3,
+    xmlhtml == 0.1.*,
+    snap-auth,
+    snap-extension-mongodb,
+    containers,
+    bson,
+    random,
+    Crypto >= 4.2
+
+  extensions: TypeSynonymInstances MultiParamTypeClasses
+
+  ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
+               -fno-warn-orphans
+  
+  
 
 Executable housetab
   hs-source-dirs: src

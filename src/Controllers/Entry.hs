@@ -47,11 +47,12 @@ import            Models.Account
 entriesH :: User -> Application ()
 entriesH user = do 
    entries <- getHouseTabEntries (authUser user)
-   liftIO $ putStrLn $ show $ length entries
+   {-liftIO $ putStrLn $ show $ length entries-}
    people <- getPeopleSplices (authUser user)
    (heistLocal $ (bindSplices ((splices entries) ++ people))) $ renderHT "entries"
      where splices es = [ ("result",  (renderResult  $ currentResult user))
                         , ("entries", (renderEntries es))
+                        , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
                         ]
 
 
@@ -114,6 +115,7 @@ deleteEntry user =
             case (entry, entry >>= eId)  of
               (Just e, Just eid) -> do
                 deleteHouseTabEntry e
+                recalculateTotals user
                 heistLocal (bindSplice "index" $ (textSplice . TE.decodeUtf8 . objid2bs) eid) $ 
                   renderHT "entries/delete_success"
               _ -> redirect "/entries"

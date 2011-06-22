@@ -38,14 +38,16 @@ data User = User
   , accountActivate :: Maybe BS.ByteString -- activation token
   }
 
--- Construct your 'User' from the given parameters
--- Make sure you do validation as well - at least for now.
-makeUser token ps = do
-  password  <- look "password"  ps
-  name      <- look "name"      ps
-  emails    <- look "email"    ps
-  return (User emptyAuthUser { userPassword = Just (ClearText password) } name [emails] emptyResult Nothing (Just token))
-        where look key map = liftM (BS.intercalate " ") $ M.lookup key map
+data SignupCreds = SignupCreds { suName :: BS.ByteString
+                               , suPassword :: BS.ByteString
+                               , suEmail :: BS.ByteString
+                               }
+
+data NewPassword = NewPassword String String
+
+
+makeUser token (SignupCreds name password email) =
+  (User emptyAuthUser { userPassword = Just (ClearText password) } name [email] emptyResult Nothing (Just token))
 
 additionalUserFields :: User -> Document
 additionalUserFields u = [ "accountName"      =: accountName u
@@ -61,18 +63,21 @@ additionalUserFields u = [ "accountName"      =: accountName u
 currentUser :: Application (Maybe User)
 currentUser = do  u <- currentAuthUser 
                   -- we set the accountName in the session at this point as well
-                  let resp = do fields    <- liftM snd u
-                                auth      <- liftM fst u
-                                name      <- B.lookup "accountName"       fields
-                                emails    <- B.lookup "accountEmails"     fields
-                                {-entries   <- B.lookup "houseTabEntries"   fields-}
-                                {-people    <- B.lookup "houseTabPeople"    fields-}
-                                current   <- B.lookup "currentResult"     fields
-                                reset     <- B.lookup "accountReset"      fields      
-                                activate  <- B.lookup "accountActivate"   fields      
-                                return $ User auth name emails {-entries-} {-people-} current reset activate
+                  let resp = buildUser u
                   maybe (return ()) (setInSession "accountName") (liftM accountName resp)
                   return resp 
+                  
+buildUser :: (Maybe (AuthUser, Document)) -> Maybe User
+buildUser u = do fields    <- liftM snd u
+                 auth      <- liftM fst u
+                 name      <- B.lookup "accountName"       fields
+                 emails    <- B.lookup "accountEmails"     fields
+                 {-entries   <- B.lookup "houseTabEntries"   fields-}
+                 {-people    <- B.lookup "houseTabPeople"    fields-}
+                 current   <- B.lookup "currentResult"     fields
+                 reset     <- B.lookup "accountReset"      fields      
+                 activate  <- B.lookup "accountActivate"   fields      
+                 return $ User auth name emails {-entries-} {-people-} current reset activate
 
 {-currentPeople :: Application (Maybe [Person])
 currentPeople = liftM (liftM houseTabPeople) currentUser

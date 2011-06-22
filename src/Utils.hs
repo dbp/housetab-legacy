@@ -4,7 +4,6 @@ import Data.List (null, elemIndex)
 import Test.QuickCheck
 import qualified  Data.ByteString.Char8 as B8
 
-
 eitherToMaybe = either (const Nothing) Just
 
 strMaybe s = case s of

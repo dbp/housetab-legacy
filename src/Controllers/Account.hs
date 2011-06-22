@@ -9,15 +9,24 @@ import            Snap.Extension.DB.MongoDB
 import qualified  Data.Map as M
 import            Control.Monad
 import            Control.Monad.Trans
+import            Control.Applicative
+
 import            Snap.Types
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
+import qualified  Data.Text as T
 
 import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
 import            System.Random
+
+import            Text.Digestive.Types
+import            Text.Digestive.Snap.Heist
+import            Text.Digestive.Validate
+import            Text.Digestive.Transform
+import            Text.Templating.Heist
 
 import            Application
 import            State
@@ -57,28 +66,36 @@ redirTo = do r <- getParam "redirectTo"
              redirect $ fromMaybe "/" r
 
 -- Make sure you have a 'password' field in there
-newSessionH :: a -> Application ()
-newSessionH = \_ -> renderHT "login"
-
--- Assuming you have a signup.tpl template
-newSignupH = renderHT "signup"
+loginH :: Application ()
+loginH = renderHT "account/login"
 
 unDoc (Doc fs) = fs
 
 -- Save user and redirect as appropriate
 signupH :: Application ()
 signupH = do
-  ps <- getParams
-  token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
-  let user = makeUser token ps
-  au <- maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) user 
-  case au of
-    Nothing -> newSignupH
-    Just au' -> do --setSessionUserId $ userId au'
-                   let user' = fromJust user -- we know this won't fail. for au to be Just, so must user
-                   mailActivation token (accountName user') (accountEmails user')
-                   redirect "/"
+  r <- eitherSnapForm signupForm "signup-form"
+  case r of
+    Left splices' -> 
+      heistLocal (bindSplices splices') $ renderHT "account/signup"
+    Right creds -> do  
+      token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
+      let user = makeUser token creds
+      au <- saveAuthUser (authUser user, additionalUserFields user) 
+      case au of
+        Nothing -> redirect "/signup" -- something went wrong in db... oops
+        Just au' -> do --setSessionUserId $ userId au'
+                       mailActivation token (accountName user) (accountEmails user)
+                       renderHT "account/signup_success"
                    
+signupForm :: SnapForm Application T.Text HeistView SignupCreds
+signupForm = mkSignupCreds
+    <$> input "name" Nothing `validate` nonEmpty <++ errors
+    <*> passwordForm
+    <*> input "email" Nothing `validate` validEmail <++ errors
+   where mkSignupCreds n (NewPassword p _) e  = SignupCreds (B8.pack n) (B8.pack p) (B8.pack e)
+
+
 activateAccountH :: Application ()
 activateAccountH = do
   token         <- getParam "token"
@@ -86,6 +103,39 @@ activateAccountH = do
   -- this is not the best user experience - better to present a message saying the token is missing, probably
   guard $ all isJust [token,maccountName]
   let accountName = fromJust maccountName
-  
   res <- withDB $ modify (select ["accountName" =: accountName, "accountActivate" =: token] "users") ["$set" =: ["accountActivate" =: (Nothing :: Maybe BS.ByteString)]]
   either (const $ redirect "/") (const $ redirect "/login") res 
+
+passwordForm :: SnapForm Application T.Text HeistView NewPassword
+passwordForm = (`validate` matchingPasswords) $ (<++ errors) $ NewPassword
+    <$> input "password" Nothing  `validate` nonEmpty <++ errors 
+    <*> input "confirm"  Nothing  `validate` nonEmpty <++ errors 
+  where matchingPasswords = check "Passwords do not match." $ \(NewPassword p1 p2) -> p1 == p2
+        mkPW p1 p2 = NewPassword p1 p2
+
+resetPasswordH :: Application ()
+resetPasswordH = do
+  token         <- getParam "token"
+  maccountName  <- getParam "account"  -- will this work?: liftM fromJust $ getParam "account"
+  -- this is not the best user experience - better to present a message saying the token is missing, probably
+  guard $ all isJust [token,maccountName]
+  let accountName = fromJust maccountName
+  r <- eitherSnapForm passwordForm "password-reset-form"
+  case r of
+    Left splices' -> 
+      heistLocal (bindSplices splices') $ renderHT "account/reset"
+    Right (NewPassword pw _) -> do  
+      muser <- withDB $ findOne (select ["accountName" =: accountName, "accountReset" =: token] "users")
+      case muser of
+        Left _ -> redirect "/"
+        Right user' -> 
+          case user' of
+            Nothing -> redirect "/"
+            Just user -> do
+              let n = fmap dropReset $ buildUser $ 
+                        (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
+                            <*> (Just user)
+              maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) n
+              redirect "/login"
+ where dropReset u = u { accountReset = Nothing }
+       setPass p au = au {userPassword = Just $ ClearText p}

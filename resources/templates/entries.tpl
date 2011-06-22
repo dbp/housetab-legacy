@@ -45,7 +45,7 @@
 				<h1>LIST OF PURCHASES</h1>
 				<img src="/img/glyph_down.png" />
 				<h3>for the account of</h3>
-				<p>DurrutiColumn</p>
+				<p><accountName/></p>
 			</div>
 			
 			<div id="mod3">
