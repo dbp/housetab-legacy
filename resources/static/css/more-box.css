@@ -1,0 +1,16 @@
+.more-box {
+  position: relative;
+}
+
+.more-box .showing, .more-box .more {
+  cursor: pointer;
+}
+
+.more-box .more {
+  position: absolute;
+  top: 120%;
+  padding: 5px;
+  border: 1px solid black;
+  background-color: white;
+  z-index: 100;
+}

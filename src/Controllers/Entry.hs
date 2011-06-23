@@ -49,12 +49,15 @@ import            Controllers.Form
 import            Controllers.Person
 import            Models.Entry
 import            Models.Account
+import            Models.Person
+
 
 entriesH :: User -> Application ()
 entriesH user = do 
-   entriesSplice <- entriesPage 0 user
    {-liftIO $ putStrLn $ show $ length entries-}
-   people <- getPeopleSplices (authUser user)
+   peopleSplice <- getPeopleSplices (authUser user)
+   people <- getHouseTabPeople (authUser user)
+   entriesSplice <- entriesPage people 0 user
    now <- liftIO $ getCurrentTime
    zone <- liftIO $ getCurrentTimeZone
    (heistLocal $ (bindSplices 
@@ -64,7 +67,7 @@ entriesH user = do
      , ("entries", entriesSplice)
      , ("entriesPage", textSplice $ "1")
      , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
-     ] ++ people))) 
+     ] ++ peopleSplice))) 
      $ renderHT "entries"
      where showTime zone now = formatTime defaultTimeLocale "%e %B %Y" $ localDay $ utcToLocalTime zone now
 
@@ -74,17 +77,18 @@ entriesPageH user = do
    case page >>= (maybeRead . B8.unpack) of
      Nothing -> mzero
      Just n -> do
-       entriesSplice <- entriesPage n user
-       people <- getPeopleSplices (authUser user)
-       (heistLocal $ (bindSplices ((splices entriesSplice) ++ people))) $ renderHT "entries/page"
+       peopleSplice <- getPeopleSplices (authUser user)
+       people <- getHouseTabPeople (authUser user)
+       entriesSplice <- entriesPage people n user
+       (heistLocal $ (bindSplices ((splices entriesSplice) ++ peopleSplice))) $ renderHT "entries/page"
          where splices es = [ ("entries", es)
                             , ("entriesPage", textSplice $ T.pack $ show (n + 1))
                             ]
 
 
-entriesPage :: Word32 -> User -> Application (Splice Application)
-entriesPage n user = do entries <- getHouseTabEntries n (authUser user)
-                        return (renderEntries entries)
+entriesPage :: [Person] -> Word32 -> User -> Application (Splice Application)
+entriesPage ps n user = do entries <- getHouseTabEntries n (authUser user)
+                           return (renderEntries ps entries)
 
 
 
@@ -94,19 +98,20 @@ addEntry user = do
          when (isNothing mbhtid) $ redirect "/"
          let (UserId htid) = fromJust mbhtid
          r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
-         people <- getPeopleSplices (authUser user)
+         peopleSplices <- getPeopleSplices (authUser user)
          case r of
              Left splices' -> do
-               heistLocal (bindSplices (splices' ++ people)) $ renderHT "entries/add"
+               heistLocal (bindSplices (splices' ++ peopleSplices)) $ renderHT "entries/add"
              Right entry' -> do
                case bs2objid htid of 
                  Nothing -> renderHT "entries/add_failure"                
                  Just h -> do
+                   people <- getHouseTabPeople (authUser user)
                    saveHouseTabEntry $ entry' { eHTId = h }
                    recalculateTotals user
-                   entries <- getHouseTabEntriesAll (authUser user)
+                   entriesSplice <- entriesPage people 0 user
                    people <- getPeopleSplices (authUser user)
-                   heistLocal (bindSplices ([("entries",(renderEntries entries))] ++ people)) $
+                   heistLocal (bindSplices ([("entries",entriesSplice)] ++ peopleSplices)) $
                       renderHT "entries/add_success"                
  
 editEntry :: User -> Application ()
@@ -117,20 +122,21 @@ editEntry user =
      let (UserId htid) = fromJust mbhtid
      case i >>= bs2objid of
       Just eid -> do
-        people <- getPeopleSplices (authUser user)
+        peopleSplices <- getPeopleSplices (authUser user)
         entry <- getHouseTabEntry eid
         r <- eitherSnapForm (entryForm entry) "edit-entry-form" 
         case r of
           Left splices' -> 
-            heistLocal (bindSplices (splices' ++ people)) $ renderHT "entries/edit"
+            heistLocal (bindSplices (splices' ++ peopleSplices)) $ renderHT "entries/edit"
           Right entry' -> do
             case bs2objid htid of 
                Nothing -> redirect "/entries"               
                Just h -> do
+                 people <- getHouseTabPeople (authUser user)
                  let newentry = entry' { eHTId = h, eId = Just eid }
                  saveHouseTabEntry newentry
                  recalculateTotals user
-                 heistLocal (bindSplices (renderEntry newentry ++ people)) $ renderHT "entries/show"
+                 heistLocal (bindSplices (renderEntry people newentry ++ peopleSplices)) $ renderHT "entries/show"
       Nothing -> redirect "/entries"
 
 deleteEntry :: User -> Application ()

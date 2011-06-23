@@ -17,8 +17,13 @@
 	<div class="col5 col">$<entryAmount/></div>
 	<div class="col6 col"><entryDate/></div>
 	<div class="col7 col">
-	  <entryFor>
-      <lookupName id="$(value)"/>,
-    </entryFor>
+	  <more-box>
+	    <entryForSummary/>
+      <more>
+        <entryFor>
+          <lookupName id="$(value)"/><br>
+        </entryFor>
+      </more>
+    </more-box>
   </div>
 </div-async>

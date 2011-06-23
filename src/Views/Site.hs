@@ -58,6 +58,20 @@ boxOption = do node <- getParamNode
                    let attributes = ("class", klass) : (filter ((flip notElem ["class","value"]).fst) $ X.elementAttrs node)
                    return [X.setAttribute "data-box-value" value $ X.Element "div" attributes (X.elementChildren node)]
 
+
+moreBox :: Monad m => Splice m
+moreBox = do node <- getParamNode
+             let children = X.elementChildren node
+             let more = case filter isMore children of
+                          (x:xs) -> [X.Element "div" [("class","more"), ("style","display:none;")] (X.elementChildren x)]
+                          _ -> []
+             let showing = X.Element "div" [("class","showing")] $ filter (not.isMore) children
+             let klass = T.concat ["more-box ",(fromMaybe "" $ X.getAttribute "class" node)]
+             return [X.setAttribute "class" klass $ X.Element "div" (X.elementAttrs node) (showing:more)] 
+    where isMore (X.Element tag _ _) = tag == "more"
+          isMore _ = False
+
+
 --- the following two taken from https://github.com/mightybyte/snap-heist-splices which depends on unreleased version of snap
 ------------------------------------------------------------------------------
 -- | Renders the child nodes only if the request comes from an authenticated
@@ -90,4 +104,5 @@ renderHT = (heistLocal $ (bindSplices splices)) . render
                   , ("categories", categories)
                   , ("catName", categoryName)
                   , ("catImage", categoryImage)
+                  , ("more-box", moreBox)
                   ] ++ heistAsyncSplices

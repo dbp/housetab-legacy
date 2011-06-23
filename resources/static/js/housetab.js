@@ -64,4 +64,17 @@ bean.add(document, 'DOMContentLoaded', function () {
   declare("click", ".close2", true, function (elem) {
       bonzo(elem.parentNode.parentNode).hide();
     });
+ // more box, ie, a div that when you click on it, it pops up a box with more content in it.
+ declare("click", ".more-box .showing", true, function (elem){
+   m = bonzo(bonzo(elem).next());
+   if (m.css("display") === "none") {
+     m.css("display", "block");
+   } else {
+     m.css("display", "none");
+   }
+ });
+ declare("click", ".more-box .more", true, function (elem){
+   bonzo(elem).css("display", "none");
+ });
+ 
 });

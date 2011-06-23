@@ -14,6 +14,7 @@ import            Snap.Auth
 import qualified  Data.Map as M
 
 import            Models.Person
+import            Application
 
 renderPersonChild :: Monad m => Person -> Splice m
 renderPersonChild person = runChildrenWith (renderPerson person)
@@ -35,6 +36,7 @@ lookupName people = do node <- getParamNode
                          Nothing -> return [] -- no id, so no name
                          Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' people 
 
+getPeopleSplices :: AuthUser -> Application [(T.Text, Splice Application)]
 getPeopleSplices au = do people <- getHouseTabPeople au
                          return [("people", renderPeople people)
                                 ,("lookupName", lookupName (personIdMap people))]
