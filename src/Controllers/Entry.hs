@@ -61,16 +61,17 @@ entriesH user = do
    entriesSplice <- entriesPage people 0 user
    now <- liftIO $ getCurrentTime
    zone <- liftIO $ getCurrentTimeZone
+   let today = localDay $ utcToLocalTime zone now
    (heistLocal $ (bindSplices 
-    ([ ("result",  (renderResult  $ currentResult user))
-     , ("totalSpent", textSplice $ T.pack $ moneyShow $ getTotalSpent user)
-     , ("currentDate", textSplice $ T.pack $ showTime zone now)
-     , ("entries", entriesSplice)
-     , ("entriesPage", textSplice $ "1")
-     , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
-     ] ++ peopleSplice))) 
-     $ renderHT "entries"
-     where showTime zone now = formatTime defaultTimeLocale "%e %B %Y" $ localDay $ utcToLocalTime zone now
+    ([ ("result",           (renderResult  $ currentResult user))
+     , ("totalSpent",       textSplice $ T.pack $ moneyShow $ getTotalSpent user)
+     , ("currentDateLong",  textSplice $ T.pack $ formatTime defaultTimeLocale "%e %B %Y" today)
+     -- the following should be the default until overridden by digestive-functors validation
+     , ("date-value",       textSplice $ T.pack $ formatTime defaultTimeLocale "%-m.%d.%Y" today)
+     , ("entries",          entriesSplice)
+     , ("entriesPage",      textSplice $ "1")
+     , ("accountName",      textSplice $ TE.decodeUtf8 (accountName user))
+     ] ++ peopleSplice))) $ renderHT "entries"
 
 entriesPageH :: User -> Application ()
 entriesPageH user = do 

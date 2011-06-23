@@ -14,17 +14,77 @@ import Snap.Auth
 import Snap.Extension.Heist
 import Snap.Extension.DB.MongoDB
 import Control.Monad.Trans (lift)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Data.List (intercalate)
 import Data.List.Split (splitEvery)
+import qualified Data.Map as M
 
 import Heist.Splices.Async
-import Views.Entry
 
 import Application 
 
-moneyShow m = (if m < 0 then "-$" else "$") ++ ((reverse . intercalate "," . splitEvery 3 . reverse . show . abs . floor) m)
+moneyShow :: Double -> String
+moneyShow m = (if m<0 then "-$" else "$") ++ ((reverse . intercalate "," . splitEvery 3 . reverse) dollars) ++ "." ++ cents
+  where mstr = (show . abs . floor . (* 100.0)) m
+        dollars = reverse $ drop 2 $ reverse mstr
+        cents = reverse $ take 2 $ reverse mstr
 
+categories :: Monad m => Splice m
+categories = mapSplices runChildrenWithText (map ((:[]) . ((,) "cat")) categoryList) 
+
+
+categoryList :: [T.Text]
+categoryList = ["alcohol"
+               ,"cash"
+               ,"entertainment"
+               ,"furnishings"
+               ,"groceries"
+               ,"household"
+               ,"misc"
+               ,"food"
+               ,"rent"
+               ,"toiletries"
+               ,"utilities"
+               ]
+
+catImages = M.fromList [("alcohol", "/img/alcohol.png")
+                       ,("cash", "/img/cash.png")
+                       ,("entertainment", "/img/entertainment.png")
+                       ,("furnishings", "/img/furnishings.png")
+                       ,("groceries", "/img/groceries.png")
+                       ,("household", "/img/household.png")
+                       ,("misc", "/img/misc.png")
+                       ,("food", "/img/pan.png")
+                       ,("rent", "/img/rent.png")
+                       ,("toiletries", "/img/toiletries.png")
+                       ,("utilities", "/img/utilities.png")
+                       ]
+
+catNames = M.fromList [("alcohol", "Alcohol")
+                      ,("cash", "Cash")
+                      ,("entertainment", "Entertainment")
+                      ,("furnishings", "Furnishings")
+                      ,("groceries", "Groceries")
+                      ,("household", "Household")
+                      ,("misc", "Miscellanea")
+                      ,("food", "Food")
+                      ,("rent", "Rent")
+                      ,("toiletries", "Toiletries")
+                      ,("utilities", "Utilities")
+                      ]
+
+categoryImage :: Monad m => Splice m
+categoryImage = do node <- getParamNode
+                   case X.getAttribute "cat" node of
+                      Nothing -> return [] -- no id, so no name
+                      Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' catImages
+                   
+
+categoryName :: Monad m => Splice m
+categoryName = do node <- getParamNode
+                  case X.getAttribute "cat" node of
+                     Nothing -> return [] -- no id, so no name
+                     Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' catNames
 
 boxField :: Monad m => Splice m
 boxField = boxFieldGen "box-field" id []

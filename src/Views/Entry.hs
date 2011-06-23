@@ -18,6 +18,8 @@ import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 import            Models.Entry
 import            Models.Person
 
+import            Views.Site
+
 renderEntryChild :: Monad m => [Person] -> HouseTabEntry -> Splice m
 renderEntryChild people entry = runChildrenWith (renderEntry people entry)
 
@@ -31,7 +33,7 @@ renderEntry people (HouseTabEntry uid htid who what category when howmuch whopay
    ,("entryWhat",       TE.decodeUtf8 what)
    ,("entryCategory",   TE.decodeUtf8 category)
    ,("entryDate",       T.pack $ show when)
-   ,("entryAmount",     T.pack $ show howmuch)
+   ,("entryAmount",     T.pack $ moneyShow howmuch)
    ,("entryForSummary", T.pack $ (showPeople whopays))
    ])
         where showPeople p
@@ -42,60 +44,3 @@ renderEntry people (HouseTabEntry uid htid who what category when howmuch whopay
 
 renderEntries :: Monad m => [Person] -> [HouseTabEntry] -> Splice m
 renderEntries people entries = mapSplices (renderEntryChild people) entries
-
-categories :: Monad m => Splice m
-categories = mapSplices runChildrenWithText (map ((:[]) . ((,) "cat")) categoryList) 
-
-
-categoryList :: [T.Text]
-categoryList = ["alcohol"
-               ,"cash"
-               ,"entertainment"
-               ,"furnishings"
-               ,"groceries"
-               ,"household"
-               ,"misc"
-               ,"food"
-               ,"rent"
-               ,"toiletries"
-               ,"utilities"
-               ]
-
-catImages = M.fromList [("alcohol", "/img/alcohol.png")
-                       ,("cash", "/img/cash.png")
-                       ,("entertainment", "/img/entertainment.png")
-                       ,("furnishings", "/img/furnishings.png")
-                       ,("groceries", "/img/groceries.png")
-                       ,("household", "/img/household.png")
-                       ,("misc", "/img/misc.png")
-                       ,("food", "/img/pan.png")
-                       ,("rent", "/img/rent.png")
-                       ,("toiletries", "/img/toiletries.png")
-                       ,("utilities", "/img/utilities.png")
-                       ]
-
-catNames = M.fromList [("alcohol", "Alcohol")
-                      ,("cash", "Cash")
-                      ,("entertainment", "Entertainment")
-                      ,("furnishings", "Furnishings")
-                      ,("groceries", "Groceries")
-                      ,("household", "Household")
-                      ,("misc", "Miscellanea")
-                      ,("food", "Food")
-                      ,("rent", "Rent")
-                      ,("toiletries", "Toiletries")
-                      ,("utilities", "Utilities")
-                      ]
-
-categoryImage :: Monad m => Splice m
-categoryImage = do node <- getParamNode
-                   case X.getAttribute "cat" node of
-                      Nothing -> return [] -- no id, so no name
-                      Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' catImages
-                   
-
-categoryName :: Monad m => Splice m
-categoryName = do node <- getParamNode
-                  case X.getAttribute "cat" node of
-                     Nothing -> return [] -- no id, so no name
-                     Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' catNames

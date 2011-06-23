@@ -34,11 +34,11 @@ data HouseTabEntry = HouseTabEntry
     deriving (Show, Eq, Typeable)
 
 getHouseTabEntriesAll :: A.AuthUser -> Application [HouseTabEntry]
-getHouseTabEntriesAll au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries")
+getHouseTabEntriesAll au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.sort = ["when" =: (-1 :: Int)] }
 
 
 getHouseTabEntries :: Word32 -> A.AuthUser -> Application [HouseTabEntry]
-getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.limit = 30, DB.skip = page * 30}
+getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.limit = 30, DB.skip = page * 30, DB.sort = ["when" =: (-1 :: Int)]}
   
   
 getHouseTabEntriesGen :: A.AuthUser -> (BS.ByteString -> DB.Query) -> Application [HouseTabEntry]
@@ -96,10 +96,11 @@ data Date = Date { year :: Integer
                  deriving (Eq, Typeable, Ord)
    
 instance Show Date where
-    show (Date year month day) = (show year) ++ "." ++ (show month) ++ "." ++ (show day)
+    show (Date year month day) = (show month) ++ "." ++ (pad $ show day) ++ "." ++ (show year)
+      where pad d = if length d < 2 then '0':d else d
 instance Read Date where
     readsPrec _ value = pd $ splitOn (".") value
-        where pd (year:month:day:[]) = mkDate (maybeRead year) (maybeRead month) (maybeRead day)
+        where pd (month:day:year:[]) = mkDate (maybeRead year) (maybeRead month) (maybeRead day)
               pd _ = []
               mkDate (Just y) (Just m) (Just d) = [(Date y m d, "")]
               mkDate _ _ _ = []

@@ -14,7 +14,7 @@
 	</div>
 	<div class="col3 col"><lookupName id="$(entryBy)"/></div>
 	<div class="col4 col"><entryWhat/></div>
-	<div class="col5 col">$<entryAmount/></div>
+	<div class="col5 col"><entryAmount/></div>
 	<div class="col6 col"><entryDate/></div>
 	<div class="col7 col">
 	  <more-box>

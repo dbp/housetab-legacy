@@ -41,7 +41,7 @@
 			
 			<div id="mod3">
 				<h3>today's date is</h3>
-				<p><currentDate/></p>
+				<p><currentDateLong/></p>
 			</div>
 		</div>
 

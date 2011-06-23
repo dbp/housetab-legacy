@@ -1,5 +1,5 @@
 <div-async name="entry-form" class="entry-form">
-  <form-async action="/entries/add" method="POST" data-loading-div="#purchases">
+  <form-async action="/entries/add" method="POST"> <!-- data-loading-div="#purchases" -->
   <input type="hidden" name="id" value="$(id-value)" />
   
   <div class="buyer">

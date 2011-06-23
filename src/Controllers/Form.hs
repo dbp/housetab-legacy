@@ -25,7 +25,7 @@ import            Application
 
 import            Models.Site
 
-import            Views.Entry
+import            Views.Site
 
 
 
