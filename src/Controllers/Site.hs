@@ -46,6 +46,7 @@ import            Views.Site
 import            Controllers.Account
 import            Controllers.Entry
 import            Controllers.Person
+import            Controllers.History
 
 
 site :: Application ()                 
@@ -60,6 +61,8 @@ site = logAccess $
              , ("/people/add",                requireUserBounce' $ addPerson)
              , ("/people/list",               listPeople)
              , ("/people/edit/:id",           requireUserBounce' $ editPerson)
+             , ("/history",                   ifTop $ requireUserBounce' historyH)
+             , ("/history/page/:page",        requireUserBounce' historyPageH)
              , ("/signup",                    signupH)
              , ("/login",                     method GET $ loginH)
              , ("/login",                     method POST $ loginHandler "password" Nothing (const loginH) redirTo)

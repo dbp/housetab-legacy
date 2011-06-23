@@ -9,6 +9,7 @@ import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
 import Snap.Extension.Heist
 import Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as B8
 import Snap.Auth.Handlers
 import Snap.Auth
 import Snap.Extension.Heist
@@ -23,11 +24,23 @@ import Heist.Splices.Async
 
 import Application 
 
+import Models.Person
+
 moneyShow :: Double -> String
 moneyShow m = (if m<0 then "-$" else "$") ++ ((reverse . intercalate "," . splitEvery 3 . reverse) dollars) ++ "." ++ cents
   where mstr = (show . abs . floor . (* 100.0)) m
         dollars = reverse $ drop 2 $ reverse mstr
         cents = reverse $ take 2 $ reverse mstr
+
+forSplice :: Monad m => [ObjectId] -> Splice m
+forSplice = (mapSplices runChildrenWithText) . (map ((:[]) . ((,) "value") . TE.decodeUtf8 . objid2bs))
+
+showPeople :: [Person] -> [ObjectId] -> String
+showPeople people ps
+   | length ps == length people = "ALL USERS" 
+   | length ps <= 2             = intercalate " & " $ getNames ps
+   | otherwise                  = head (getNames ps) ++ " & " ++ (show $ length ps - 1) ++ " others."
+ where getNames ps = map (B8.unpack . pName) $ filter (flip elem (map Just ps) . pId) people 
 
 categories :: Monad m => Splice m
 categories = mapSplices runChildrenWithText (map ((:[]) . ((,) "cat")) categoryList) 
@@ -131,8 +144,14 @@ moreBox = do node <- getParamNode
     where isMore (X.Element tag _ _) = tag == "more"
           isMore _ = False
 
+identitySplice :: Monad m => Splice m
+identitySplice = do node <- getParamNode
+                    return [node]
+                    
+blackHoleSplice :: Monad m => Splice m
+blackHoleSplice = return []
 
--- | t his splice shows it's children if the blank attribute is not blank :)
+-- | this splice shows it's children if the blank attribute is not blank :)
 showContent :: Monad m => Splice m
 showContent = do node <- getParamNode
                  case X.getAttribute "blank" node of

@@ -42,7 +42,7 @@ getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["hti
   
   
 getHouseTabEntriesGen :: A.AuthUser -> (BS.ByteString -> DB.Query) -> Application [HouseTabEntry]
-getHouseTabEntriesGen au q = do
+getHouseTabEntriesGen au q =
     case A.userId au of
       Just (A.UserId uid) -> do c <- DB.withDB $ DB.find (q uid)
                                 case c of
