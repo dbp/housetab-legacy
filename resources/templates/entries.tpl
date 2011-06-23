@@ -4,7 +4,7 @@
     <h1>BALANCE OF PAYMENTS</h1>
   	<img src="/img/glyph_up.png" />
   	<h3>total spent</h3>
-  	<p>$15,201.45</p>
+  	<p><totalSpent/></p>
   	<apply template="people/add"></apply>
   </bind>
   
@@ -50,7 +50,7 @@
 			
 			<div id="mod3">
 				<h3>today's date is</h3>
-				<p>16 January 2011</p>
+				<p><currentDate/></p>
 			</div>
 		</div>
 

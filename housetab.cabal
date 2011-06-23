@@ -73,7 +73,8 @@ Executable housetab
     heist-async >= 0.2,
     snap-logging-mongodb,
     email-postmark,
-    vector
+    vector,
+    old-locale
 
   extensions: TypeSynonymInstances MultiParamTypeClasses
 

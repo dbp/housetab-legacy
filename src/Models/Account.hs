@@ -45,6 +45,10 @@ data SignupCreds = SignupCreds { suName :: BS.ByteString
 
 data NewPassword = NewPassword String String
 
+                     
+getTotalSpent :: User -> Double
+getTotalSpent u = sum $ map (\(_,s,_) -> s) $ people (currentResult u)
+
 
 makeUser token (SignupCreds name password email) =
   (User emptyAuthUser { userPassword = Just (ClearText password) } name [email] emptyResult Nothing (Just token))

@@ -12,6 +12,7 @@ import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 import            Models.Result
 import            Models.Person
 
+import            Views.Site
 
 renderPersonResult :: Monad m => (Person,Spent,Owes) -> Splice m
 renderPersonResult (person,spent,owes) = do
@@ -19,7 +20,6 @@ renderPersonResult (person,spent,owes) = do
                       ,("personName",   TE.decodeUtf8 $ pName person)
                       ,("personSpent",  T.pack $ moneyShow spent)
                       ,("personOwes",   T.pack $ moneyShow (negate owes))]
-          where moneyShow m = (if m < 0 then "-$" else "$") ++ show (abs $ floor m)
                        
 renderResult :: Monad m => Result -> Splice m
 renderResult (Result people date) = mapSplices renderPersonResult people

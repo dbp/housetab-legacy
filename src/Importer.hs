@@ -23,6 +23,16 @@ import Models.Account
 import Models.Person
 import Models.Result
 
+{- 
+This module is a bit of a mess, for reasons:
+    1. I need to reach inside of snap-auth for mongodb, which I can only really do by duplicating hidden functions, because I need to be able to programmatically create new users, which isn't really possible through the public API.
+    2. This is something that only needs to happen once. This is truly throwaway code - it exists to get data out of one legacy format into a new format (specifically, from a custom dump that is generated from happstack-state and into mongodb). It will only need to be used once (after being tested a few times), it will not need to be improved upon, as if I need to do something similar again, I can just write new code to do it. 
+    3. The target is an empty database, so the cost of screwing up is very low - a mistake simply means droping the database, fixing tho code, and running it again.
+    4. The data set is quite small, so iterating as described it 3 is totally feasible.
+    5. It could be worse - this is probably the most reliable imperative code I've ever written - once I got it to compile, it worked correctly, the first time. That's not bad :)
+-}
+
+
 type IAccountName = String
 type IEmail = String
 type IId = String
@@ -64,7 +74,7 @@ hashPassword s pwd = SaltedHash s h
   where h = hashFunc ((unSalt s) ++ pwd')
         pwd' = BS.unpack pwd
 
--- ripped out of snap-extension-mongodb
+-- | ripped out of snap-extension-mongodb
 addTimeStamps d = do
   t <- getCurrentTime
   let tsc = ["created_at" =: t]
@@ -72,6 +82,7 @@ addTimeStamps d = do
   return $ tsu `merge` d `merge` tsc
 
 
+-- | a lot of this comes right out of snap-auth, but it combines a bunch of separate steps into one
 newUser :: Service s => ConnPool s -> String -> [String] -> IO (Maybe User)
 newUser p name emails = do
   token <- getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')

@@ -16,6 +16,11 @@ import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
 import            Data.Word
 
+import            Data.Time.Clock
+import            Data.Time.LocalTime
+import            Data.Time.Format
+import            System.Locale (defaultTimeLocale)
+
 import            Snap.Extension.Heist
 import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
 import qualified  Data.Bson as B
@@ -50,12 +55,18 @@ entriesH user = do
    entriesSplice <- entriesPage 0 user
    {-liftIO $ putStrLn $ show $ length entries-}
    people <- getPeopleSplices (authUser user)
-   (heistLocal $ (bindSplices ((splices entriesSplice) ++ people))) $ renderHT "entries"
-     where splices es = [ ("result",  (renderResult  $ currentResult user))
-                        , ("entries", es)
-                        , ("entriesPage", textSplice $ "1")
-                        , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
-                        ]
+   now <- liftIO $ getCurrentTime
+   zone <- liftIO $ getCurrentTimeZone
+   (heistLocal $ (bindSplices 
+    ([ ("result",  (renderResult  $ currentResult user))
+     , ("totalSpent", textSplice $ T.pack $ moneyShow $ getTotalSpent user)
+     , ("currentDate", textSplice $ T.pack $ showTime zone now)
+     , ("entries", entriesSplice)
+     , ("entriesPage", textSplice $ "1")
+     , ("accountName", textSplice $ TE.decodeUtf8 (accountName user))
+     ] ++ people))) 
+     $ renderHT "entries"
+     where showTime zone now = formatTime defaultTimeLocale "%e %B %Y" $ localDay $ utcToLocalTime zone now
 
 entriesPageH :: User -> Application ()
 entriesPageH user = do 

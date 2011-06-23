@@ -15,12 +15,16 @@ import Snap.Extension.Heist
 import Snap.Extension.DB.MongoDB
 import Control.Monad.Trans (lift)
 import Data.Maybe (fromMaybe)
+import Data.List (intercalate)
+import Data.List.Split (splitEvery)
 
-import            Heist.Splices.Async
+import Heist.Splices.Async
 import Views.Entry
 
-{-import Notification (notificationSplice)-}
 import Application 
+
+moneyShow m = (if m < 0 then "-$" else "$") ++ ((reverse . intercalate "," . splitEvery 3 . reverse . show . abs . floor) m)
+
 
 boxField :: Monad m => Splice m
 boxField = boxFieldGen "box-field" id []
