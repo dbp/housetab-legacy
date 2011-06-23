@@ -9,16 +9,7 @@
   </bind>
   
   <bind tag="above">
-    <div id="payments-table">
-		  <result>
-		    <div class="person $(personClasses)">
-		      <h2><personName/> (<a href="/people/edit/$(personId)">edit</a>)</h2>
-          <p>spent <personSpent/></p>
-          <p><personShare/>%</p>
-          <p class="balance"><personOwes/></p>
-		    </div>
-      </result>
-    </div>		
+		<apply template="people/result"></apply>
   </bind>
 
   <bind tag="navbar">

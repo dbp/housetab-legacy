@@ -4,3 +4,4 @@
     Deleted entry.
   </div>
 </div-async>
+<apply template="/people/result"></apply>

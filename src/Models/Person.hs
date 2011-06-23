@@ -23,6 +23,7 @@ import            Control.Monad.Reader
 import            Application
 
 import            Models.Entry
+import            Models.Site
 
 data Share = Share { sDate :: Date, sValue :: Double }
   deriving (Show, Read, Eq, Typeable, Ord)
@@ -39,6 +40,8 @@ data Person = Person { pId    :: Maybe ObjectId
                      , pName  :: BS.ByteString
                      , pShares :: [Share]}
                      deriving (Show, Eq, Typeable, Ord)
+
+emptyPerson = Person Nothing emptyObjectId "" [] 
 
 getHouseTabPeople :: A.AuthUser -> Application [Person]
 getHouseTabPeople au = do

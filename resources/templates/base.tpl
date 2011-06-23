@@ -27,6 +27,7 @@
     <div id="above">
     	<div id="abovecontents">
         <above/>
+        <div class="clearfix"/>
       </div>
     </div>
     

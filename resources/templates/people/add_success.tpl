@@ -1,3 +1,3 @@
-<div-async name="add-person">
-  Successfully added person!
-</div-async>
+<apply template="add"></apply>
+<apply template="result"></apply>
+<apply template="/entries/add"></apply>

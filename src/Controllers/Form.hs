@@ -23,9 +23,10 @@ import            Text.Templating.Heist
 
 import            Application
 
+import            Models.Site
+
 import            Views.Entry
 
-emptyObjectId = Oid 0 0
 
 
 nonEmpty :: Validator Application Text String

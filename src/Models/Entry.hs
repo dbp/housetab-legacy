@@ -15,6 +15,7 @@ import            Data.Typeable
 import            Data.Maybe (catMaybes, listToMaybe, isNothing)
 import            Data.List.Split (splitOn)
 import            Data.Word
+import            Data.Time.Calendar
 import            Control.Monad
 import            Control.Monad.Trans
 import            Control.Monad.Reader
@@ -112,3 +113,5 @@ instance Val Date where
     cast' _ = Nothing
 
 emptyDate = Date 0 0 0
+
+dateToDay (Date y m d) = fromGregorian y (fromInteger m) (fromInteger d)

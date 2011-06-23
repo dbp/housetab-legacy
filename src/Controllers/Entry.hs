@@ -50,6 +50,7 @@ import            Controllers.Person
 import            Models.Entry
 import            Models.Account
 import            Models.Person
+import            Models.Site
 
 
 entriesH :: User -> Application ()
@@ -108,10 +109,10 @@ addEntry user = do
                  Just h -> do
                    people <- getHouseTabPeople (authUser user)
                    saveHouseTabEntry $ entry' { eHTId = h }
-                   recalculateTotals user
-                   entriesSplice <- entriesPage people 0 user
-                   people <- getPeopleSplices (authUser user)
-                   heistLocal (bindSplices ([("entries",entriesSplice)] ++ peopleSplices)) $
+                   nu <- recalculateTotals user
+                   entriesSplice <- entriesPage people 0 nu
+                   people <- getPeopleSplices (authUser nu)
+                   heistLocal (bindSplices ([("entries",entriesSplice),("result",(renderResult  $ currentResult nu))] ++ peopleSplices)) $
                       renderHT "entries/add_success"                
  
 editEntry :: User -> Application ()
@@ -135,8 +136,8 @@ editEntry user =
                  people <- getHouseTabPeople (authUser user)
                  let newentry = entry' { eHTId = h, eId = Just eid }
                  saveHouseTabEntry newentry
-                 recalculateTotals user
-                 heistLocal (bindSplices (renderEntry people newentry ++ peopleSplices)) $ renderHT "entries/show"
+                 nu <- recalculateTotals user
+                 heistLocal (bindSplices (renderEntry people newentry ++ peopleSplices ++ [("result",(renderResult  $ currentResult nu))])) $ renderHT "entries/edit_success"
       Nothing -> redirect "/entries"
 
 deleteEntry :: User -> Application ()
@@ -153,8 +154,8 @@ deleteEntry user =
             case (entry, entry >>= eId)  of
               (Just e, Just eid) -> do
                 deleteHouseTabEntry e
-                recalculateTotals user
-                heistLocal (bindSplice "index" $ (textSplice . TE.decodeUtf8 . objid2bs) eid) $ 
+                nu <- recalculateTotals user
+                heistLocal (bindSplices [("index", (textSplice . TE.decodeUtf8 . objid2bs) eid),("result",(renderResult  $ currentResult nu))]) $ 
                   renderHT "entries/delete_success"
               _ -> redirect "/entries"
               

@@ -98,7 +98,7 @@ h3 {
 	
 	#abovecontents {
 		width: 960px;
-		height: 240px;
+/*    height: 240px;*/
 		margin-left: auto;
 		margin-right: auto;
 		background-image: url("/img/grid.png");
@@ -107,7 +107,7 @@ h3 {
 	#payments-table {
 		  background: transparent url("") no-repeat 264px 0px;
 		  width: 864px;
-		  min-height: 235px;
+/*      min-height: 235px;*/
 		  margin: 0px auto;
 	}
 	

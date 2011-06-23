@@ -94,11 +94,11 @@ modPeople fn user = do
  where sortPeople = sortBy (\p1 p2 -> compare (letter p1) (letter p2))  
  -}
  
-recalculateTotals :: User -> Application ()
+recalculateTotals :: User -> Application User
 recalculateTotals u = do 
   entries <- getHouseTabEntriesAll (authUser u)
   people <- getHouseTabPeople (authUser u)
   let u' = u {currentResult = run people entries}
   saveAuthUser (authUser u', additionalUserFields u')
-  return ()
+  return u'
 

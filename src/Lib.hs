@@ -29,7 +29,7 @@ getPercentage person date = fn (pShares person)
       fn ((Share d p):(Share d' p'):xs) = if d' > date
                     then p
                     else fn $ (Share d' p'):xs
-      fn [] = 1 -- if they have nothing assigned, assume no share.
+      fn [] = 0 -- if they have nothing assigned, assume no share.
 
 getPerson :: [Person] -> B.ObjectId -> Person
 getPerson ps id' = head $ filter (\p -> (pId p) == Just id') ps

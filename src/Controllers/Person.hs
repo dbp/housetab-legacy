@@ -39,8 +39,10 @@ import            Lib
 import            Mail (mailActivation)
 import            Utils
 import            Views.Site
-{-import            Views.Person-}
+import            Views.Result
+import            Views.Person
 import            Models.Person
+import            Models.Site
 import            Models.Account
 import            Controllers.Form
 
@@ -78,7 +80,9 @@ addPerson user = do
          case mhtid >>= (\(UserId h) -> bs2objid h) of
            Nothing -> renderHT "people/add_failure"  
            Just htid -> do saveHouseTabPerson $ person' { pHTId = htid}
-                           renderHT "people/add_success"  
+                           nu <- recalculateTotals user
+                           peopleSplices <- getPeopleSplices (authUser user)
+                           (heistLocal $ bindSplices ([("result",(renderResult  $ currentResult nu))] ++ peopleSplices)) $ renderHT "people/add_success"  
 
 
 addShare :: User -> Application ()
@@ -102,9 +106,10 @@ addShare user = do
                   case mperson of
                     Nothing -> renderHT "people/share/add_failure" -- means they hit the wrong URL
                     Just person -> do saveHouseTabPerson $ person { pShares = share':(pShares person)}
-                                      recalculateTotals user
-                                      renderHT "people/share/add_success"  
-                                      
+                                      nu <- recalculateTotals user
+                                      (heistLocal $ bindSplice "result"  (renderResult  $ currentResult nu)) 
+                                        $ renderHT "people/result"
+                                       
 
 listPeople = do mhtid <- authenticatedUserId
                 case mhtid of
@@ -131,8 +136,9 @@ editPerson user =
             heistLocal (bindSplices splices') $ renderHT "people/edit"
           Right person' -> do
             maybe (return ()) (\p -> saveHouseTabPerson $ p { pName = pName person' }) person
-            recalculateTotals user
-            renderHT "people/edit_success"
+            nu <- recalculateTotals user
+            (heistLocal $ bindSplice "result"  (renderResult  $ currentResult nu)) 
+              $ renderHT "people/result"
       Nothing -> redirect "/entries"
       
 

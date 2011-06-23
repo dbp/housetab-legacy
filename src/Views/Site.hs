@@ -72,6 +72,14 @@ moreBox = do node <- getParamNode
           isMore _ = False
 
 
+-- | t his splice shows it's children if the blank attribute is not blank :)
+showContent :: Monad m => Splice m
+showContent = do node <- getParamNode
+                 case X.getAttribute "blank" node of
+                   Just "" -> return []
+                   Nothing -> return []
+                   _ -> return $ X.elementChildren node
+
 --- the following two taken from https://github.com/mightybyte/snap-heist-splices which depends on unreleased version of snap
 ------------------------------------------------------------------------------
 -- | Renders the child nodes only if the request comes from an authenticated
@@ -105,4 +113,5 @@ renderHT = (heistLocal $ (bindSplices splices)) . render
                   , ("catName", categoryName)
                   , ("catImage", categoryImage)
                   , ("more-box", moreBox)
+                  , ("show", showContent)
                   ] ++ heistAsyncSplices
