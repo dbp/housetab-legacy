@@ -81,3 +81,14 @@ historyPageH user = do
 historyPage :: [Person] -> Word32 -> User -> Application (Splice Application)
 historyPage ps n user = do hs <- getHistory n (authUser user)
                            return (renderHistory ps hs)
+
+deactivateHistory :: User -> Application ()
+deactivateHistory user = do deleteHistory (authUser user)
+                            let u = user { recordHistory = False }
+                            saveAuthUser (authUser u, additionalUserFields u)
+                            renderHT "history/deactivated"
+                            
+activateHistory :: User -> Application ()
+activateHistory user = do let u = user { recordHistory = True }
+                          saveAuthUser (authUser u, additionalUserFields u)
+                          renderHT "history/activated"

@@ -108,7 +108,7 @@ addEntry user = do
                  Just h -> do
                    people <- getHouseTabPeople (authUser user)
                    saveHouseTabEntry $ entry' { eHTId = h }
-                   trackAdd $ entry' { eHTId = h }
+                   when (recordHistory user) $ trackAdd $ entry' { eHTId = h }
                    nu <- recalculateTotals user
                    entriesSplice <- entriesPage people 0 nu
                    heistLocal (bindSplices [("entries",entriesSplice),("result",(renderResult  $ currentResult nu))]) $
@@ -133,7 +133,7 @@ editEntry user =
                  people <- getHouseTabPeople (authUser user)
                  let newentry = entry' { eHTId = h, eId = Just eid }
                  saveHouseTabEntry newentry
-                 trackEdit oldentry newentry
+                 when (recordHistory user) $ trackEdit oldentry newentry
                  nu <- recalculateTotals user
                  heistLocal (bindSplices (renderEntry people newentry ++ [("result",(renderResult  $ currentResult nu))])) $ renderHT "entries/edit_success"
                _ -> redirect "/entries"               
@@ -154,7 +154,7 @@ deleteEntry user =
             case (entry, entry >>= eId)  of
               (Just e, Just eid) -> do
                 deleteHouseTabEntry e
-                trackDelete e
+                when (recordHistory user) $ trackDelete e
                 nu <- recalculateTotals user
                 heistLocal (bindSplices [("index", (textSplice . TE.decodeUtf8 . objid2bs) eid),("result",(renderResult  $ currentResult nu))]) $ 
                   renderHT "entries/delete_success"

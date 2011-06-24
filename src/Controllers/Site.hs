@@ -65,6 +65,8 @@ site = logAccess $
              , ("/tutorial/activate",         requireUserBounce' $ tutorialActivate)
              , ("/history",                   ifTop $ requireUserBounce' historyH)
              , ("/history/page/:page",        requireUserBounce' historyPageH)
+             , ("/history/activate",          ifTop $ requireUserBounce' activateHistory)
+             , ("/history/deactivate",        ifTop $ requireUserBounce' deactivateHistory)
              , ("/signup",                    noRequireUser $ signupH)
              , ("/login",                     method GET $ noRequireUser $ loginH)
              , ("/login",                     method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)

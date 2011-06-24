@@ -110,6 +110,13 @@ getHistory page au =
                Right es -> return $ catMaybes $ map (cast' . Doc) es
     Nothing -> return []
 
+deleteHistory :: A.AuthUser -> Application ()
+deleteHistory au = 
+  case A.userId au of
+    Just (A.UserId uid) -> do DB.withDB $ DB.delete (DB.select ["htid" =: bs2objid uid] "history")
+                              return ()
+    Nothing -> return ()
+      
 instance Val a => Val (Change a) where
   val (Change old new) = Doc ["o" =: old, "n" =: new]
   cast' (Doc fields) = do

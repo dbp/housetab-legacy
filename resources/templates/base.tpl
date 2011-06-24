@@ -13,6 +13,7 @@
     <script type="text/javascript" charset="utf-8" src="/js/housetab.js"></script>
     
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/history.css" />
     <link rel="stylesheet" type="text/css" href="/css/more-box.css" />
 
     <link rel="stylesheet" type="text/css" href="/css/tutorial.css" />

@@ -1,0 +1,8 @@
+.more-box.delete-history {
+  background-color: red;
+  color: white;
+  width: 300px;
+  padding: 5px;
+  margin: 10px;
+  float: right;
+}

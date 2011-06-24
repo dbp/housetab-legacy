@@ -60,6 +60,8 @@ requireUserBounce' good = do
       Just user -> do hs <- liftM getHeistState ask
                       peopleSplice <- getPeopleSplices (authUser user)
                       registerSplices hs ([("tutorial", tutorialSplice)
+                                          ,("historyOn", if (recordHistory user) then identitySplice else blackHoleSplice)
+                                          ,("historyOff", if (recordHistory user) then blackHoleSplice else identitySplice)
                                           ] ++ peopleSplice)
                       good user
  

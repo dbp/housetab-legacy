@@ -1,5 +1,5 @@
 <div-async-append name="history">
-
+  
   <history>
     <apply template="show"></apply>
   </history>
