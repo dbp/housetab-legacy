@@ -31,11 +31,11 @@ data User = User
   { authUser        :: AuthUser
   , accountName     :: BS.ByteString
   , accountEmails   :: [BS.ByteString]
-  {-, houseTabEntries :: [HouseTabEntry]-}
-  {-, houseTabPeople  :: [Person]-}
   , currentResult    :: Result
   , accountReset    :: Maybe BS.ByteString -- reset token
   , accountActivate :: Maybe BS.ByteString -- activation token
+  , tutorialActive  :: Bool
+  , recordHistory   :: Bool
   }
 
 data SignupCreds = SignupCreds { suName :: BS.ByteString
@@ -51,16 +51,16 @@ getTotalSpent u = sum $ map (\(_,s,_) -> s) $ people (currentResult u)
 
 
 makeUser token (SignupCreds name password email) =
-  (User emptyAuthUser { userPassword = Just (ClearText password) } name [email] emptyResult Nothing (Just token))
+  (User emptyAuthUser { userPassword = Just (ClearText password) } name [email] emptyResult Nothing (Just token) True True)
 
 additionalUserFields :: User -> Document
 additionalUserFields u = [ "accountName"      =: accountName u
                          , "accountEmails"    =: accountEmails u
-                         {-, "houseTabEntries"  =: houseTabEntries u-}
-                         {-, "houseTabPeople"   =: houseTabPeople u-}
                          , "currentResult"    =: currentResult u
                          , "accountReset"     =: accountReset u -- reset token
                          , "accountActivate"  =: accountActivate u -- activation token
+                         , "tutorialActive"   =: tutorialActive u
+                         , "recordHistory"    =: recordHistory u
                          ]
 
 
@@ -76,23 +76,12 @@ buildUser u = do fields    <- liftM snd u
                  auth      <- liftM fst u
                  name      <- B.lookup "accountName"       fields
                  emails    <- B.lookup "accountEmails"     fields
-                 {-entries   <- B.lookup "houseTabEntries"   fields-}
-                 {-people    <- B.lookup "houseTabPeople"    fields-}
                  current   <- B.lookup "currentResult"     fields
                  reset     <- B.lookup "accountReset"      fields      
                  activate  <- B.lookup "accountActivate"   fields      
-                 return $ User auth name emails {-entries-} {-people-} current reset activate
-
-{-currentPeople :: Application (Maybe [Person])
-currentPeople = liftM (liftM houseTabPeople) currentUser
--}
-
-{-modPeople :: ([Person] -> [Person]) -> User -> Application ()
-modPeople fn user = do
-   let u' = user {houseTabPeople = sortPeople (fn (houseTabPeople user))}
-   recalculateTotals u'
- where sortPeople = sortBy (\p1 p2 -> compare (letter p1) (letter p2))  
- -}
+                 tutorial  <- B.lookup "tutorialActive"    fields      
+                 history   <- B.lookup "recordHistory"     fields      
+                 return $ User auth name emails current reset activate tutorial history
  
 recalculateTotals :: User -> Application User
 recalculateTotals u = do 

@@ -14,12 +14,21 @@
     
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/more-box.css" />
+
+    <ifTutorial>
+      <link rel="stylesheet" type="text/css" href="/css/tutorial.css" />
+      <script type="text/javascript" charset="utf-8" src="/js/tutorial.js"></script>
+    </ifTutorial>
     
     </head>
   <body>
+    
 
     <div id="top">
     	<div id="topcontents">
+    	  <ifTutorial>
+          <apply template="tutorial/base"></apply>
+        </ifTutorial>
         <top/>
       </div>
     </div>

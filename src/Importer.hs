@@ -94,7 +94,9 @@ newUser p name emails = do
                    (map B8.pack emails) 
                    emptyResult 
                    (Just token) 
-                   Nothing)
+                   Nothing
+                   True
+                   True)
   d <- addTimeStamps $ authUserToDoc $ authUser user
   let d' = d `merge` (additionalUserFields user)
   mid <- runDB p $ insert "users" d'

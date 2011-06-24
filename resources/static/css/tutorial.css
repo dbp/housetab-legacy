@@ -1,0 +1,18 @@
+#tutorial {
+  position: absolute;
+  left: 30px;
+  top: 0px;
+  width: 275px;
+  border: 2px solid red;
+  border-top: 0;
+  background-color: white;
+}
+
+#tutorial .content p {
+  font-size: 16px;
+  padding: 5px;
+}
+
+#tutorial a {
+  float: right;
+}

@@ -146,7 +146,7 @@ moreBox = do node <- getParamNode
 
 identitySplice :: Monad m => Splice m
 identitySplice = do node <- getParamNode
-                    return [node]
+                    return (X.elementChildren node)
                     
 blackHoleSplice :: Monad m => Splice m
 blackHoleSplice = return []

@@ -64,6 +64,7 @@ h3 {
 	margin-right: auto;
 	background-image: url("/img/grid.png");
 	height: 160px;
+	position: relative;
 }
 
 #topcontents h1 {
@@ -87,6 +88,9 @@ h3 {
 		margin-top: 3px;
 	}
 
+#topcontents .addPerson {
+  margin-left: 350px;
+}
 
 /*All of the shit above the navigation bar but below the tippy-top*/
 

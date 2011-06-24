@@ -51,7 +51,7 @@ import            Controllers.History
 
 site :: Application ()                 
 site = logAccess $ 
-       route [ ("/",                          ifTop $ renderHT "index")
+       route [ ("/",                          ifTop $ noRequireUser $ renderHT "index")
              , ("/entries",                   ifTop $ requireUserBounce' entriesH)
              , ("/entries/page/:page",        requireUserBounce' entriesPageH)
              , ("/entries/add",               requireUserBounce' $ addEntry)              
@@ -59,15 +59,17 @@ site = logAccess $
              , ("/entries/delete/:id",        requireUserBounce' $ deleteEntry)              
              , ("/people/:person/share/add",  requireUserBounce' $ addShare)
              , ("/people/add",                requireUserBounce' $ addPerson)
-             , ("/people/list",               listPeople)
+             , ("/people/list",               requireUserBounce $ listPeople)
              , ("/people/edit/:id",           requireUserBounce' $ editPerson)
+             , ("/tutorial/deactivate",       requireUserBounce' $ tutorialDeactivate)
+             , ("/tutorial/activate",         requireUserBounce' $ tutorialActivate)
              , ("/history",                   ifTop $ requireUserBounce' historyH)
              , ("/history/page/:page",        requireUserBounce' historyPageH)
-             , ("/signup",                    signupH)
-             , ("/login",                     method GET $ loginH)
-             , ("/login",                     method POST $ loginHandler "password" Nothing (const loginH) redirTo)
-             , ("/logout",                    method GET $ logoutHandler redirTo)
-             , ("/activate",                  activateAccountH)
-             , ("/reset",                     resetPasswordH)
+             , ("/signup",                    noRequireUser $ signupH)
+             , ("/login",                     method GET $ noRequireUser $ loginH)
+             , ("/login",                     method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)
+             , ("/logout",                    method GET $ noRequireUser $ logoutHandler redirTo)
+             , ("/activate",                  noRequireUser $ activateAccountH)
+             , ("/reset",                     noRequireUser $ resetPasswordH)
              ]
        <|> serveDirectory "resources/static"

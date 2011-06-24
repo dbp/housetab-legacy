@@ -8,6 +8,7 @@ import            Snap.Extension.Session.CookieSession
 import            Snap.Extension.DB.MongoDB
 import qualified  Data.Map as M
 import            Control.Monad
+import            Control.Monad.Reader
 import            Control.Monad.Trans
 import            Control.Applicative
 
@@ -17,6 +18,7 @@ import qualified  Data.ByteString.Char8 as B8
 import qualified  Data.Text as T
 
 import            Snap.Extension.Heist
+import            Snap.Extension.Heist.Impl
 import            Data.Maybe (fromMaybe, fromJust, isJust)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
@@ -38,13 +40,6 @@ import            Controllers.Form
 import            Models.Account
 
 
-
-{-currentHouseTab :: Application (Maybe ([Person],[HouseTabEntry]))
-currentHouseTab = do entries <- currentEntries
-                     people <- currentPeople
-                     return $ liftM2 (,) people entries-}
-
-
 requireUserBounce :: Application () -> Application ()
 requireUserBounce good = do
     uri <- liftM rqURI getRequest
@@ -58,8 +53,15 @@ requireUserBounce' good = do
     u <- currentUser
     case u of
       Nothing -> loginPage
-      Just user -> good user
+      Just user -> do hs <- liftM getHeistState ask
+                      registerSplices hs [("ifTutorial",if (tutorialActive user) then identitySplice else blackHoleSplice)]
+                      good user
  
+noRequireUser :: Application () -> Application ()
+noRequireUser handler = do 
+  hs <- liftM getHeistState ask
+  registerSplices hs [("ifTutorial", blackHoleSplice)]
+  handler
 
 redirTo :: Application ()
 redirTo = do r <- getParam "redirectTo"
@@ -68,6 +70,11 @@ redirTo = do r <- getParam "redirectTo"
 -- Make sure you have a 'password' field in there
 loginH :: Application ()
 loginH = renderHT "account/login"
+
+loginSuccess :: Application ()
+loginSuccess = do u <- currentUser
+                  recalculateTotals (fromJust u)
+                  redirTo
 
 unDoc (Doc fs) = fs
 
@@ -139,3 +146,14 @@ resetPasswordH = do
               redirect "/login"
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
+       
+       
+tutorialDeactivate :: User -> Application ()
+tutorialDeactivate user = do let u = user { tutorialActive = False }
+                             saveAuthUser (authUser u, additionalUserFields u)
+                             renderHT "tutorial/deactivated"
+
+tutorialActivate :: User -> Application ()
+tutorialActivate user = do let u = user { tutorialActive = True }
+                           saveAuthUser (authUser u, additionalUserFields u)
+                           renderHT "tutorial/activated"
