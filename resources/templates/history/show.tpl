@@ -12,6 +12,7 @@
     </more-box>
   </div>
 	<div class="col2 col">
+	  <type/>
 	  <more-box>
 	    <bind tag="imgSrc">
         <catImage cat="$(category)" />

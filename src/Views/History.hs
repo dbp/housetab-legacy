@@ -33,9 +33,9 @@ renderHistoryChild t people h = runChildrenWith (renderHistoryEntry t people h)
 
 renderHistoryEntry :: (UTCTime -> LocalTime) -> [Person] -> History -> [(T.Text, Splice Application)]
 renderHistoryEntry t people (Add uid htid date who what category when howmuch whopays) =
-  (renderuhd t uid htid date) ++ (renderadddel people who what category when howmuch whopays)
+  (renderuhd t uid htid date) ++ (renderadddel people who what category when howmuch whopays) ++ [("type", textSplice "Add")]
 renderHistoryEntry t people (Delete uid htid date who what category when howmuch whopays) =
-  (renderuhd t uid htid date) ++ (renderadddel people who what category when howmuch whopays)
+  (renderuhd t uid htid date) ++ (renderadddel people who what category when howmuch whopays) ++ [("type", textSplice "Delete")]
 renderHistoryEntry t people (Edit uid htid date who what category when howmuch whopays) =
   (renderuhd t uid htid date) ++ 
   (renderChangeT "who" (TE.decodeUtf8 . objid2bs) who) ++
@@ -44,7 +44,8 @@ renderHistoryEntry t people (Edit uid htid date who what category when howmuch w
   (renderChangeT "when" (T.pack . show) when) ++
   (renderChangeT "ammount" (T.pack . moneyShow) howmuch) ++
   (renderChangeT "forSummary" (T.pack . showPeople people) whopays) ++
-  (renderChange  "for" forSplice whopays)
+  (renderChange  "for" forSplice whopays) ++ 
+  [("type", textSplice "Edit")]
 
 
 renderuhd t uid htid date = map ((\(a,b) -> (a, textSplice b)))
