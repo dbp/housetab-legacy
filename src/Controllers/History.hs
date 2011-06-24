@@ -57,14 +57,13 @@ import            Models.Site
 
 historyH :: User -> Application ()
 historyH user = do 
-   peopleSplice <- getPeopleSplices (authUser user)
    people <- getHouseTabPeople (authUser user)
    historySplice <- historyPage people 0 user
    (heistLocal $ (bindSplices 
-    ([ ("history",          historySplice)
-     , ("historyPage",      textSplice $ "1")
-     , ("accountName",      textSplice $ TE.decodeUtf8 (accountName user))
-     ] ++ peopleSplice))) $ renderHT "history"
+    [ ("history",          historySplice)
+    , ("historyPage",      textSplice $ "1")
+    , ("accountName",      textSplice $ TE.decodeUtf8 (accountName user))
+    ])) $ renderHT "history"
 
 historyPageH :: User -> Application ()
 historyPageH user = do 
@@ -72,12 +71,11 @@ historyPageH user = do
    case page >>= (maybeRead . B8.unpack) of
      Nothing -> mzero
      Just n -> do
-       peopleSplice <- getPeopleSplices (authUser user)
        people <- getHouseTabPeople (authUser user)
        historySplice <- historyPage people n user
-       (heistLocal $ (bindSplices ([ ("history", historySplice)
-                                   , ("historyPage", textSplice $ T.pack $ show (n + 1))
-                                   ] ++ peopleSplice))) $ renderHT "history/page"
+       (heistLocal $ (bindSplices [ ("history", historySplice)
+                                  , ("historyPage", textSplice $ T.pack $ show (n + 1))
+                                  ])) $ renderHT "history/page"
 
 
 historyPage :: [Person] -> Word32 -> User -> Application (Splice Application)

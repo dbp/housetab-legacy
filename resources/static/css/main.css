@@ -90,6 +90,8 @@ h3 {
 
 #topcontents .addPerson {
   margin-left: 350px;
+  position: relative;
+  width: 250px;
 }
 
 /*All of the shit above the navigation bar but below the tippy-top*/
@@ -121,6 +123,7 @@ h3 {
 		border-right: 1px solid #424242;
 		border-bottom: 1px solid #424242;
 		float: left;
+		position: relative;
 	}
 		
 	.person.last {

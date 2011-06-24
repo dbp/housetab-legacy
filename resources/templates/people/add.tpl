@@ -5,4 +5,19 @@
     <input name="name" type="text" value="$(name-value)" />
     <button type="submit" title=""/>
   </form-async>
+  
+  <tutorial step="1">
+    <div id="tutorial-1">
+      1
+    </div>
+  </tutorial>
+  <tutorial step="2">
+    <div id="tutorial-2">
+      2
+    </div>
+  </tutorial>
 </div-async>
+
+<tutorial step="2">
+  <apply template="/tutorial/2"></apply>
+</tutorial>

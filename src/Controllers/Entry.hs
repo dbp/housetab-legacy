@@ -57,7 +57,6 @@ import            Models.Site
 entriesH :: User -> Application ()
 entriesH user = do 
    {-liftIO $ putStrLn $ show $ length entries-}
-   peopleSplice <- getPeopleSplices (authUser user)
    people <- getHouseTabPeople (authUser user)
    entriesSplice <- entriesPage people 0 user
    now <- liftIO $ getLocalTime
@@ -70,8 +69,7 @@ entriesH user = do
      , ("date-value",       textSplice $ T.pack $ formatTime defaultTimeLocale "%-m.%d.%Y" today)
      , ("entries",          entriesSplice)
      , ("entriesPage",      textSplice $ "1")
-     , ("accountName",      textSplice $ TE.decodeUtf8 (accountName user))
-     ] ++ peopleSplice))) $ renderHT "entries"
+     ]))) $ renderHT "entries"
 
 entriesPageH :: User -> Application ()
 entriesPageH user = do 
@@ -79,10 +77,9 @@ entriesPageH user = do
    case page >>= (maybeRead . B8.unpack) of
      Nothing -> mzero
      Just n -> do
-       peopleSplice <- getPeopleSplices (authUser user)
        people <- getHouseTabPeople (authUser user)
        entriesSplice <- entriesPage people n user
-       (heistLocal $ (bindSplices ((splices entriesSplice) ++ peopleSplice))) $ renderHT "entries/page"
+       (heistLocal $ (bindSplices (splices entriesSplice))) $ renderHT "entries/page"
          where splices es = [ ("entries", es)
                             , ("entriesPage", textSplice $ T.pack $ show (n + 1))
                             ]
@@ -90,6 +87,8 @@ entriesPageH user = do
 
 entriesPage :: [Person] -> Word32 -> User -> Application (Splice Application)
 entriesPage ps n user = do entries <- getHouseTabEntries n (authUser user)
+                           -- if they are visiting the entries page, and have an active tutorial, start at step one
+                           when (tutorialActive user) $ setInSession "tutorial-step" "1"
                            return (renderEntries ps entries)
 
 
@@ -100,10 +99,9 @@ addEntry user = do
          when (isNothing mbhtid) $ redirect "/"
          let (UserId htid) = fromJust mbhtid
          r <- eitherSnapForm (entryForm Nothing) "add-entry-form"
-         peopleSplices <- getPeopleSplices (authUser user)
          case r of
              Left splices' -> do
-               heistLocal (bindSplices (splices' ++ peopleSplices)) $ renderHT "entries/add"
+               heistLocal (bindSplices splices') $ renderHT "entries/add"
              Right entry' -> do
                case bs2objid htid of 
                  Nothing -> renderHT "entries/add_failure"                
@@ -113,8 +111,7 @@ addEntry user = do
                    trackAdd $ entry' { eHTId = h }
                    nu <- recalculateTotals user
                    entriesSplice <- entriesPage people 0 nu
-                   people <- getPeopleSplices (authUser nu)
-                   heistLocal (bindSplices ([("entries",entriesSplice),("result",(renderResult  $ currentResult nu))] ++ peopleSplices)) $
+                   heistLocal (bindSplices [("entries",entriesSplice),("result",(renderResult  $ currentResult nu))]) $
                       renderHT "entries/add_success"                
  
 editEntry :: User -> Application ()
@@ -125,12 +122,11 @@ editEntry user =
      let (UserId htid) = fromJust mbhtid
      case i >>= bs2objid of
       Just eid -> do
-        peopleSplices <- getPeopleSplices (authUser user)
         entry <- getHouseTabEntry eid
         r <- eitherSnapForm (entryForm entry) "edit-entry-form" 
         case r of
           Left splices' -> 
-            heistLocal (bindSplices (splices' ++ peopleSplices)) $ renderHT "entries/edit"
+            heistLocal (bindSplices splices') $ renderHT "entries/edit"
           Right entry' -> do
             case (bs2objid htid,entry) of 
                (Just h, Just oldentry) -> do
@@ -139,7 +135,7 @@ editEntry user =
                  saveHouseTabEntry newentry
                  trackEdit oldentry newentry
                  nu <- recalculateTotals user
-                 heistLocal (bindSplices (renderEntry people newentry ++ peopleSplices ++ [("result",(renderResult  $ currentResult nu))])) $ renderHT "entries/edit_success"
+                 heistLocal (bindSplices (renderEntry people newentry ++ [("result",(renderResult  $ currentResult nu))])) $ renderHT "entries/edit_success"
                _ -> redirect "/entries"               
               
       Nothing -> redirect "/entries"

@@ -16,6 +16,7 @@ import            Snap.Types
 import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import qualified  Data.Text as T
+import qualified  Data.Text.Encoding as TE
 
 import            Snap.Extension.Heist
 import            Snap.Extension.Heist.Impl
@@ -35,6 +36,9 @@ import            State
 import            Lib
 import            Mail (mailActivation)
 import            Views.Site
+import            Views.Result
+import            Views.Account
+import            Views.Person
 import            Controllers.Form
 
 import            Models.Account
@@ -54,13 +58,15 @@ requireUserBounce' good = do
     case u of
       Nothing -> loginPage
       Just user -> do hs <- liftM getHeistState ask
-                      registerSplices hs [("ifTutorial",if (tutorialActive user) then identitySplice else blackHoleSplice)]
+                      peopleSplice <- getPeopleSplices (authUser user)
+                      registerSplices hs ([("tutorial", tutorialSplice)
+                                          ] ++ peopleSplice)
                       good user
  
 noRequireUser :: Application () -> Application ()
 noRequireUser handler = do 
   hs <- liftM getHeistState ask
-  registerSplices hs [("ifTutorial", blackHoleSplice)]
+  registerSplices hs [("tutorial", blackHoleSplice)]
   handler
 
 redirTo :: Application ()
@@ -146,14 +152,19 @@ resetPasswordH = do
               redirect "/login"
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
-       
+
        
 tutorialDeactivate :: User -> Application ()
 tutorialDeactivate user = do let u = user { tutorialActive = False }
                              saveAuthUser (authUser u, additionalUserFields u)
-                             renderHT "tutorial/deactivated"
+                             deleteFromSession "tutorial-step"
+                             heistLocal (bindSplices [ ("result", (renderResult  $ currentResult user))
+                                                     ])
+                              $ renderHT "tutorial/deactivated"
 
 tutorialActivate :: User -> Application ()
 tutorialActivate user = do let u = user { tutorialActive = True }
                            saveAuthUser (authUser u, additionalUserFields u)
+                           setInSession "tutorial-step" "1"
                            renderHT "tutorial/activated"
+                           

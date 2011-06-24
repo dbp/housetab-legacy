@@ -5,7 +5,12 @@
   	<img src="/img/glyph_up.png" />
   	<h3>total spent</h3>
   	<p><totalSpent/></p>
-  	<apply template="people/add"></apply>
+  	<ifTutorial>
+  	  <apply template="/tutorial/people_add1"></apply>
+    </ifTutorial>
+  	<notTutorial>  
+      <apply template="people/add"></apply>
+    </notTutorial>
   </bind>
   
   <bind tag="above">

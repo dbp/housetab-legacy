@@ -81,8 +81,8 @@ addPerson user = do
            Nothing -> renderHT "people/add_failure"  
            Just htid -> do saveHouseTabPerson $ person' { pHTId = htid}
                            nu <- recalculateTotals user
-                           peopleSplices <- getPeopleSplices (authUser user)
-                           (heistLocal $ bindSplices ([("result",(renderResult  $ currentResult nu))] ++ peopleSplices)) $ renderHT "people/add_success"  
+                           when (tutorialActive user) $ setInSession "tutorial-step" "2"
+                           (heistLocal $ bindSplices [("result",(renderResult  $ currentResult nu))]) $ renderHT "people/add_success"  
 
 
 addShare :: User -> Application ()

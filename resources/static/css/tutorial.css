@@ -16,3 +16,13 @@
 #tutorial a {
   float: right;
 }
+
+#tutorial-1, #tutorial-2 {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  color: white;
+}
