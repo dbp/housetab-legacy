@@ -31,6 +31,11 @@ import            Text.Digestive.Validate
 import            Text.Digestive.Transform
 import            Text.Templating.Heist
 
+import            Data.Time.LocalTime
+import            Data.Time.Format
+import            System.Locale (defaultTimeLocale)
+
+
 import            Application
 import            State
 import            Lib
@@ -42,6 +47,7 @@ import            Views.Person
 import            Controllers.Form
 
 import            Models.Account
+import            Models.Site
 
 
 requireUserBounce :: Application () -> Application ()
@@ -59,10 +65,17 @@ requireUserBounce' good = do
       Nothing -> loginPage
       Just user -> do hs <- liftM getHeistState ask
                       peopleSplice <- getPeopleSplices (authUser user)
-                      registerSplices hs ([("tutorial", tutorialSplice)
-                                          ,("historyOn", if (recordHistory user) then identitySplice else blackHoleSplice)
-                                          ,("historyOff", if (recordHistory user) then blackHoleSplice else identitySplice)
-                                          ] ++ peopleSplice)
+                      now <- liftIO $ getLocalTime
+                      let today = localDay now
+                      registerSplices hs 
+                        ([ ("tutorial", tutorialSplice)
+                         , ("historyOn", if (recordHistory user) then identitySplice else blackHoleSplice)
+                         , ("historyOff", if (recordHistory user) then blackHoleSplice else identitySplice)
+                         , ("currentDateLong", textSplice $ T.pack $ formatTime defaultTimeLocale "%e %B %Y" today)
+                         -- the following should be the default until overridden by digestive-functors validation
+                         , ("date-value",textSplice $ T.pack $ formatTime defaultTimeLocale "%-m.%d.%Y" today)
+                         , ("accountName",      textSplice $ TE.decodeUtf8 (accountName user))
+                         ] ++ peopleSplice)
                       good user
  
 noRequireUser :: Application () -> Application ()
@@ -150,8 +163,9 @@ resetPasswordH = do
               let n = fmap dropReset $ buildUser $ 
                         (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
                             <*> (Just user)
-              maybe (return Nothing) (\u -> saveAuthUser (authUser u, additionalUserFields u)) n
-              redirect "/login"
+              maybe (redirect "/") (\u -> do saveAuthUser (authUser u, additionalUserFields u)
+                                             redirect "/login") n
+              
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
 

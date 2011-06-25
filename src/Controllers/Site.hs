@@ -47,6 +47,7 @@ import            Controllers.Account
 import            Controllers.Entry
 import            Controllers.Person
 import            Controllers.History
+import            Controllers.Settings
 
 
 site :: Application ()                 
@@ -57,13 +58,15 @@ site = logAccess $
              , ("/entries/add",               requireUserBounce' $ addEntry)              
              , ("/entries/edit/:id",          requireUserBounce' $ editEntry)              
              , ("/entries/delete/:id",        requireUserBounce' $ deleteEntry)              
+             , ("/people/:person/show",       requireUserBounce' $ showPerson)
              , ("/people/:person/share/add",  requireUserBounce' $ addShare)
+             , ("/people/:person/share/show", requireUserBounce' $ showShares)
              , ("/people/add",                requireUserBounce' $ addPerson)
              , ("/people/list",               requireUserBounce $ listPeople)
              , ("/people/edit/:id",           requireUserBounce' $ editPerson)
              , ("/tutorial/deactivate",       requireUserBounce' $ tutorialDeactivate)
              , ("/tutorial/activate",         requireUserBounce' $ tutorialActivate)
-             , ("/history",                   ifTop $ requireUserBounce' historyH)
+             , ("/settings",                  ifTop $ requireUserBounce' settingsH)
              , ("/history/page/:page",        requireUserBounce' historyPageH)
              , ("/history/activate",          ifTop $ requireUserBounce' activateHistory)
              , ("/history/deactivate",        ifTop $ requireUserBounce' deactivateHistory)

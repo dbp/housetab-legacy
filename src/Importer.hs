@@ -107,7 +107,8 @@ newUser p name emails = do
         Nothing -> return Nothing
         Just id' -> return $ Just $ user {authUser = (authUser user) {userId = Just id'}}
 
-createShare (d,v) = Share (read d) v
+createShare (d,v) = Share (swapDate (read d)) v
+  where swapDate (Date d y m) = Date y m d
 
 unDoc (Doc fields) = fields
 processNew fields = if isNothing (B.lookup "_id" fields :: Maybe ObjectId) then exclude ["_id"] fields else fields

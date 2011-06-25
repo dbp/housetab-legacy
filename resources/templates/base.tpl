@@ -24,12 +24,6 @@
 
     <div id="top">
     	<div id="topcontents">
-    	  <tutorial step="1">
-          <apply template="tutorial/1"></apply>
-        </tutorial>
-    	  <tutorial step="2">
-          <apply template="tutorial/2"></apply>
-        </tutorial>
         <top/>
       </div>
     </div>

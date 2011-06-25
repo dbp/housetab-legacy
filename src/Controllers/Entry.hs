@@ -59,14 +59,9 @@ entriesH user = do
    {-liftIO $ putStrLn $ show $ length entries-}
    people <- getHouseTabPeople (authUser user)
    entriesSplice <- entriesPage people 0 user
-   now <- liftIO $ getLocalTime
-   let today = localDay now
    (heistLocal $ (bindSplices 
     ([ ("result",           (renderResult  $ currentResult user))
      , ("totalSpent",       textSplice $ T.pack $ moneyShow $ getTotalSpent user)
-     , ("currentDateLong",  textSplice $ T.pack $ formatTime defaultTimeLocale "%e %B %Y" today)
-     -- the following should be the default until overridden by digestive-functors validation
-     , ("date-value",       textSplice $ T.pack $ formatTime defaultTimeLocale "%-m.%d.%Y" today)
      , ("entries",          entriesSplice)
      , ("entriesPage",      textSplice $ "1")
      ]))) $ renderHT "entries"

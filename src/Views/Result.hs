@@ -24,16 +24,16 @@ import            Models.Entry
 import            Models.Person
 
 import            Views.Site
+import            Views.Person
 
 renderPersonResult :: Monad m => Day -> (String,Person,Spent,Owes) -> Splice m
 renderPersonResult today (klasses,person,spent,owes) = do
-  runChildrenWithText [("personId",      TE.decodeUtf8 $ fromMaybe "" $ fmap objid2bs $ pId person)
-                      ,("personName",    TE.decodeUtf8 $ pName person)
-                      ,("personSpent",   T.pack $ moneyShow spent)
-                      ,("personOwes",    T.pack $ moneyShow (negate owes))
-                      ,("personShare",   T.pack $ maybe "0" (show.snd) $ personShareAsOf today person)
-                      ,("personClasses", T.pack klasses)
-                      ]
+  runChildrenWith 
+    ([("personSpent",        textSplice $ T.pack $ moneyShow spent)
+     ,("personOwes",         textSplice $ T.pack $ moneyShow (negate owes))
+     ,("personCurrentShare", textSplice $ T.pack $ maybe "0" (show.snd) $ personShareAsOf today person)
+     ,("personClasses",      textSplice $ T.pack klasses)
+     ] ++ (renderPerson person))
       where personShareAsOf day (Person _ _ _ shares) = listToMaybe $ reverse $ takeWhile ((< day).fst) $ sortBy (\a b -> compare (fst a) (fst b)) $ map (\(Share d v) -> (dateToDay d,v)) shares 
                        
 renderResult :: Result -> Splice Application

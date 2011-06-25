@@ -16,15 +16,17 @@ import qualified  Data.Map as M
 import            Models.Person
 import            Application
 
+import            Views.Site
+
 renderPersonChild :: Monad m => Person -> Splice m
 renderPersonChild person = runChildrenWith (renderPerson person)
 
 renderPerson :: Monad m => Person -> [(T.Text, Splice m)]
 renderPerson (Person pid htid name shares) =
-  map ((\(a,b) -> (a, textSplice b)))
-   [("personId",    TE.decodeUtf8 (maybe "" objid2bs pid))
-   ,("htid",        TE.decodeUtf8 $ objid2bs htid)
-   ,("personName",  TE.decodeUtf8 $ name)
+   [("personId",     textSplice $ TE.decodeUtf8 (maybe "" objid2bs pid))
+   ,("htid",         textSplice $ TE.decodeUtf8 $ objid2bs htid)
+   ,("personName",   textSplice $ TE.decodeUtf8 $ name)
+   ,("personShares", sharesSplice shares)
    ]                       
 
 renderPeople :: Monad m => [Person] -> Splice m

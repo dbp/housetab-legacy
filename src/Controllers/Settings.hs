@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Controllers.History where
+module Controllers.Settings where
 
 import            Snap.Auth
 import            Snap.Extension.Session.CookieSession
@@ -48,6 +48,7 @@ import            Views.Person
 import            Views.History
 import            Controllers.Form
 import            Controllers.Person
+import            Controllers.History
 import            Models.Entry
 import            Models.Account
 import            Models.Person
@@ -55,30 +56,12 @@ import            Models.History
 import            Models.Site
 
 
-historyPageH :: User -> Application ()
-historyPageH user = do 
-   page <- getParam "page"
-   case page >>= (maybeRead . B8.unpack) of
-     Nothing -> mzero
-     Just n -> do
-       people <- getHouseTabPeople (authUser user)
-       historySplice <- historyPage people n user
-       (heistLocal $ (bindSplices [ ("history", historySplice)
-                                  , ("historyPage", textSplice $ T.pack $ show (n + 1))
-                                  ])) $ renderHT "history/page"
-
-
-historyPage :: [Person] -> Word32 -> User -> Application (Splice Application)
-historyPage ps n user = do hs <- getHistory n (authUser user)
-                           return (renderHistory ps hs)
-
-deactivateHistory :: User -> Application ()
-deactivateHistory user = do deleteHistory (authUser user)
-                            let u = user { recordHistory = False }
-                            saveAuthUser (authUser u, additionalUserFields u)
-                            renderHT "history/deactivated"
-                            
-activateHistory :: User -> Application ()
-activateHistory user = do let u = user { recordHistory = True }
-                          saveAuthUser (authUser u, additionalUserFields u)
-                          renderHT "history/activated"
+settingsH :: User -> Application ()
+settingsH user = do 
+   people <- getHouseTabPeople (authUser user)
+   historySplice <- historyPage people 0 user
+   (heistLocal $ (bindSplices 
+    [ ("result",           (renderResult  $ currentResult user))
+    , ("history",          historySplice)
+    , ("historyPage",      textSplice $ "1")
+    ])) $ renderHT "settings"

@@ -32,8 +32,17 @@ moneyShow m = (if m<0 then "-$" else "$") ++ ((reverse . intercalate "," . split
         dollars = reverse $ drop 2 $ reverse mstr
         cents = reverse $ take 2 $ reverse mstr
 
+sharesSplice :: Monad m => [Share] -> Splice m
+sharesSplice = listSplice' [((,) "date") . T.pack . show . sDate,((,) "value") . T.pack . show . sValue]
+
 forSplice :: Monad m => [ObjectId] -> Splice m
-forSplice = (mapSplices runChildrenWithText) . (map ((:[]) . ((,) "value") . TE.decodeUtf8 . objid2bs))
+forSplice = listSplice (TE.decodeUtf8 . objid2bs)
+
+listSplice :: Monad m => (a -> T.Text) -> [a] -> Splice m
+listSplice f = (mapSplices runChildrenWithText) . (map ((:[]) . ((,) "value") . f))
+
+listSplice' :: Monad m => [(a -> (T.Text,T.Text))] -> [a] -> Splice m
+listSplice' fs = (mapSplices runChildrenWithText) . (map (zipWith ($) fs . repeat))
 
 showPeople :: [Person] -> [ObjectId] -> String
 showPeople people ps

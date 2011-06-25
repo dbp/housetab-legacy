@@ -1,16 +1,11 @@
 <apply template="base">
 
   <bind tag="top">
+    
     <h1>BALANCE OF PAYMENTS</h1>
   	<img src="/img/glyph_up.png" />
   	<h3>total spent</h3>
   	<p><totalSpent/></p>
-  	<ifTutorial>
-  	  <apply template="/tutorial/people_add1"></apply>
-    </ifTutorial>
-  	<notTutorial>  
-      <apply template="people/add"></apply>
-    </notTutorial>
   </bind>
   
   <bind tag="above">
@@ -19,9 +14,9 @@
 
   <bind tag="navbar">
     <div id="navbarcontents1">
-  		<div id="settings"></div>
+  		<a href="/settings" id="settings"></a>
   		<div id="arch"></div>
-  		<div id="about"></div>
+  		<a href="/about" id="about"></a>
   	</div>
   	<div id="navbarcontents2">
   		<div id="subnav1"><p><a href="#top">See the Balance of Payments</a></p></div>

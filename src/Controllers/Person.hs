@@ -84,31 +84,54 @@ addPerson user = do
                            when (tutorialActive user) $ setInSession "tutorial-step" "2"
                            (heistLocal $ bindSplices [("result",(renderResult  $ currentResult nu))]) $ renderHT "people/add_success"  
 
+showPerson :: User -> Application ()
+showPerson user = do
+  mPid <- getParam "person"
+  case mPid of
+    Nothing -> redirect "/settings"
+    Just pid -> do
+      mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
+      case mperson of
+        Nothing -> redirect "/settings" -- means they hit the wrong URL
+        Just person -> heistLocal (bindSplices (renderPerson person)) $ renderHT "people/settings_show"
+
+
+showShares :: User -> Application ()
+showShares user = do
+  mPid <- getParam "person"
+  case mPid of
+    Nothing -> redirect "/settings"
+    Just pid -> do
+      mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
+      case mperson of
+        Nothing -> redirect "/settings" -- means they hit the wrong URL
+        Just person -> heistLocal (bindSplices (renderPerson person)) $ renderHT "people/share/show"
+  
 
 addShare :: User -> Application ()
 addShare user = do
    mPid <- getParam "person"
    case mPid of
-     Nothing -> renderHT "people/share/no_person"
+     Nothing -> redirect "/settings"
      Just pid -> do
-       r <- eitherSnapForm (shareForm Nothing) "add-share-form"
-       case r of
-           Left splices' -> 
-             heistLocal 
-              (bindSplices (splices' ++ [("personId", textSplice $ TE.decodeUtf8 pid)])) $ 
-              renderHT "people/share/add"
-           Right share' -> do
-             mhtid <- authenticatedUserId
-             mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
-             case mhtid of
-               Nothing -> renderHT "people/share/add_failure" -- should never happen
-               Just htid -> 
-                  case mperson of
-                    Nothing -> renderHT "people/share/add_failure" -- means they hit the wrong URL
-                    Just person -> do saveHouseTabPerson $ person { pShares = share':(pShares person)}
-                                      nu <- recalculateTotals user
-                                      (heistLocal $ bindSplice "result"  (renderResult  $ currentResult nu)) 
-                                        $ renderHT "people/result"
+       mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
+       case mperson of
+         Nothing -> redirect "/settings" -- means they hit the wrong URL
+         Just person -> do
+           r <- eitherSnapForm (shareForm Nothing) "add-share-form"
+           case r of
+               Left splices' -> 
+                 heistLocal 
+                  (bindSplices (splices' ++ (renderPerson person))) $ 
+                  renderHT "people/share/add"
+               Right share' -> do
+                 mhtid <- authenticatedUserId
+                 case mhtid of
+                   Nothing -> redirect "/settings" -- should never happen
+                   Just htid -> 
+                      do saveHouseTabPerson $ person { pShares = share':(pShares person)}
+                         nu <- recalculateTotals user
+                         heistLocal (bindSplices (renderPerson person)) $ renderHT "people/settings_show"
                                        
 
 listPeople = do mhtid <- authenticatedUserId
