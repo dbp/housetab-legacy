@@ -39,7 +39,7 @@ getHouseTabEntriesAll au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid"
 
 
 getHouseTabEntries :: Word32 -> A.AuthUser -> Application [HouseTabEntry]
-getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.limit = 30, DB.skip = page * 30, DB.sort = ["when" =: (-1 :: Int)]}
+getHouseTabEntries page au = getHouseTabEntriesGen au $ \uid -> (DB.select ["htid" =: bs2objid uid] "entries") { DB.limit = 30, DB.skip = page * 30, DB.sort = ["when.year" =: (-1 :: Int),"when.month" =: (-1 :: Int),"when.day" =: (-1 :: Int)]}
   
   
 getHouseTabEntriesGen :: A.AuthUser -> (BS.ByteString -> DB.Query) -> Application [HouseTabEntry]
