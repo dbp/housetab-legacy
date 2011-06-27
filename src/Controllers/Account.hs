@@ -132,7 +132,7 @@ activateAccountH = do
   guard $ all isJust [token,maccountName]
   let accountName = fromJust maccountName
   res <- withDB $ modify (select ["accountName" =: accountName, "accountActivate" =: token] "users") ["$set" =: ["accountActivate" =: (Nothing :: Maybe BS.ByteString)]]
-  either (const $ redirect "/") (const $ redirect "/login") res 
+  either (const $ redirect "/") (const $ redirect "/settings") res 
 
 passwordForm :: SnapForm Application T.Text HeistView NewPassword
 passwordForm = (`validate` matchingPasswords) $ (<++ errors) $ NewPassword
@@ -164,7 +164,7 @@ resetPasswordH = do
                         (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
                             <*> (Just user)
               maybe (redirect "/") (\u -> do saveAuthUser (authUser u, additionalUserFields u)
-                                             redirect "/login") n
+                                             redirect "/settings") n
               
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}

@@ -20,6 +20,7 @@ import            Control.Monad
 import            Control.Monad.Trans
 import            Control.Monad.Reader
 import            Application
+import            Utils
 
 data HouseTabEntry = HouseTabEntry
     { eId       :: Maybe ObjectId
@@ -86,9 +87,6 @@ instance Val HouseTabEntry where
       return (HouseTabEntry id' htid who what category when howmuch whopays)
     cast' _ = Nothing
 
--- stolen from cgi:
-maybeRead :: Read a => String -> Maybe a
-maybeRead = fmap fst . listToMaybe . reads
 
 data Date = Date { year :: Integer
                  , month :: Integer

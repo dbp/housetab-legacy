@@ -29,6 +29,11 @@
             }
           }
         }
+      } else if (elements[i].nodeName == "TITLE") {
+        // in this case, we are supposed to be showing a whole page. the only way this could happen is 
+        // with a session timeout. so just redirect to login.
+        document.location.href = "/login";
+        return;
       }
     };
     // now run any included javascript

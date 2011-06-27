@@ -13,7 +13,14 @@
 	  <div-async name="delete-$(index)" style="display: none;"></div-async>
 	</div>
 	<div class="col3 col"><lookupName id="$(entryBy)"/></div>
-	<div class="col4 col"><entryWhat/></div>
+	<div class="col4 col">
+	  <more-box>
+      <take n="35" val="$(entryWhat)" />
+      <more>
+        <entryWhat/>
+      </more>
+	  </more-box>
+  </div>
 	<div class="col5 col"><entryAmount/></div>
 	<div class="col6 col"><entryDate/></div>
 	<div class="col7 col">

@@ -10,6 +10,16 @@
   height: 12px;
 }
 
+.box .close {
+  float: right;
+  width: 20px;
+  height: 20px;
+}
+
+.box .option.selected {
+  background-color: gray;
+}
+
 .box-field .box, .box-field-multi .box {
   position: absolute;
   top: 30px;

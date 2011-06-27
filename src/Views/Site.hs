@@ -14,7 +14,7 @@ import Snap.Auth.Handlers
 import Snap.Auth
 import Snap.Extension.Heist
 import Snap.Extension.DB.MongoDB
-import Control.Monad.Trans (lift)
+import Control.Monad.Trans (lift,liftIO)
 import Data.Maybe (fromMaybe, maybeToList)
 import Data.List (intercalate)
 import Data.List.Split (splitEvery)
@@ -23,6 +23,7 @@ import qualified Data.Map as M
 import Heist.Splices.Async
 
 import Application 
+import Utils
 
 import Models.Person
 
@@ -153,6 +154,22 @@ moreBox = do node <- getParamNode
     where isMore (X.Element tag _ _) = tag == "more"
           isMore _ = False
 
+takeN :: Monad m => Splice m
+takeN = do node <- getParamNode
+           case X.getAttribute "n" node >>= (maybeRead . T.unpack) of
+              Nothing -> return []
+              Just n -> case X.getAttribute "val" node of
+                Just v -> return [X.TextNode (if T.length v > n then T.concat [T.take n v, "..."] else v)]
+                Nothing -> return []
+                
+dropN :: Monad m => Splice m
+dropN = do node <- getParamNode
+           case X.getAttribute "n" node >>= (maybeRead . T.unpack) of
+              Nothing -> return []
+              Just n -> case X.getAttribute "val" node of
+                Just v -> return [X.TextNode (if T.length v > n then T.concat ["...", T.drop n v] else v)]
+                Nothing -> return []
+              
 identitySplice :: Monad m => Splice m
 identitySplice = do node <- getParamNode
                     return (X.elementChildren node)
@@ -201,5 +218,7 @@ renderHT = (heistLocal $ (bindSplices splices)) . render
                   , ("catName", categoryName)
                   , ("catImage", categoryImage)
                   , ("more-box", moreBox)
+                  , ("take", takeN)
+                  , ("drop", dropN)
                   , ("show", showContent)
                   ] ++ heistAsyncSplices

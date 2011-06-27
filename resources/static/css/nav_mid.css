@@ -226,6 +226,63 @@
 		cursor: pointer;
 	}
 	
+	.entry-form .category .inp .display {
+	  background-position: center left;
+	  background-repeat: no-repeat;
+	  height: 20px;
+	  width: 50px;
+	  color: transparent;
+	  overflow: hidden;
+	}
+	
+	.category .option {
+	  background-position: center left;
+	  background-repeat: no-repeat;
+	  padding-left: 45px;
+	  height: 30px;
+	  display: inline-block;
+	}
+		
+  .category .alcohol, .category #alcohol {
+    background-image: url("/img/alcohol.png");
+  }
+  .category .cash, .category #cash {
+    background-image: url("/img/cash.png");
+  }
+  .category .entertainment, .category #entertainment {
+    background-image: url("/img/entertainment.png");
+  }
+  .category .furnishings, .category #furnishings {
+    background-image: url("/img/furnishings.png");
+  }
+  .category .groceries, .category #groceries {
+    background-image: url("/img/groceries.png");
+  }
+  .category .household, .category #household {
+    background-image: url("/img/household.png");
+  }
+  .category .misc, .category #misc {
+    background-image: url("/img/misc.png");
+  }
+  .category .food, .category #food {
+    background-image: url("/img/pan.png");
+  }
+  .category .rent, .category #rent {
+    background-image: url("/img/rent.png");
+  }
+  .category .toiletries, .category #toiletries {
+    background-image: url("/img/toiletries.png");
+  }
+  .category .utilities, .category #utilities {
+    background-image: url("/img/utilities.png");
+  }
+  
+	.category .box-field .box {
+	  width: 250px;
+	  left: -20px;
+  }
+	
+	
 	#loginform {
 		margin-left: 240px;
 	}

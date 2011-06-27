@@ -108,7 +108,8 @@ newUser p name emails = do
         Just id' -> return $ Just $ user {authUser = (authUser user) {userId = Just id'}}
 
 createShare (d,v) = Share (swapDate (read d)) v
-  where swapDate (Date d y m) = Date y m d
+
+swapDate (Date y m d) = Date m d y
 
 unDoc (Doc fields) = fields
 processNew fields = if isNothing (B.lookup "_id" fields :: Maybe ObjectId) then exclude ["_id"] fields else fields
@@ -128,7 +129,7 @@ createEntry :: Service s => ConnPool s -> B.ObjectId -> [(ILetter, B.ObjectId)] 
 createEntry p htid people (id,who',what,when,howmuch,whopays') = do
   let entry' = do who <- lookup (head who') people
                   whopays <- sequence (map (flip lookup people) whopays')
-                  return $ HouseTabEntry Nothing htid who (B8.pack what) "misc" (read when) (read howmuch) whopays
+                  return $ HouseTabEntry Nothing htid who (B8.pack what) "misc" (swapDate (read when)) (read howmuch) whopays
   case entry' of
     Nothing -> return Nothing
     Just entry -> do

@@ -3,6 +3,7 @@ module Utils where
 import Data.List (null, elemIndex)
 import Test.QuickCheck
 import qualified  Data.ByteString.Char8 as B8
+import Data.Maybe (listToMaybe)
 
 eitherToMaybe = either (const Nothing) Just
 
@@ -12,6 +13,11 @@ strMaybe s = case s of
 
 findReplace fn val []     = val:[]
 findReplace fn val (x:xs) = if fn x then val:xs else x : (findReplace fn val xs)
+
+-- stolen from cgi:
+maybeRead :: Read a => String -> Maybe a
+maybeRead = fmap fst . listToMaybe . reads
+
 
 prop_findreplace_first :: [Int] -> Bool
 prop_findreplace_first l = head (findReplace (const True) 1 l) == 1

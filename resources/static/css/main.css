@@ -467,6 +467,9 @@
 	.col4 {
 		width: 261px;
 	}
+	.col4  .showing {
+		padding: 3px;
+	}
 	
 	#purchases .purchase.entry-form .col4 input {
 	  width: 250px;

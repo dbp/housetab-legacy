@@ -5,6 +5,7 @@
   </bind>
 
   <bind tag="above">
+    
     	<div id="copy">
     	<img src="/img/Other/logo.png" />
     		<p>An application to track expenses among a group of friends that is simple and powerful</p>
