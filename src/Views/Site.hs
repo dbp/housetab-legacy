@@ -69,17 +69,17 @@ categoryList = ["alcohol"
                ,"utilities"
                ]
 
-catImages = M.fromList [("alcohol", "/img/alcohol.png")
-                       ,("cash", "/img/cash.png")
-                       ,("entertainment", "/img/entertainment.png")
-                       ,("furnishings", "/img/furnishings.png")
-                       ,("groceries", "/img/groceries.png")
-                       ,("household", "/img/household.png")
-                       ,("misc", "/img/misc.png")
-                       ,("food", "/img/pan.png")
-                       ,("rent", "/img/rent.png")
-                       ,("toiletries", "/img/toiletries.png")
-                       ,("utilities", "/img/utilities.png")
+catImages = M.fromList [("alcohol", "/img/Categories/alcohol.png")
+                       ,("cash", "/img/Categories/cash.png")
+                       ,("entertainment", "/img/Categories/entertainment.png")
+                       ,("furnishings", "/img/Categories/furnishings.png")
+                       ,("groceries", "/img/Categories/groceries.png")
+                       ,("household", "/img/Categories/household.png")
+                       ,("misc", "/img/Categories/misc.png")
+                       ,("food", "/img/Categories/pan.png")
+                       ,("rent", "/img/Categories/rent.png")
+                       ,("toiletries", "/img/Categories/toiletries.png")
+                       ,("utilities", "/img/Categories/utilities.png")
                        ]
 
 catNames = M.fromList [("alcohol", "Alcohol")

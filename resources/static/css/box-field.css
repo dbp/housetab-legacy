@@ -1,0 +1,35 @@
+.box-field, .box-field-multi {
+  display: inline-block;
+  position: relative;
+}
+
+.box-field .display, .box-field-multi .display {
+/*  width: 100px;
+*/  background-color: white;
+  color: black;
+  height: 12px;
+}
+
+.box-field .box, .box-field-multi .box {
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  background-color: white;
+  border: 1px solid gray;
+  padding: 5px;
+  color: black;
+  z-index: 100;
+}
+
+.box-field .box .option, .box-field-multi .box .option {
+  cursor: pointer;
+}
+
+.errors {
+  position: absolute;
+  top: 25px;
+  background-color: white;
+  padding: 0;
+  color: black;
+  width: 100px;
+}

@@ -26,7 +26,8 @@ import Snap.Types hiding (POST)
 mailActivation token account emails = do
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
-  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Welcome to HouseTab. Now activate your account." "activation" (BS.concat $ msg server portNum)) emails
+  liftIO $ putStrLn "Sending activation email [fake]"
+  -- liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Welcome to HouseTab. Now activate your account." "activation" (BS.concat $ msg server portNum)) emails
     where msg s p = ["Welcome to HouseTab. "
                   ,"All you need to do to complete your registration is activate your account by clicking on the link below.\n\n"
                   ,"Please activate your account by visiting "

@@ -1,9 +1,7 @@
-<apply template="base">
-
-  <bind tag="above">
-    <h2>Congratulations for signing up for HouseTab.</h2>
-      
-    <h3>Please check your email for a message welcoming you to the community - there is a link in it that you must click on before you can start using the account.</h3>
-  </bind>
-
-</apply>
+<div-async name="signup-box" id="navbarcontents2">
+	<div id="subnav">
+		<div id="subnav_signup"></div>
+	</div>
+	<div id="subnav3"><p>Successfully Signed Up</p></div>
+	<form><p>An activation email has been sent to you. Please follow the instructions within to complete your registration.</p></form>
+</div-async>

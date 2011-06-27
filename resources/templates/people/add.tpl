@@ -1,9 +1,9 @@
-<div-async name="add-person" class="addPerson">
+<div-async name="add-person" class="addPerson" id="adduser">
   <form-async action="/people/add" method="POST">
     <name-errors><error/> </name-errors>
-    <label for="name">Add Person:</label>
+    <h2><label for="name">Add a new user:</label></h2>
     <input name="name" type="text" value="$(name-value)" />
-    <button type="submit" title=""/>
+    <button type="submit" title="" class="addform_submit" />
   </form-async>
   
   <tutorial step="1">

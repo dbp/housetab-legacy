@@ -6,6 +6,7 @@
       </div>
     </tutorial>
     <h2><personName/> <a href="/people/edit/$(personId)">\/ edit</a></h2>
+    <p>shares: <personCurrentShare/></p>
     <a-async href="/people/$(personId)/share/add">\/ add a share</a-async><br>
     <hasShares>
       <a-async href="/people/$(personId)/share/show">\/ show shares</a-async><br>	        

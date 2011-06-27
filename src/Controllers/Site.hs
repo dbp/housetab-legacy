@@ -52,7 +52,7 @@ import            Controllers.Settings
 
 site :: Application ()                 
 site = logAccess $ 
-       route [ ("/",                          ifTop $ noRequireUser $ renderHT "index")
+       route [ ("/",                          ifTop $ redirect "/login")
              , ("/entries",                   ifTop $ requireUserBounce' entriesH)
              , ("/entries/page/:page",        requireUserBounce' entriesPageH)
              , ("/entries/add",               requireUserBounce' $ addEntry)              
@@ -70,6 +70,7 @@ site = logAccess $
              , ("/history/page/:page",        requireUserBounce' historyPageH)
              , ("/history/activate",          ifTop $ requireUserBounce' activateHistory)
              , ("/history/deactivate",        ifTop $ requireUserBounce' deactivateHistory)
+             , ("/about",                     ifTop $ noRequireUser $ renderHT "about")
              , ("/signup",                    noRequireUser $ signupH)
              , ("/login",                     method GET $ noRequireUser $ loginH)
              , ("/login",                     method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)

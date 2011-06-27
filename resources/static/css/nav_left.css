@@ -1,0 +1,243 @@
+/*This is the styling for the navigation bar on both the Settings page and the Sign Up page*/
+
+	/*Main Navigation*/
+	
+	#sel_settings {
+		float: left;
+		background-image: url("/img/NavigationBar/sel_settings.png");
+		width: 240px;
+		height: 144px;
+		margin-left: 144px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+		
+		
+	#sel_signup {
+		float: left;
+		background-image: url("/img/NavigationBar/sel_signup.png");
+		width: 240px;
+		height: 144px;
+		margin-left: 144px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}	
+		
+	#entries {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_entries.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 24px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#entries:hover {
+	  background-image: url("/img/NavigationBar/nav_entries_mo.png");
+	  cursor: pointer;
+	}
+	
+	#login {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_login.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 24px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#login:hover {
+	  background-image: url("/img/NavigationBar/nav_login_mo.png");
+	  cursor: pointer;
+	}
+	
+	#about {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_about.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 72px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#about:hover {
+	  background-image: url("/img/NavigationBar/nav_about_mo.png");
+	  cursor: pointer;
+	}
+	
+	#logout{
+		float: left;
+		background-image: url("/img/NavigationBar/nav_logout.png");
+		margin: 0;
+		width: 144px;
+		height: 144px;
+		margin-left: 48px; 
+	}
+	
+	#logout:hover {
+		background-image: url("/img/NavigationBar/nav_logout_mo.png");
+		cursor: pointer;
+	}
+	
+	/*Subnavigation*/
+	
+	#navbarcontents2 {
+		background-image: url("/img/Backgrounds/nav_left.png");
+		height: 120px;
+		margin: 0;
+	}
+	
+	#subnav {
+		height: 72px;
+		width: 960px;
+	}		
+	
+	#subnav_settings {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		margin-left: 144px;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_settings.png");
+	}
+	
+	#subnav_signup {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		margin-left: 144px;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_signup.png");
+	}
+	
+	#subnav1 {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_above.png");
+	}
+	
+	#subnav2 {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		margin-right: 96px;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_below.png");
+	}
+
+	#subnav1 p, #subnav2 p{
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		margin-top: 36px;
+		color: #5082A0;
+		font-variant: small-caps;
+	}
+	
+	#navbarcontents2 a {
+		color: #383838;
+		text-decoration: none;
+	}
+	
+	#navbarcontents2 a:hover {
+		color: #383838;
+		text-decoration: underline;
+	}
+	
+	#subnav3 {
+
+		height: 21px;
+		margin: 0;
+
+	}
+	
+	#subnav3 p {
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		color: #5082A0;
+		font-variant: small-caps;
+		margin-top: 3px;
+	}
+	
+	/*Forms*/
+	
+	#adduser .addform_submit {
+		background-image: url("/img/Icons/submit.png");
+		border: 0;
+		width: 36px;
+		height: 18px;	
+	}
+	
+	#adduser .addform_submit:hover {
+		background-image: url("/img/Icons/submit_mo.png");
+	}
+	
+
+	#navbarcontents2 form {
+		margin: 0;
+		text-align: center;
+		color: white;
+		height: 20px;
+	}
+	
+	#navbarcontents2 form p {
+		font-family: "times new roman";
+		font-size: 15px;
+		display: inline-block;
+		margin: 0;
+		margin-right: 5px;
+		vertical-align: top;
+		margin-top: 1px;
+
+	}	
+	
+	.setform {
+		width: 144px;
+		height: 12px;
+		vertical-align: top;
+	}
+	
+	.setform_submit {
+		float: right;	
+		margin: 0;
+		margin-right: 66px;
+		vertical-align: top;
+	}
+	
+	#signupform {
+		margin-left: 120px;
+	}
+	#signupform .field {
+	  display: inline-block;
+		position: relative;
+	}
+	
+	.suform {
+		width: 106px;
+		height: 16px;
+	}
+	
+	#suform_submit {
+		float: right;	
+		margin: 0;
+		margin-right: 96px;
+		background-image: url("/img/Icons/submit_b.png");
+		border: 0;
+		width: 36px;
+		height: 18px;
+	}
+	
+	#suform_submit:hover {
+	  cursor: pointer;
+	}

@@ -1,0 +1,248 @@
+/*This is the styling for the navigation bar on both the Entries page and the Log In page*/
+	
+	/*Main Navigation*/
+	
+	#settings {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_settings.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 192px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#settings:hover {
+	  background-image: url("/img/NavigationBar/nav_settings_mo.png");
+	  cursor: pointer;
+	}
+	
+	#signup {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_signup.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 192px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#signup:hover {
+	  background-image: url("/img/NavigationBar/nav_signup_mo.png");
+	  cursor: pointer;
+	}
+	
+	#sel_entries {
+		float: left;
+		background-image: url("/img/NavigationBar/sel_entries.png");
+		width: 240px;
+		height: 144px;
+		margin-left: 24px;
+		mrgin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#about:hover, #about_lo:hover {
+	  background-image: url("/img/NavigationBar/nav_about_mo.png");
+	  cursor: pointer;
+	}
+	
+	
+	#about {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_about.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 24px;
+		mrgin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	#about_lo {
+		float: left;
+		background-image: url("/img/NavigationBar/nav_about.png");
+		width: 144px;
+		height: 144px;
+		margin-left: 288px;
+		margin-right: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	
+	#logout{
+		float: left;
+		background-image: url("/img/NavigationBar/nav_logout.png");
+		margin: 0;
+		width: 144px;
+		height: 144px;
+		margin-left: 48px; 
+	}
+	
+	#logout:hover {
+		background-image: url("/img/NavigationBar/nav_logout_mo.png");
+		cursor: pointer;
+	}
+	
+	/*Subnavigation*/
+	
+	#navbarcontents2 {
+		background-image: url("/img/Backgrounds/nav_mid.png");
+		height: 120px;
+		margin: 0;
+	}
+	
+	#navbarcontents2_lo {
+		height: 120px;
+		margin: 0;
+	}
+	
+	#subnav {
+		height: 72px;
+		width: 960px;
+	}
+	
+	#subnav1 {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		float: left;
+		margin-left: 120px;
+		background-image: url("/img/NavigationBar/subnav_above.png");
+	}
+	
+	#subnav2 {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		margin-right: 120px;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_below.png");
+	}
+	
+	#subnav_entries {
+		height: 72px;
+		width: 240px;
+		margin: 0;
+		float: left;
+		background-image: url("/img/NavigationBar/subnav_entries.png");
+	}
+	
+	#subnav1 p, #subnav2 p{
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		margin-top: 36px;
+		color: #5082A0;
+		font-variant: small-caps;
+	}
+	
+	#navbarcontents2 a {
+		color: #383838;
+		text-decoration: none;
+	}
+	
+	#navbarcontents2 a:hover {
+		color: #383838;
+		text-decoration: underline;
+	}
+	
+	#subnav3 {
+
+		height: 21px;
+		margin: 0;
+
+	}
+	
+	#subnav3 p {
+		font-family: "adobe caslon pro";
+		font-size: 16px;
+		text-align: center;
+		color: #5082A0;
+		font-variant: small-caps;
+		margin-top: 3px;
+	}
+	
+	/*Forms*/
+	
+	form {
+		margin: 0;
+		text-align: center;
+		color: white;
+		height: 16px;
+	}
+	
+	form p, form div {
+		font-family: "times new roman";
+		font-size: 15px;
+		display: inline-block;
+		position: relative;
+		margin: 0;
+/*    margin-right: 5px;
+*/	}
+	
+	
+	.enform1 .display {
+    width: 96px;
+    height: 16px
+	}
+	
+	.enform2 input {
+		width: 184px;
+    height: 16px
+	
+	}
+	
+	.enform3 .display {
+		width: 48px;
+		height: 16px
+	}
+	
+	.enform4 input {
+		width: 60px;
+		height: 16px
+	}
+	
+	.enform5 input {
+		width: 60px;
+		height: 16px
+	}
+	
+	.enform6 .display {
+		width: 144px;
+		height: 16px
+	}
+	
+	.enform_submit {
+	  background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
+		float: right;	
+		margin: 0;
+		width: 36px;
+		height: 18px;
+		border: 0;
+		cursor: pointer;
+	}
+	
+	#loginform {
+		margin-left: 240px;
+	}
+	
+	.logform {
+		width: 144px;
+		height: 16px
+	}
+	
+	#logform_submit {
+		float: right;	
+		margin: 0;
+		margin-right: 240px;
+		background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
+	 	width: 36px;
+		height: 18px;
+		border: 0; 
+		cursor: pointer;
+	}
+	
