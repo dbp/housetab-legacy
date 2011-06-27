@@ -16,7 +16,7 @@
     			<a href="/login" id="login"></a>
     			<a href="/about" id="about"></a>
     		</div>
-    		<div-async name="signup-box" id="navbarcontents2">
+    		<div-async name="reset-box" id="navbarcontents2">
     			<div id="subnav">
     				<div id="subnav_signup"></div>
     			</div>

@@ -155,16 +155,17 @@ resetPasswordH = do
     Right (NewPassword pw _) -> do  
       muser <- withDB $ findOne (select ["accountName" =: accountName, "accountReset" =: token] "users")
       case muser of
-        Left _ -> redirect "/"
+        Left _ -> renderHT "account/reset_error"
         Right user' -> 
           case user' of
-            Nothing -> redirect "/"
+            Nothing -> renderHT "account/reset_error"
             Just user -> do
               let n = fmap dropReset $ buildUser $ 
                         (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
                             <*> (Just user)
-              maybe (redirect "/") (\u -> do saveAuthUser (authUser u, additionalUserFields u)
-                                             redirect "/settings") n
+              maybe (renderHT "account/reset_error") 
+                    (\u -> do saveAuthUser (authUser u, additionalUserFields u)
+                              renderHT "account/reset_success") n
               
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
