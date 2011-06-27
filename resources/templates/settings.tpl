@@ -11,6 +11,9 @@
 	  <tutorial step="2">
       <apply template="tutorial/2"></apply>
     </tutorial>
+    <tutorialOff>
+      <apply template="tutorial/off"></apply>      
+    </tutorialOff>  
 	  
 	  <h1>USER SETTINGS</h1>
 		<div id="totalshares">
@@ -38,7 +41,12 @@
 			<div id="subnav">
 				<div id="subnav_settings"></div>
 				<div id="subnav1"><p><a href="#top">See User Settings</a></p></div>
-				<div id="subnav2"><p><a href="#below">See Account History</a> | <a href="#below">Delete Account</a></p></div> 
+				<div id="subnav2"><p>
+				  <a href="#below">See Account History</a> 
+				  | <a href="#below">Delete Account</a>
+				  | <tutorialOn><a-async href="/tutorial/deactivate">Stop Tutorial</a-async></tutorialOn>
+				    <tutorialOff><a-async href="/tutorial/activate">Start Tutorial</a-async></tutorialOff>
+				  </p></div> 
 			</div>
 			<div id="subnav3"><p>Update Account Settings</p></div>
 			<form action="">

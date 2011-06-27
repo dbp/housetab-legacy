@@ -69,6 +69,8 @@ requireUserBounce' good = do
                       let today = localDay now
                       registerSplices hs 
                         ([ ("tutorial", tutorialSplice)
+                         , ("tutorialOn", if (tutorialActive user) then identitySplice else blackHoleSplice)
+                         , ("tutorialOff", if (tutorialActive user) then blackHoleSplice else identitySplice)
                          , ("historyOn", if (recordHistory user) then identitySplice else blackHoleSplice)
                          , ("historyOff", if (recordHistory user) then blackHoleSplice else identitySplice)
                          , ("currentDateLong", textSplice $ T.pack $ formatTime defaultTimeLocale "%e %B %Y" today)

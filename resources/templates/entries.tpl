@@ -6,6 +6,10 @@
   </bind>
 
   <bind tag="top">
+    <tutorial step="1">
+      <apply template="tutorial/0"></apply>
+    </tutorial>
+    
     
     <h1>BALANCE OF PAYMENTS</h1>
 		<img src="/img/Glyphs/glyph_above.png" />
