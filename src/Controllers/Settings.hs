@@ -22,7 +22,7 @@ import            Data.Time.Format
 import            System.Locale (defaultTimeLocale)
 
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
+import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing, mapMaybe)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
 import            Data.List.Split
@@ -35,6 +35,10 @@ import            Text.Digestive.Validate
 import            Text.Digestive.Transform
 import            Data.Text (Text)
 import            Text.Templating.Heist
+
+import            Data.Time.Calendar
+import            Data.Time.LocalTime
+import            Data.Time.Clock
 
 import            Application
 import            State
@@ -60,8 +64,10 @@ settingsH :: User -> Application ()
 settingsH user = do 
    people <- getHouseTabPeople (authUser user)
    historySplice <- historyPage people 0 user
+   today <- liftM localDay $ liftIO getLocalTime
    (heistLocal $ (bindSplices 
     [ ("result",           (renderResult  $ currentResult user))
+    , ("totalShares",      textSplice $ T.pack $ show $ getTotalShares today people)
     , ("history",          historySplice)
     , ("historyPage",      textSplice $ "1")
     ])) $ renderHT "settings"

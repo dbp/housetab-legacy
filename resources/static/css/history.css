@@ -6,3 +6,27 @@
   margin: 10px;
   float: right;
 }
+
+#history .col {
+  float: left;
+}
+
+#history .col0 {
+  width: 150px;
+}
+
+#history .col1 {
+  width: 50px;
+}
+
+#history .col2 {
+  width: 100px;
+}
+
+#history .col4 {
+  width: 150px;
+}
+
+#history .col7 {
+  width: 100px;
+}

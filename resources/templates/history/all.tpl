@@ -1,4 +1,4 @@
-<div-async name="purchases" id="purchases">	
+<div-async name="purchases"  id="history">	
 
   <historyOn>
     <more-box class="delete-history">
@@ -17,14 +17,15 @@
   <div class="clearfix"/>
 
   <div class="heading">
-  		<div class="col1">Time</div>
-  		<div class="col2"></div>
-  		<div class="col3">Buyer</div>
-  		<div class="col4">Purchase</div>
-  		<div class="col5">Cost</div>
-  		<div class="col6">Date</div>
-  		<div class="col7">Users</div>
-    </div>
+		<div class="col0 col">Time</div>
+		<div class="col1 col">Category</div>
+  	<div class="col2 col"></div>
+  	<div class="col3 col">Buyer</div>
+  	<div class="col4 col">Purchase</div>
+  	<div class="col5 col">Cost</div>
+  	<div class="col6 col">Date</div>
+  	<div class="col7 col">Users</div>
+  </div>
   	
   	<apply template="page"></apply>
     

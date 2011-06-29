@@ -33,6 +33,10 @@ import            Text.Digestive.Transform
 import            Data.Text (Text)
 import            Text.Templating.Heist
 
+import            Data.Time.Calendar
+import            Data.Time.LocalTime
+import            Data.Time.Clock
+
 import            Application
 import            State
 import            Lib
@@ -44,6 +48,7 @@ import            Views.Person
 import            Models.Person
 import            Models.Site
 import            Models.Account
+import            Models.Entry
 import            Controllers.Form
 
 personCheck :: Validator Application Text Person
@@ -84,8 +89,8 @@ addPerson user = do
                            when (tutorialActive user) $ setInSession "tutorial-step" "2"
                            (heistLocal $ bindSplices [("result",(renderResult  $ currentResult nu))]) $ renderHT "people/add_success"  
 
-showPerson :: User -> Application ()
-showPerson user = do
+personH :: User -> Application ()
+personH user = do
   mPid <- getParam "person"
   case mPid of
     Nothing -> redirect "/settings"
@@ -93,45 +98,64 @@ showPerson user = do
       mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
       case mperson of
         Nothing -> redirect "/settings" -- means they hit the wrong URL
-        Just person -> heistLocal (bindSplices (renderPerson person)) $ renderHT "people/settings_show"
+        Just person -> route [("/shares",               showShares user person)
+                             ,("/shares/hide",          hideShares user person)
+                             ,("/shares/add",           addShare user person)
+                             ,("/shares/delete/:date",  deleteShare user person)
+                             ]
+
+hideShares :: User -> Person -> Application ()
+hideShares user person = heistLocal (bindSplices (renderPerson person)) $ renderHT "people/share/hide"
+
+shareErrorsBlank = [("date-errors", blackHoleSplice)
+                   ,("value-errors", blackHoleSplice)
+                   ,("value-value", textSplice "")
+                   ]
+
+showShares :: User -> Person -> Application ()
+showShares user person = heistLocal (bindSplices (shareErrorsBlank ++ (renderPerson person))) $ renderHT "people/share/show"
 
 
-showShares :: User -> Application ()
-showShares user = do
-  mPid <- getParam "person"
-  case mPid of
+addShare :: User -> Person -> Application ()
+addShare user person = do
+   r <- eitherSnapForm (shareForm Nothing) "add-share-form"
+   case r of
+       Left splices' -> 
+         heistLocal 
+          (bindSplices (splices' ++ (renderPerson person))) $ 
+          renderHT "people/share/add"
+       Right share' -> do
+         mhtid <- authenticatedUserId
+         case mhtid of
+           Nothing -> redirect "/settings" -- should never happen
+           Just htid -> 
+              do let nperson = person { pShares = share':(pShares person)}
+                 saveHouseTabPerson nperson
+                 nu <- recalculateTotals user
+                 people <- getHouseTabPeople (authUser user)
+                 today <- liftM localDay $ liftIO getLocalTime
+                 heistLocal (bindSplices 
+                    [ ("result",      (renderResult  $ currentResult nu))
+                    , ("totalShares", textSplice $ T.pack $ show $ getTotalShares today people)])
+                  $ renderHT "people/share/change_success"
+                 {-heistLocal (bindSplices (renderPerson nperson)) $ renderHT "people/share/show"-}
+
+deleteShare :: User -> Person -> Application ()
+deleteShare user person = do
+  d <- getParam "date"
+  case d >>= (maybeRead . B8.unpack) of
+    Just date -> do
+      let nperson = person { pShares = filter ((/= date).sDate) (pShares person) }
+      saveHouseTabPerson nperson
+      nu <- recalculateTotals user
+      people <- getHouseTabPeople (authUser user)
+      today <- liftM localDay $ liftIO getLocalTime
+      heistLocal (bindSplices 
+         [ ("result",      (renderResult  $ currentResult nu))
+         , ("totalShares", textSplice $ T.pack $ show $ getTotalShares today people)])
+       $ renderHT "people/share/change_success"
+      {-heistLocal (bindSplices ((renderPerson nperson) ++ shareErrorsBlank)) $ renderHT "people/share/show"-}
     Nothing -> redirect "/settings"
-    Just pid -> do
-      mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
-      case mperson of
-        Nothing -> redirect "/settings" -- means they hit the wrong URL
-        Just person -> heistLocal (bindSplices (renderPerson person)) $ renderHT "people/share/show"
-  
-
-addShare :: User -> Application ()
-addShare user = do
-   mPid <- getParam "person"
-   case mPid of
-     Nothing -> redirect "/settings"
-     Just pid -> do
-       mperson <- maybe (return Nothing) getHouseTabPerson (bs2objid pid)
-       case mperson of
-         Nothing -> redirect "/settings" -- means they hit the wrong URL
-         Just person -> do
-           r <- eitherSnapForm (shareForm Nothing) "add-share-form"
-           case r of
-               Left splices' -> 
-                 heistLocal 
-                  (bindSplices (splices' ++ (renderPerson person))) $ 
-                  renderHT "people/share/add"
-               Right share' -> do
-                 mhtid <- authenticatedUserId
-                 case mhtid of
-                   Nothing -> redirect "/settings" -- should never happen
-                   Just htid -> 
-                      do saveHouseTabPerson $ person { pShares = share':(pShares person)}
-                         nu <- recalculateTotals user
-                         heistLocal (bindSplices (renderPerson person)) $ renderHT "people/settings_show"
                                        
 
 listPeople = do mhtid <- authenticatedUserId

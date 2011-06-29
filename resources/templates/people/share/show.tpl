@@ -1,8 +1,8 @@
-<div-async name="settings-$(personId)">
-  <h2><personName/></h2>
-  <a-async href="/people/$(personId)/share/add">\/ add a share</a-async><br>
-  <a-async href="/people/$(personId)/show">/\ show shares</a-async><br>	        
+<div-async name="settings-$(personId)-shares" class="shares-box">
+  <a-async href="/people/$(personId)/shares/hide">hide shares</a-async>
+
+  <apply template="add"></apply>
   <personShares>
-    <value/> as of <date/><br>
+    <a-async href="/people/$(personId)/shares/delete/$(date)">x</a-async> <value/> as of <date/><br>
   </personShares>
 </div-async>

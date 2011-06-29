@@ -22,25 +22,28 @@ import            Application
 import            Models.Result
 import            Models.Entry
 import            Models.Person
+import            Models.Site
 
 import            Views.Site
 import            Views.Person
 
-renderPersonResult :: Monad m => Day -> (String,Person,Spent,Owes) -> Splice m
-renderPersonResult today (klasses,person,spent,owes) = do
+renderPersonResult :: Monad m => Double -> Day -> (String,Person,Spent,Owes) -> Splice m
+renderPersonResult total today (klasses,person,spent,owes) = do
+  let share = personShareAsOf today person
   runChildrenWith 
-    ([("personSpent",        textSplice $ T.pack $ moneyShow spent)
-     ,("personOwes",         textSplice $ T.pack $ moneyShow (negate owes))
-     ,("personCurrentShare", textSplice $ T.pack $ maybe "0" (show.snd) $ personShareAsOf today person)
-     ,("personClasses",      textSplice $ T.pack klasses)
+    ([("personSpent",          textSplice $ T.pack $ moneyShow spent)
+     ,("personOwes",           textSplice $ T.pack $ moneyShow (negate owes))
+     ,("personClasses",        textSplice $ T.pack klasses)
+     ,("personCurrentShare",   textSplice $ T.pack $ maybe "0" (show.snd) $ share)
+     ,("personCurrentPercent", textSplice $ T.pack $ show $ ((/ 100) $ fromIntegral $ floor $ (* 100) $ (maybe 0 snd share) / total * 100 :: Double))
      ] ++ (renderPerson person))
-      where personShareAsOf day (Person _ _ _ shares) = listToMaybe $ reverse $ takeWhile ((< day).fst) $ sortBy (\a b -> compare (fst a) (fst b)) $ map (\(Share d v) -> (dateToDay d,v)) shares 
+
                        
 renderResult :: Result -> Splice Application
-renderResult (Result people date) = do now <- lift $ liftIO $ getCurrentTime
-                                       zone <- lift $ liftIO $ getCurrentTimeZone
+renderResult (Result people date) = do today <- lift $ liftIO $ getLocalTime
+                                       let total = getTotalShares (localDay today) (map (\(a,_,_) -> a) people)
                                        mapSplices 
-                                        (renderPersonResult $ localDay $ utcToLocalTime zone now) 
+                                        (renderPersonResult total $ localDay today) 
                                         (addClasses people)
   where addClasses ps = concat $ map (addLast "last") $ addLastAll "bottom" $ pad $ splitEvery 6 $ addClassSpot ps
         -- pad adds in extra spaces to the last row, if needed

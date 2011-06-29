@@ -6,14 +6,22 @@ module Views.Person where
 import            Text.Templating.Heist
 import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
-import            Data.Maybe (fromMaybe, maybeToList)
+import            Data.Maybe (fromMaybe, maybeToList, listToMaybe, mapMaybe)
+import            Data.List (sortBy)
 import qualified  Data.ByteString.Char8 as B8
 import qualified  Text.XmlHtml as X
 import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
 import            Snap.Auth
 import qualified  Data.Map as M
+import            Control.Monad.Trans (liftIO)
+
+import            Data.Time.Calendar
+import            Data.Time.LocalTime
+import            Data.Time.Clock
 
 import            Models.Person
+import            Models.Site
+import            Models.Entry (dateToDay)
 import            Application
 
 import            Views.Site
@@ -23,14 +31,19 @@ renderPersonChild person = runChildrenWith (renderPerson person)
 
 renderPerson :: Monad m => Person -> [(T.Text, Splice m)]
 renderPerson (Person pid htid name shares) =
-   [("personId",     textSplice $ TE.decodeUtf8 (maybe "" objid2bs pid))
-   ,("htid",         textSplice $ TE.decodeUtf8 $ objid2bs htid)
-   ,("personName",   textSplice $ TE.decodeUtf8 $ name)
-   ,("personShares", sharesSplice shares)
-   ]                       
+   [("personId",             textSplice $ TE.decodeUtf8 (maybe "" objid2bs pid))
+   ,("htid",                 textSplice $ TE.decodeUtf8 $ objid2bs htid)
+   ,("personName",           textSplice $ TE.decodeUtf8 $ name)
+   ,("personShares",         sharesSplice shares)
+   ]
+      
 
-renderPeople :: Monad m => [Person] -> Splice m
-renderPeople people = mapSplices renderPersonChild people
+renderPeople :: Monad m => Day -> [Person] -> Splice m
+renderPeople today people = mapSplices renderPersonChild people
+
+personShareAsOf day (Person _ _ _ shares) = listToMaybe $ reverse $ takeWhile ((< day).fst) $ sortBy (\a b -> compare (fst a) (fst b)) $ map (\(Share d v) -> (dateToDay d,v)) shares 
+
+getTotalShares today people = sum $ map snd $ mapMaybe (personShareAsOf today) people
 
 lookupName :: Monad m => M.Map T.Text T.Text -> Splice m
 lookupName people = do node <- getParamNode
@@ -40,5 +53,6 @@ lookupName people = do node <- getParamNode
 
 getPeopleSplices :: AuthUser -> Application [(T.Text, Splice Application)]
 getPeopleSplices au = do people <- getHouseTabPeople au
-                         return [("people", renderPeople people)
+                         today <- liftIO getLocalTime
+                         return [("people", renderPeople (localDay today) people)
                                 ,("lookupName", lookupName (personIdMap people))]

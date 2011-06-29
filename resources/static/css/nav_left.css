@@ -173,6 +173,7 @@
 	/*Forms*/
 	
 	#adduser .addform_submit {
+	  background-color: transparent;
 		background-image: url("/img/Icons/submit.png");
 		border: 0;
 		width: 36px;
@@ -181,6 +182,7 @@
 	
 	#adduser .addform_submit:hover {
 		background-image: url("/img/Icons/submit_mo.png");
+		cursor: pointer;
 	}
 	
 

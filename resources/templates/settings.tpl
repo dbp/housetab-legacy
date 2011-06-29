@@ -16,11 +16,7 @@
     </tutorialOff>  
 	  
 	  <h1>USER SETTINGS</h1>
-		<div id="totalshares">
-			<img src="/img/Glyphs/glyph_above.png" />
-			<h3>total shares</h3>
-			<p>NNN</p>
-		</div>
+    <apply template="people/total_shares"></apply>
 		
     <apply template="people/add"></apply>
   </bind>

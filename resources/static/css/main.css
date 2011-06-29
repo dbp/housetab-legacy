@@ -617,3 +617,33 @@
 	#arrow_below:hover {
 	  background-image: url("/img/Glyphs/arrow_below_mo.png");
 	}
+
+
+/* Misc stuff */
+form.add-share button {
+  background: transparent url("/img/Icons/submit.png") no-repeat  center center;
+ 	width: 36px;
+	height: 18px;
+	border: 0; 
+	cursor: pointer;
+	float: right;
+}
+
+form.add-share .date {
+  width: 65px;
+}
+
+form.add-share .value {
+  width: 30px;
+}
+
+form.add-share button:hover {
+  background-image: url("/img/Icons/submit_mo.png");
+}
+
+.shares-box {
+  background-color: white;
+  padding: 5px;
+  font-size: 14px;
+}
+
