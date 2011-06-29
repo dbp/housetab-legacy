@@ -36,13 +36,27 @@ bean.add(document, 'DOMContentLoaded', function () {
     e = bonzo(elem);
     d = bonzo(elem.parentNode).previous()[0]; // display
     h = bonzo(d).previous()[0] // hidden value
+    function get_name(value) {
+      return v(elem.parentNode.childNodes).toArray().filter(function(i){return i.nodeType === 1 && i.getAttribute("data-box-value") === value})[0].innerHTML;
+    };
+    var num_people = v(elem.parentNode.childNodes).toArray().filter(function(i){return i.nodeName === "DIV" && bonzo(i).hasClass("option");}).length;
+    function display(selected) {
+      if (selected.length === num_people) {
+        return "ALL USERS"
+      } else if (selected.length <= 2) {
+        return v(selected).map(function(i){return get_name(i);}).join(" & ");
+      } else {
+        return get_name(selected[0]) + " & " + (selected.length - 1) + " others.";
+      }
+    };
     if (e.hasClass("selected")) {
       // remove from list
       e.removeClass("selected");
       sels = h.getAttribute("value").split(",");
       // strip out the element, using valentine
-      h.setAttribute("value",v(sels).filter(function(i){return i!==elem.getAttribute("data-box-value")}).join(","));
-      d.innerHTML = (sels.length - 1) + " selected.";
+      var newsels = v(sels).filter(function(i){return i!==elem.getAttribute("data-box-value")});
+      h.setAttribute("value",newsels.join(","));
+      d.innerHTML = display(newsels);
     } else {
       // add to list
       e.addClass("selected");
@@ -52,8 +66,9 @@ bean.add(document, 'DOMContentLoaded', function () {
       } else {
         sels = val.split(",");
       }
-      h.setAttribute("value",sels.concat([elem.getAttribute("data-box-value")]).join(","));
-      d.innerHTML = (sels.length + 1) + " selected.";
+      var newsels = sels.concat([elem.getAttribute("data-box-value")]);
+      h.setAttribute("value",newsels.join(","));
+      d.innerHTML = display(newsels);
     }
   });
   

@@ -54,11 +54,12 @@
 	<div class="users enform6">
 	  <p>Users:</p>
     <div class="errors"><for-errors><error/></for-errors></div>
-    <box-field-multi name="for" value="$(for-value)" display="$(for-value)" class="">
+    <bind tag="peopleshow"><lookupPeopleShow value="$(for-value)"/></bind>
+    <box-field-multi name="for" value="$(for-value)" display="$(peopleshow)" class="">
     <people>
       <box-option value="$(personId)">
         <personName/>
-      </box-option>
+      </box-option><br>
     </people>
     </box-field-multi>
   </div>

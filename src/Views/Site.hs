@@ -113,10 +113,10 @@ boxField :: Monad m => Splice m
 boxField = boxFieldGen "box-field" id []
 
 boxFieldMulti :: Monad m => Splice m
-boxFieldMulti = boxFieldGen "box-field-multi" countSelected [X.Element "div" [("class","close")] [X.TextNode "X"]]
-  where countSelected t = T.concat [T.pack (show (if T.length t == 0 then 0 else length (T.splitOn "," t)))
+boxFieldMulti = boxFieldGen "box-field-multi" id [X.Element "div" [("class","close")] [X.TextNode "X"]]
+  {-where countSelected t = T.concat [T.pack (show (if T.length t == 0 then 0 else length (T.splitOn "," t)))
                                    ," selected."
-                                   ]
+                                   ]-}
 
 boxFieldGen :: Monad m => T.Text -> (T.Text -> T.Text) -> [X.Node] -> Splice m
 boxFieldGen typ sel extra = do node <- getParamNode

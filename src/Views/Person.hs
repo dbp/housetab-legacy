@@ -51,8 +51,16 @@ lookupName people = do node <- getParamNode
                          Nothing -> return [] -- no id, so no name
                          Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' people 
 
+lookupPeopleShow :: {-Monad m => -}[Person] -> Splice Application
+lookupPeopleShow people = do node <- getParamNode
+                             case X.getAttribute "value" node of
+                               Just t -> return [X.TextNode $ T.pack $ showPeople people $ mapMaybe (bs2objid . TE.encodeUtf8) $ T.splitOn "," t]
+                               _ -> return []
+                               
 getPeopleSplices :: AuthUser -> Application [(T.Text, Splice Application)]
 getPeopleSplices au = do people <- getHouseTabPeople au
                          today <- liftIO getLocalTime
                          return [("people", renderPeople (localDay today) people)
-                                ,("lookupName", lookupName (personIdMap people))]
+                                ,("lookupName", lookupName (personIdMap people))
+                                ,("lookupPeopleShow", lookupPeopleShow people)
+                                ]

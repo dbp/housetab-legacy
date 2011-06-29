@@ -22,7 +22,7 @@ import            Data.Time.Format
 import            System.Locale (defaultTimeLocale)
 
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
+import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing, mapMaybe)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
 import            Data.List.Split
@@ -56,14 +56,14 @@ import            Models.Site
 
 entriesH :: User -> Application ()
 entriesH user = do 
-   {-liftIO $ putStrLn $ show $ length entries-}
    people <- getHouseTabPeople (authUser user)
    entriesSplice <- entriesPage people 0 user
-   (heistLocal $ (bindSplices 
+   (heistLocal $ (bindSplices
     ([ ("result",           (renderResult  $ currentResult user))
      , ("totalSpent",       textSplice $ T.pack $ moneyShow $ getTotalSpent user)
      , ("entries",          entriesSplice)
      , ("entriesPage",      textSplice $ "1")
+     , ("for-value",        textSplice $ T.intercalate "," $ map (TE.decodeUtf8 . objid2bs) $ mapMaybe pId people)
      ]))) $ renderHT "entries"
 
 entriesPageH :: User -> Application ()

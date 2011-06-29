@@ -179,6 +179,7 @@
 		font-family: "times new roman";
 		font-size: 15px;
 		display: inline-block;
+		vertical-align: top;
 		position: relative;
 		margin: 0;
 /*    margin-right: 5px;
@@ -192,7 +193,7 @@
 	
 	.enform2 input {
 		width: 184px;
-    height: 16px
+    height: 20px
 	
 	}
 	
@@ -202,8 +203,8 @@
 	}
 	
 	.enform4 input {
-		width: 60px;
-		height: 16px
+		width: 80px;
+		height: 20px
 	}
 	
 	.enform5 input {
@@ -212,7 +213,7 @@
 	}
 	
 	.enform6 .display {
-		width: 144px;
+		width: 124px;
 		height: 16px
 	}
 	
