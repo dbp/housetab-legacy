@@ -172,21 +172,24 @@ editPerson :: User -> Application ()
 editPerson user = 
   do i <- getParam "id"
      let mbhtid = userId $ authUser user
-     when (isNothing mbhtid) $ redirect "/entries"
+     when (isNothing mbhtid) $ redirect "/settings"
      let (UserId htid) = fromJust mbhtid
      case i >>= bs2objid of
       Just pid -> do
-        person <- getHouseTabPerson pid
-        r <- eitherSnapForm (personForm person) "edit-person-form" 
-        case r of
-          Left splices' -> 
-            heistLocal (bindSplices splices') $ renderHT "people/edit"
-          Right person' -> do
-            maybe (return ()) (\p -> saveHouseTabPerson $ p { pName = pName person' }) person
-            nu <- recalculateTotals user
-            (heistLocal $ bindSplice "result"  (renderResult  $ currentResult nu)) 
-              $ renderHT "people/result"
-      Nothing -> redirect "/entries"
+        mperson <- getHouseTabPerson pid
+        case mperson of 
+          Nothing -> redirect "/settings"
+          Just person -> do
+            r <- eitherSnapForm (personForm (Just person)) "edit-person-form" 
+            case r of
+              Left splices' -> 
+                heistLocal (bindSplices splices') $ renderHT "people/edit"
+              Right person' -> do
+                let nperson = person { pName = pName person' }
+                saveHouseTabPerson nperson
+                nu <- recalculateTotals user
+                heistLocal (bindSplices  (renderPerson nperson)) $ renderHT "people/name"
+      Nothing -> redirect "/settings"
       
 
 nonNegative :: (Ord a, Num a) => Validator Application Text a

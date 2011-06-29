@@ -5,7 +5,9 @@
         2
       </div>
     </tutorial>
-    <h2><personName/> <a href="/people/edit/$(personId)">\/ edit</a></h2>
+    <h2>
+      <apply template="name"></apply>
+    </h2>
     <p>shares: <personCurrentShare/></p>
     <p><personCurrentPercent/>%</p>
     <apply template="share/hide"></apply>
