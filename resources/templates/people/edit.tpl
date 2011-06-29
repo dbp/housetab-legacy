@@ -1,4 +1,4 @@
-<div-async name="edit-person-$(id-value)">
+<div-async name="edit-person-$(id-value)" class="edit-person">
   <form-async action="/people/edit/$(id-value)" method="POST">
     <name-errors><error/><br></name-errors>
     <input name="name" type="text" value="$(name-value)" />

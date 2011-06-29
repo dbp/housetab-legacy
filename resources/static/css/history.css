@@ -7,6 +7,10 @@
   float: right;
 }
 
+.more-box.delete-history .more {
+  color: black;
+}
+
 #history .col {
   float: left;
 }

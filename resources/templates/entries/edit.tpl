@@ -3,7 +3,7 @@
   <input type="hidden" name="id" value="$(id-value)" />
   <div class="clearfix"/>
 
-  <div class="col1 col edit">
+  <div class="col1 col">
 	  <div class="errors"><category-errors><error/> </category-errors></div>
 	  <bind tag="category-display">
 	    <catName cat="$(category-value)" />
@@ -12,10 +12,12 @@
       <categories>
         <box-option value="$(cat)" id="$(cat)">
         <catName cat="$(cat)"/>
-        </box-option>
+        </box-option><br>
       </categories>
     </box-field>
 	</div>
+	
+	<div class="col2 col"></div>
 	
     <!-- <div class="col2 col">
       <a-async href="/entries/delete/$(index)" class="delete"></a-async>

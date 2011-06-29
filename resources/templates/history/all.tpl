@@ -7,6 +7,7 @@
         Are you sure you want to do this? You cannot undo this (though you can turn the recording back on, but only for new actions).
         <br><br>
         <a-async href="/history/deactivate">Yes</a-async>
+        <button class="close">Cancel</button>
       </more>
     </more-box>
   </historyOn>

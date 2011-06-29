@@ -484,7 +484,7 @@
 		padding-right: .5em;
 	}
 	
-	.col6 {
+	.col6, .col6 input {
 		width: 87px;
 	}
 	#purchases .purchase  .col6 {
@@ -620,13 +620,25 @@
 
 
 /* Misc stuff */
-form.add-share button {
+form.add-share button, #purchases .entry-form button, .edit-person button {
   background: transparent url("/img/Icons/submit.png") no-repeat  center center;
  	width: 36px;
 	height: 18px;
 	border: 0; 
 	cursor: pointer;
 	float: right;
+}
+
+form.add-share button, #purchases .entry-form button {
+	margin-right: -40px;
+}
+
+form.add-share button {
+  margin-top: -20px;
+}
+
+.edit-person input {
+  width: 95px;
 }
 
 form.add-share .date {
@@ -637,7 +649,7 @@ form.add-share .value {
   width: 30px;
 }
 
-form.add-share button:hover {
+form.add-share button:hover, #purchases .entry-form button:hover, .edit-person button:hover {
   background-image: url("/img/Icons/submit_mo.png");
 }
 
