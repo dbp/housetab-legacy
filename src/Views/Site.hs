@@ -126,8 +126,9 @@ boxFieldGen typ sel extra = do node <- getParamNode
                                    let klass = T.concat [typ, " ", (fromMaybe "" $ X.getAttribute "class" node)]
                                    let value = fromMaybe "" $ X.getAttribute "value" node
                                    let display = sel $ fromMaybe "" $ X.getAttribute "display" node
+                                   let displayClass = T.concat ["display ", fromMaybe "" $ X.getAttribute "display-class" node]
                                    let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
-                                                  , X.Element "div" [("class","display")] [X.TextNode display]
+                                                  , X.Element "div" [("class",displayClass)] [X.TextNode display]
                                                   , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
                                                   ]
                                    return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]

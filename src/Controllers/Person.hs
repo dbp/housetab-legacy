@@ -56,12 +56,12 @@ personCheck = check "Shouldnt see this" $ \(Person _ _ _ _) -> True
 
 
 onePerson :: Validator Application Text String
-onePerson = checkM "Must be a id that corresponds to a person." fn
+onePerson = checkM "Must be a person." fn
   where fn id' = do pers <- maybe (return Nothing) getHouseTabPerson (bs2objid $ B8.pack id')
                     return $ isJust pers
 
 manyPeople :: Validator Application Text String
-manyPeople = checkM "Must be comma separated ids that corresponds to people, no duplicates." fn
+manyPeople = checkM "Must be at least one person." fn
   where fn ps = do muid <- authenticatedUserId
                    case muid of
                      Nothing -> return False -- this should never be able to happen, but...

@@ -226,13 +226,14 @@
 		cursor: pointer;
 	}
 	
-	.entry-form .category .inp .display {
+	.entry-form .category .display {
 	  background-position: center left;
 	  background-repeat: no-repeat;
 	  height: 20px;
-	  width: 50px;
+	  width: 10px;
 	  color: transparent;
 	  overflow: hidden;
+	  padding-left: 40px;
 	}
 	
 	.category .option {
@@ -265,7 +266,7 @@
     background-image: url("/img/Categories/misc.png");
   }
   .category .food, .category #food {
-    background-image: url("/img/Categories/pan.png");
+    background-image: url("/img/Categories/kitchen.png");
   }
   .category .rent, .category #rent {
     background-image: url("/img/Categories/rent.png");

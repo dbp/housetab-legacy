@@ -162,10 +162,10 @@ entryForm e = mkEntry
     <$> input "id"  (lMO (e >>= eId))
     <*> input "by"  (lMO (liftM eWho e)) `validate` onePerson  `transform` mongoObjectId     <++ errors
     <*> input "for" (lMO' eWhopays e) `validate` manyPeople `transform` mongoObjectIdMany <++ errors 
-    <*> inputRead "ammount" "Invalid ammount" (liftM eHowmuch e)  <++ errors 
+    <*> inputRead "ammount" "Must be a number, like 20.5" (liftM eHowmuch e)  <++ errors 
     <*> input "what" (lm8 eWhat e)   <++ errors 
     <*> input "category" (lm8 eCategory e) `validate` isCategory   <++ errors 
-    <*> inputRead "date" "Date must be YYYY.MM.DD like 2011.6.21" (liftM eWhen e)     <++ errors 
+    <*> inputRead "date" "Date must be MM.DD.YYYY like 6.21.2011" (liftM eWhen e)     <++ errors 
   where mkEntry i b f a wha cat whe = HouseTabEntry (bs2objid $ B8.pack i) emptyObjectId b (B8.pack wha) (B8.pack cat) whe a f
         lMO = liftM (B8.unpack . objid2bs)
         lMO' f = liftM (B8.unpack . B8.intercalate "," . map objid2bs . f)

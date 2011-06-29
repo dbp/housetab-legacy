@@ -29,7 +29,7 @@
 	  <bind tag="category-display">
 	    <catName cat="$(category-value)" />
     </bind>
-	  <box-field name="category" value="$(category-value)" display="$(category-display)" class="">
+	  <box-field name="category" value="$(category-value)" display="$(category-display)" display-class="$(category-value)">
       <categories>
         <box-option value="$(cat)" id="$(cat)">
         <catName cat="$(cat)"/>
