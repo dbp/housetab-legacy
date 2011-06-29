@@ -79,12 +79,19 @@
           </div>
           
           <div id="arrows">
-          	<a href="#top"><div id="arrow_up"></div></a>
+          	<a href="#top"><div id="arrow_above"></div></a>
           	<a href="#navbar"><div id="arrow_mid"></div></a>
-          	<a href="#below"><div id="arrow_down"></div></a>
+          	<a href="#below"><div id="arrow_below"></div></a>
           </div>
       	</div>
       </div>
     </show>
+    
+    <div id="preload" style="display: none;">
+      <img src="/img/Glyphs/arrow_mid_mo.png"/>
+      <img src="/img/Glyphs/arrow_above_mo.png"/>
+      <img src="/img/Glyphs/arrow_below_mo.png"/>
+    </div>
+    
   </body>
 </html>
