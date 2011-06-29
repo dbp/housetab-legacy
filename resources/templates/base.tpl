@@ -25,7 +25,7 @@
   <body>
     
 
-    <show blank="$(top)">
+    <show notblank="$(top)">
       <div id="top">
       	<div id="topcontents">
           <top/>
@@ -33,7 +33,7 @@
       </div>
     </show>
 
-    <show blank="$(above)">
+    <show notblank="$(above)">
       <div id="above">
         <ifLoggedIn>
       	<div id="abovecontents">
@@ -50,7 +50,7 @@
       </div>
     </show>
     
-    <show blank="$(navbar)">
+    <show notblank="$(navbar)">
       <div id="navbar">
         <ifLoggedIn>
       	  <div id="navbarcontents">
@@ -65,7 +65,7 @@
       </div>
     </show>
     
-    <show blank="$(below)">
+    <show notblank="$(below)">
       <div id="below">
       	<div id="belowcontents">
       
@@ -91,6 +91,15 @@
       <img src="/img/Glyphs/arrow_mid_mo.png"/>
       <img src="/img/Glyphs/arrow_above_mo.png"/>
       <img src="/img/Glyphs/arrow_below_mo.png"/>
+      <img src="/img/Icons/submit_mo.png"/>
+      <img src="/img/Icons/edit_mo.png"/>
+      <img src="/img/Icons/delete_mo.png"/>
+      <img src="/img/NavigationBar/nav_entries_mo.png"/>
+      <img src="/img/NavigationBar/nav_login_mo.png"/>
+      <img src="/img/NavigationBar/nav_about_mo.png"/>
+      <img src="/img/NavigationBar/nav_logout_mo.png"/>
+      <img src="/img/NavigationBar/nav_settings_mo.png"/>
+      <img src="/img/NavigationBar/nav_signup_mo.png"/>
     </div>
     
   </body>

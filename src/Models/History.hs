@@ -82,9 +82,11 @@ trackEdit :: HouseTabEntry -> HouseTabEntry -> Application ()
 trackEdit (HouseTabEntry oid' ohtid owho owhat ocat owhen ohowmuch owhopays) 
           (HouseTabEntry nid' nhtid nwho nwhat ncat nwhen nhowmuch nwhopays) = do
     now <- liftIO getCurrentTime
+    {-liftIO $ putStrLn "Tracking edit"-}
     let edit = Edit Nothing ohtid now (mkC owho nwho) (mkC owhat nwhat) (mkC ocat ncat) 
                     (mkC owhen nwhen) (mkC ohowmuch nhowmuch) (mkC owhopays nwhopays)
-    DB.withDB $ DB.insert "history" (unDoc $ val edit)
+    {-liftIO $ putStrLn $ show $ (unDoc $ val edit)-}
+    DB.withDB $ DB.insert "history" $ B.exclude ["_id"] (unDoc $ val edit)
     return ()
   where mkC o n = if o == n then Change o Nothing else Change o (Just n)
 

@@ -177,13 +177,19 @@ identitySplice = do node <- getParamNode
 blackHoleSplice :: Monad m => Splice m
 blackHoleSplice = return []
 
--- | this splice shows it's children if the blank attribute is not blank :)
+-- | this splice shows it's children if the blank attribute is blank, or if it's notblank attribute is not blank, 
+--   or another attribute is equal to it's name
 showContent :: Monad m => Splice m
 showContent = do node <- getParamNode
-                 case X.getAttribute "blank" node of
+                 case X.getAttribute "notblank" node of
                    Just "" -> return []
-                   Nothing -> return []
+                   Nothing -> case X.getAttribute "blank" node of
+                     Just "" -> return $ X.elementChildren node
+                     Nothing -> if checkAttrs node then return (X.elementChildren node) else return []
+                     _ -> return []
                    _ -> return $ X.elementChildren node
+        where checkAttrs node = any (\(a,b) -> a == b) $ X.elementAttrs node
+
 
 --- the following two taken from https://github.com/mightybyte/snap-heist-splices which depends on unreleased version of snap
 ------------------------------------------------------------------------------

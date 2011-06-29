@@ -1,5 +1,5 @@
 <div-async name="settings-$(personId)">
-  <show blank="$(personId)">
+  <show notblank="$(personId)">
     <tutorial step="2">
       <div id="tutorial-2">
         2

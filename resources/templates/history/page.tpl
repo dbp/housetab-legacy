@@ -7,5 +7,6 @@
 </div-async-append>
 
 <div-async name="history-next">
+<div class="clearfix"/>
   <a-async href="/history/page/$(historyPage)">More</a-async>
 </div-async>

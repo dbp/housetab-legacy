@@ -58,24 +58,31 @@ renderadddel people who what category when howmuch whopays =
   (map ((\(a,b) -> (a, textSplice b)))
     [("who",         TE.decodeUtf8 $ objid2bs who)
     ,("who-old",   "")
+    ,("who-class",   "")
     ,("what",       TE.decodeUtf8 what)
     ,("what-old",   "")
+    ,("what-class",   "")
     ,("category",   TE.decodeUtf8 category)
     ,("category-old",   "")
+    ,("category-class",   "")
     ,("when",       T.pack $ show when)
     ,("when-old",   "")
+    ,("when-class",   "")
     ,("ammount",     T.pack $ moneyShow howmuch)
     ,("ammount-old",   "")
+    ,("ammount-class",   "")
     ,("forSummary", T.pack $ (showPeople people whopays))
     ,("forSummary-old",   "")
+    ,("forSummary-class",   "")
     ])
 
 renderChangeT :: Monad m => T.Text -> (a -> T.Text) -> Change a -> [(T.Text,Splice m)]
 renderChangeT n f = renderChange n (textSplice . f)
 
 renderChange :: Monad m => T.Text -> (a -> Splice m) -> Change a -> [(T.Text,Splice m)]
-renderChange n f (Change old new) = [(n, f old)
-                                    ,(T.concat [n,"-old"], maybe (textSplice "") f new)]
+renderChange n f (Change old new) = [(n, f (fromMaybe old new))
+                                    ,(T.concat [n,"-old"], maybe (textSplice "") (const (f old)) new)
+                                    ,(T.concat [n,"-class"], maybe (textSplice "nm") (const (textSplice "")) new)]
 
 
 renderHistory :: [Person] -> [History] -> Splice Application

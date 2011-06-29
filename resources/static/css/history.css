@@ -12,16 +12,36 @@
 }
 
 #history .col0 {
-  width: 150px;
+  width: 167px;
 }
 
 #history .col1 {
   width: 50px;
+  font-weight: bold;
+}
+
+#history .heading .col1 {
+  font-weight: normal;
 }
 
 #history .col2 {
   width: 100px;
 }
+
+#history .col2 .more-box .showing {
+  z-index: 0;
+  position: relative;
+}
+#history .col2 .more-box .showing img {
+  z-index: -1;
+  position: relative;
+}
+
+
+#history .col3 {
+  width: 100px;
+}
+
 
 #history .col4 {
   width: 150px;
@@ -29,4 +49,8 @@
 
 #history .col7 {
   width: 100px;
+}
+
+.history-add, .history-edit .col.nm {
+  color: #CCC;
 }
