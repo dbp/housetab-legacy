@@ -220,6 +220,12 @@ changeEmailH = do
       redirect "/settings" 
     _ -> redirect "/settings" 
     
+
+deleteAccountH :: User -> Application ()
+deleteAccountH user = do
+  deleteAccount user
+  performLogout
+  redirect "/"
   
        
 tutorialDeactivate :: User -> Application ()

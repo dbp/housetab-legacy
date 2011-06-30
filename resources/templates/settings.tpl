@@ -36,11 +36,16 @@
 		<div id="navbarcontents2">
 			<div id="subnav">
 				<div id="subnav_settings"></div>
-				<div id="subnav1"><p><a href="#top">See User Settings</a></p></div>
-				<div id="subnav2"><p>
-				  <a href="#below">See Account History</a> 
-				  | <a href="#below">Delete Account</a>
-				  | <tutorialOn><a-async href="/tutorial/deactivate">Stop Tutorial</a-async></tutorialOn>
+				<div id="subnav1"><p><a href="#top">See User Settings</a> | </p>
+				  <more-box>
+				    Delete Account
+				    <more>
+				      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit">Yes</button></form> <button class="close">No</button>
+				    </more>
+				  </more-box>
+				  </div>
+				<div id="subnav2">
+				  <p><a href="#below">See Account History</a> | <tutorialOn><a-async href="/tutorial/deactivate">Stop Tutorial</a-async></tutorialOn>
 				    <tutorialOff><a-async href="/tutorial/activate">Start Tutorial</a-async></tutorialOff>
 				  </p></div> 
 			</div>

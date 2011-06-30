@@ -96,3 +96,15 @@ recalculateTotals u = do
   saveAuthUser (authUser u', additionalUserFields u')
   return u'
 
+
+deleteAccount :: User -> Application ()
+deleteAccount user =
+  case userId (authUser user) >>= (DB.bs2objid . unUid) of
+    Nothing -> return () -- no id means we can't do anything, but this should never happen
+    Just htid -> do
+      DB.withDB $ DB.delete $ DB.select ["htid" =: htid] "entries"
+      DB.withDB $ DB.delete $ DB.select ["htid" =: htid] "history"
+      DB.withDB $ DB.delete $ DB.select ["htid" =: htid] "people"
+      DB.withDB $ DB.delete $ DB.select ["_id" =: htid]  "users"
+      -- fewww... that was a lot of work.
+      return ()

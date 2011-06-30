@@ -26,8 +26,8 @@ import Snap.Types hiding (POST)
 mailActivation token account email = do
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
-  liftIO $ putStrLn "Sending activation email [fake]"
-  -- liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Welcome to HouseTab. Now activate your account." "activation" (BS.concat $ msg server portNum)) [email]
+  {-liftIO $ putStrLn "Sending activation email [fake]"-}
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Welcome to HouseTab. Now activate your account." "activation" (BS.concat $ msg server portNum)) [email]
     where msg s p = ["Welcome to HouseTab. "
                   ,"All you need to do to complete your registration is activate your account by clicking on the link below.\n\n"
                   ,"Please activate your account by visiting "
@@ -43,8 +43,8 @@ mailActivation token account email = do
 mailEmailChange token account email = do 
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
-  liftIO $ putStrLn "Sending email change email [fake]"
-  {-liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Confirm your email change on HouseTab." "emailchange" (BS.concat $ msg server portNum)) [email]-}
+  {-liftIO $ putStrLn "Sending email change email [fake]"-}
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Confirm your new email address on HouseTab." "emailchange" (BS.concat $ msg server portNum)) [email]
     where msg s p = ["You just changed your email account on HouseTab to this one. "
                   ,"To confirm that this is indeed your email account, please visit the following link.\n\n"
                   ,"http://"

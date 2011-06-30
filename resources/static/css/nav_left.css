@@ -135,7 +135,7 @@
 		background-image: url("/img/NavigationBar/subnav_below.png");
 	}
 
-	#subnav1 p, #subnav2 p{
+	#subnav1 p, #subnav2 p, #subnav1 .more-box .showing {
 		font-family: "adobe caslon pro";
 		font-size: 16px;
 		text-align: center;
@@ -144,12 +144,27 @@
 		font-variant: small-caps;
 	}
 	
+	 #subnav1 .more-box	{
+	   display: inline-block;
+	   width: 180px;
+	   margin-left: 60px;
+	 }
+	 
+	 	 #subnav1 .more-box	form {
+	 	   display: inline;
+	 	 }
+	
+	 #subnav1 .more-box .showing {
+	   display: inline;
+	   color: #383838;
+	 }
+	
 	#navbarcontents2 a {
 		color: #383838;
 		text-decoration: none;
 	}
 	
-	#navbarcontents2 a:hover {
+	#navbarcontents2 a:hover,  #subnav1 .more-box .showing:hover {
 		color: #383838;
 		text-decoration: underline;
 	}

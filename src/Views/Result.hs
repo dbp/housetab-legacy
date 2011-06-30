@@ -47,7 +47,9 @@ renderResult (Result people date) = do today <- lift $ liftIO $ getLocalTime
                                         (addClasses people)
   where addClasses ps = concat $ map (addLast "last") $ addLastAll "bottom" $ pad $ splitEvery 6 $ addClassSpot ps
         -- pad adds in extra spaces to the last row, if needed
-        pad l = init l ++ [last l ++ (take (6 - length (last l)) $ repeat ("",emptyPerson,0,0))] 
+        pad l = case l of
+          [] -> [take 6 $ repeat ("",emptyPerson,0,0)] 
+          _ -> init l ++ [last l ++ (take (6 - length (last l)) $ repeat ("",emptyPerson,0,0))] 
         addClassSpot = map (\(a,b,c) -> ("",a,b,c))
         addC :: String -> (String,Person,Spent,Owes) -> (String,Person,Spent,Owes)
         addC s l       = (\(a,b,c,d) -> (a ++ " " ++ s,b,c,d)) l

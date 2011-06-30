@@ -12,6 +12,9 @@
     <script type="text/javascript" charset="utf-8" src="/js/bonzo.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/housetab.js"></script>
     
+    <!--     <script type="text/javascript" src="http://use.typekit.com/hbk2bjj.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script> -->
+    
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/history.css" />
     <link rel="stylesheet" type="text/css" href="/css/more-box.css" />
