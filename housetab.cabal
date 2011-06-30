@@ -2,7 +2,7 @@ Name:                housetab
 Version:             0.2
 Synopsis:            HouseTab is a webapp that allows a group of people to flexibly share things.
 Description:         
-License:             BSD3
+License-file:        LICENSE
 Author:              Daniel Patterson
 Maintainer:          daniel@positionstudios.com
 Stability:           Experimental
