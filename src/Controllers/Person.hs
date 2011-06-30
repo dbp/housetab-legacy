@@ -50,6 +50,7 @@ import            Models.Site
 import            Models.Account
 import            Models.Entry
 import            Controllers.Form
+import            Controllers.Tutorial
 
 personCheck :: Validator Application Text Person
 personCheck = check "Shouldnt see this" $ \(Person _ _ _ _) -> True
@@ -86,7 +87,7 @@ addPerson user = do
            Nothing -> renderHT "people/add_failure"  
            Just htid -> do saveHouseTabPerson $ person' { pHTId = htid}
                            nu <- recalculateTotals user
-                           when (tutorialActive user) $ setInSession "tutorial-step" "2"
+                           tutorialStep user "1" "2"
                            (heistLocal $ bindSplices [("result",(renderResult  $ currentResult nu))]) $ renderHT "people/add_success"  
 
 personH :: User -> Application ()
@@ -134,11 +135,11 @@ addShare user person = do
                  nu <- recalculateTotals user
                  people <- getHouseTabPeople (authUser user)
                  today <- liftM localDay $ liftIO getLocalTime
+                 tutorialStep user "2" "3"
                  heistLocal (bindSplices 
                     [ ("result",      (renderResult  $ currentResult nu))
                     , ("totalShares", textSplice $ T.pack $ show $ getTotalShares today people)])
                   $ renderHT "people/share/change_success"
-                 {-heistLocal (bindSplices (renderPerson nperson)) $ renderHT "people/share/show"-}
 
 deleteShare :: User -> Person -> Application ()
 deleteShare user person = do

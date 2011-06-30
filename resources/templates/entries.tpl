@@ -9,7 +9,16 @@
     <tutorial step="1">
       <apply template="tutorial/0"></apply>
     </tutorial>
-    
+    <tutorial step="4">
+      <apply template="tutorial/4"></apply>
+    </tutorial>
+    <tutorial step="5">
+      <apply template="tutorial/5"></apply>
+    </tutorial>
+    <tutorialOff>
+      <apply template="tutorial/off"></apply>      
+    </tutorialOff>  
+	  
     
     <h1>BALANCE OF PAYMENTS</h1>
 		<img src="/img/Glyphs/glyph_above.png" />

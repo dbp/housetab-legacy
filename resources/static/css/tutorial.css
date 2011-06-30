@@ -6,6 +6,7 @@
   border: 2px solid red;
   border-top: 0;
   background-color: white;
+  padding: 5px;
 }
 
 #tutorial .content p {
@@ -13,13 +14,12 @@
   padding: 5px;
 }
 
-#tutorial a {
+#tutorial a.end {
   float: right;
 }
 
-#tutorial-1, #tutorial-2 {
+#tutorial-1, #tutorial-2, #tutorial-3, #tutorial-4 {
   position: absolute;
-
   width: 40px;
   height: 40px;
 }
@@ -43,3 +43,24 @@
   top: -10px;
   left: 160px;
 }
+
+#tutorial-3 {
+  background: transparent url("/img/Other/step3.png") no-repeat center center;
+}
+
+#tutorial-3.a {
+  bottom: 80px;
+  left: 400px;
+}
+
+#tutorial-3.b {
+  top: 0px;
+  left: -40px;
+}
+
+#tutorial-4 {
+  background: transparent url("/img/Other/step4.png") no-repeat center center;
+  top: -20px;
+  left: -20px;
+}
+

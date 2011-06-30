@@ -45,6 +45,7 @@ import            Views.Result
 import            Views.Account
 import            Views.Person
 import            Controllers.Form
+import            Controllers.Tutorial
 
 import            Models.Account
 import            Models.Site
@@ -69,8 +70,10 @@ requireUserBounce' good = do
                       let today = localDay now
                       registerSplices hs 
                         ([ ("tutorial", tutorialSplice)
-                         , ("tutorialOn", if (tutorialActive user) then identitySplice else blackHoleSplice)
-                         , ("tutorialOff", if (tutorialActive user) then blackHoleSplice else identitySplice)
+                         {-, ("tutorialOn", if (tutorialActive user) then identitySplice else blackHoleSplice)
+                         , ("tutorialOff", if (tutorialActive user) then blackHoleSplice else identitySplice)-}
+                         , ("tutorialOn", tutorialTest True)
+                         , ("tutorialOff", tutorialTest False)
                          , ("historyOn", if (recordHistory user) then identitySplice else blackHoleSplice)
                          , ("historyOff", if (recordHistory user) then blackHoleSplice else identitySplice)
                          , ("currentDateLong", textSplice $ T.pack $ formatTime defaultTimeLocale "%e %B %Y" today)
@@ -97,6 +100,10 @@ loginH = renderHT "account/login"
 loginSuccess :: Application ()
 loginSuccess = do u <- currentUser
                   recalculateTotals (fromJust u)
+                  t <- getFromSession "tutorial-step"
+                  case t of
+                    Nothing -> when (tutorialActive (fromJust u)) $ setInSession "tutorial-step" "1"
+                    _ -> return ()
                   redirTo
 
 unDoc (Doc fs) = fs
@@ -247,19 +254,4 @@ deleteAccountH user = do
   deleteAccount user
   performLogout
   redirect "/"
-  
-       
-tutorialDeactivate :: User -> Application ()
-tutorialDeactivate user = do let u = user { tutorialActive = False }
-                             saveAuthUser (authUser u, additionalUserFields u)
-                             deleteFromSession "tutorial-step"
-                             heistLocal (bindSplices [ ("result", (renderResult  $ currentResult user))
-                                                     ])
-                              $ renderHT "tutorial/deactivated"
-
-tutorialActivate :: User -> Application ()
-tutorialActivate user = do let u = user { tutorialActive = True }
-                           saveAuthUser (authUser u, additionalUserFields u)
-                           setInSession "tutorial-step" "1"
-                           renderHT "tutorial/activated"
                            

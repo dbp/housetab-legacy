@@ -48,10 +48,14 @@ import            Controllers.Entry
 import            Controllers.Person
 import            Controllers.History
 import            Controllers.Settings
+import            Controllers.Tutorial
 
 
 site :: Application ()                 
-site = logAccess $ 
+site = do
+  {-s <- getFromSession "tutorial-step"
+  liftIO $ putStrLn $ show s-}
+  logAccess $ 
        route [ ("/",                            ifTop $ redirect "/login")
              , ("/entries",                     ifTop $ requireUserBounce' entriesH)
              , ("/entries/page/:page",          requireUserBounce' entriesPageH)

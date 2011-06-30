@@ -47,6 +47,7 @@ import            Views.Result
 import            Views.Person
 import            Controllers.Form
 import            Controllers.Person
+import            Controllers.Tutorial
 import            Models.Entry
 import            Models.Account
 import            Models.Person
@@ -58,6 +59,7 @@ entriesH :: User -> Application ()
 entriesH user = do 
    people <- getHouseTabPeople (authUser user)
    entriesSplice <- entriesPage people 0 user
+   tutorialStep user "3" "4"
    (heistLocal $ (bindSplices
     ([ ("result",           (renderResult  $ currentResult user))
      , ("totalSpent",       textSplice $ T.pack $ moneyShow $ getTotalSpent user)
@@ -82,8 +84,6 @@ entriesPageH user = do
 
 entriesPage :: [Person] -> Word32 -> User -> Application (Splice Application)
 entriesPage ps n user = do entries <- getHouseTabEntries n (authUser user)
-                           -- if they are visiting the entries page, and have an active tutorial, start at step one
-                           when (tutorialActive user) $ setInSession "tutorial-step" "1"
                            return (renderEntries ps entries)
 
 
@@ -106,6 +106,7 @@ addEntry user = do
                    when (recordHistory user) $ trackAdd $ entry' { eHTId = h }
                    nu <- recalculateTotals user
                    entriesSplice <- entriesPage people 0 nu
+                   tutorialStep user "4" "5"
                    heistLocal (bindSplices [("entries",entriesSplice),("result",(renderResult  $ currentResult nu))]) $
                       renderHT "entries/add_success"                
  

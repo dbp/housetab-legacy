@@ -4,6 +4,6 @@
   </p>
   
   <p>
-    Set users shares. Shares indicate what portion of expenses that the given user will cover. They can change over time.
+    2. Set users shares. Shares indicate what portion of expenses that the given user will cover. They can change over time.
   </p>
 </apply>

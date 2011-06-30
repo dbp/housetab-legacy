@@ -3,7 +3,11 @@
   <tutorial step="2">
   <div id="tutorial-2" class="a">
   </div>
-</tutorial>
+  </tutorial>
+  <tutorial step="3">
+  <div id="tutorial-3" class="b">
+  </div>
+  </tutorial>
   <result>
     <div class="person $(personClasses)">
       <apply template="settings_show"></apply>

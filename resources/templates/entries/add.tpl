@@ -1,4 +1,8 @@
 <div-async name="entry-form" class="entry-form">
+<tutorial step="4">
+  <div id="tutorial-4">
+  </div>
+</tutorial>
   <form-async action="/entries/add" method="POST"> <!-- data-loading-div="#purchases" -->
   <input type="hidden" name="id" value="$(id-value)" />
   

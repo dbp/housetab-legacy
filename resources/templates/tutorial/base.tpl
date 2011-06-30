@@ -2,5 +2,5 @@
   <div class="content">
     <content/>
   </div>
-  <a-async href="/tutorial/deactivate" data-loading-div="#tutorial">Stop Tutorial</a-async>
+  <a-async class="end" href="/tutorial/deactivate">End Tutorial</a-async>
 </div-async>

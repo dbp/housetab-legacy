@@ -11,6 +11,9 @@
 	  <tutorial step="2">
       <apply template="tutorial/2"></apply>
     </tutorial>
+	  <tutorial step="3">
+      <apply template="tutorial/3"></apply>
+    </tutorial>
     <tutorialOff>
       <apply template="tutorial/off"></apply>      
     </tutorialOff>  
@@ -24,15 +27,11 @@
 
   <bind tag="above">
 		<apply template="people/settings"></apply>
+    <apply template="/tutorial/3_bubble"></apply>
   </bind>
 
   <bind tag="navbar">
-    <div id="navbarcontents1">
-			<div id="sel_settings"></div>
-			<a href="/entries" id="entries"></a>
-			<a href="/about" id="about"></a>
-			<a href="/logout" id="logout"></a>
-		</div>
+    <apply template="settings/navbar1"></apply>
 		<div id="navbarcontents2">
 			<div id="subnav">
 				<div id="subnav_settings"></div>
@@ -44,10 +43,7 @@
 				    </more>
 				  </more-box>
 				  </div>
-				<div id="subnav2">
-				  <p><a href="#below">See Account History</a> | <tutorialOn><a-async href="/tutorial/deactivate">Stop Tutorial</a-async></tutorialOn>
-				    <tutorialOff><a-async href="/tutorial/activate">Start Tutorial</a-async></tutorialOff>
-				  </p></div> 
+          <apply template="settings/subnav2"></apply>
 			</div>
 			<div id="subnav3"><p>Update Account Settings</p></div>
       <apply template="/account/change_settings"></apply>

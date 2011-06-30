@@ -129,7 +129,8 @@
 		margin-left: auto;
 		margin-right: auto;
 		background-image: url("/img/Backgrounds/grid.png");
-	}
+/*    position: relative;
+*/	}
 	
 	#abovecontents_lo {
 		width: 960px;
@@ -283,6 +284,7 @@
 	#navbarcontents1 {
 		background-image: url("/img/NavigationBar/circles.png");
 		height: 144px;
+		position: relative;
 	}
 	
 	#navbarcontents1_lo {
@@ -672,10 +674,12 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
 .shares-box.showing {
 /*  z-index: 20;*/
 position: relative;
-
 }
 
 a {
   color: black;
 }
 
+.entry-form {
+  position: relative;
+}
