@@ -71,6 +71,8 @@ site = logAccess $
              , ("/history/deactivate",          ifTop $ requireUserBounce' deactivateHistory)
              , ("/about",                       ifTop $ noRequireUser $ renderHT "about")
              , ("/account/delete",              method POST $ requireUserBounce' deleteAccountH)
+             , ("/account/forgot",              method GET $ renderHT "account/forgot")
+             , ("/account/forgot",              method POST $ noRequireUser forgotPasswordH)
              , ("/signup",                      noRequireUser $ signupH)
              , ("/login",                       method GET $ noRequireUser $ loginH)
              , ("/login",                       method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)

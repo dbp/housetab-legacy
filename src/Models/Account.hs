@@ -17,9 +17,13 @@ import            Data.Typeable
 import            Data.Maybe (catMaybes, listToMaybe)
 import            Data.List.Split (splitOn)
 import            Data.List (sortBy)
+import            Control.Applicative
 import            Control.Monad
 import            Control.Monad.Trans
 import            Control.Monad.Reader
+import            System.Random
+
+
 import            Application
 import            Lib
 
@@ -96,6 +100,33 @@ recalculateTotals u = do
   saveAuthUser (authUser u', additionalUserFields u')
   return u'
 
+resetUser muser =
+  case muser of
+    Left _ -> return Nothing
+    Right user' -> 
+      case user' of
+        Nothing -> return Nothing
+        Just user -> do
+          token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
+          let n = fmap (setReset token) $ buildUser $ 
+                    (,) <$> (DB.docToAuthUser user) 
+                        <*> (Just user)
+          case n of
+            Nothing -> return Nothing
+            Just u -> do
+              saveAuthUser (authUser u, additionalUserFields u)
+              return (Just (accountName u, accountEmail u, token))
+ where setReset t u = u { accountReset = Just t }
+
+resetByEmail :: BS.ByteString -> Application (Maybe (BS.ByteString, BS.ByteString, BS.ByteString))
+resetByEmail email = do
+  muser <- DB.withDB $ DB.findOne (DB.select ["accountEmail" =: email] "users")
+  resetUser muser
+  
+resetByAccount :: BS.ByteString -> Application (Maybe (BS.ByteString, BS.ByteString, BS.ByteString))
+resetByAccount account = do
+  muser <- DB.withDB $ DB.findOne (DB.select ["accountName" =: account] "users")
+  resetUser muser
 
 deleteAccount :: User -> Application ()
 deleteAccount user =

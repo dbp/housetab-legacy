@@ -39,7 +39,7 @@ import            System.Locale (defaultTimeLocale)
 import            Application
 import            State
 import            Lib
-import            Mail (mailActivation, mailEmailChange)
+import            Mail (mailActivation, mailEmailChange, mailResetPassword)
 import            Views.Site
 import            Views.Result
 import            Views.Account
@@ -172,6 +172,27 @@ resetPasswordH = do
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
 
+forgotPasswordH :: Application ()
+forgotPasswordH = do
+  account <- getParam "account"
+  email <- getParam "email"
+  case account of
+    a | a == Just "" || a == Nothing -> 
+      case email of
+        Just "" -> renderHT "account/forgot_empty"
+        Nothing -> renderHT "account/forgot_empty"
+        Just em -> do res <- resetByEmail em
+                      case res of
+                        Nothing -> renderHT "account/forgot_invalid"
+                        Just (a,em,token) -> do
+                          mailResetPassword a em token
+                          renderHT "account/forgot_success"
+    Just acc -> do res <- resetByAccount acc
+                   case res of
+                     Nothing -> renderHT "account/forgot_invalid"
+                     Just (a,em,token) -> do
+                       mailResetPassword a em token
+                       renderHT "account/forgot_success"
 
 changeSettingsForm :: User -> SnapForm Application T.Text HeistView NewSettings
 changeSettingsForm user = mkSettings

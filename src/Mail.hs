@@ -58,4 +58,19 @@ mailEmailChange token account email = do
                   ,"\n\nThanks! - The HouseTab Team"]
 
 
-resetPassword email token = undefined
+mailResetPassword account email token = do 
+  server  <- liftM rqServerName getRequest
+  portNum <- liftM rqServerPort getRequest
+  {-liftIO $ putStrLn "Sending password reset email [fake]"-}
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Reset your password on HouseTab." "reset" (BS.concat $ msg server portNum)) [email]
+    where msg s p = ["You just requested to reset your password on HouseTab. "
+                  ,"To do that, please visit the following link.\n\n"
+                  ,"http://"
+                  ,s
+                  ,if p /= 80 then (B8.pack $ ':' : (show p)) else ""
+                  ,"/reset?account="
+                  ,account
+                  ,"&token="
+                  ,token
+                  ," .\n\nIf you did not do this, don't click on the link, and your password will remain what it was before."
+                  ,"\n\nThanks! - The HouseTab Team"]

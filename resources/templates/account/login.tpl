@@ -24,16 +24,17 @@
   	  	<a href="/signup" id="signup"></a>
   	  	<a href="/about" id="about_lo"></a>
   	  </div>
-  	  <div id="navbarcontents2_lo">
+  	  <div-async name="login-box" id="navbarcontents2_lo">
   	  	<div id="subnav">
   	  	</div>
   	  	<div id="subnav3"><p>Log in Below</p></div>
   	  	<form method="POST" id="loginform">
   	  		<p>Account:</p><input type="text" name="accountName" class="logform" value="" />
   	  		<p>Password:</p><input type="password" name="password" class="logform" value="" />
-  	  		<button type="submit" id="logform_submit"/>
+  	  		<button type="submit" id="logform_submit"/>    	  	
   	  	</form>
-  	  </div>
+  	  	<p class="inline"><a-async href="/account/forgot">forgot password?</a-async></p>
+  	  </div-async>
     </div>
   </bind>
 

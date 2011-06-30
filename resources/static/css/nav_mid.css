@@ -286,7 +286,20 @@
 	
 	
 	#loginform {
-		margin-left: 240px;
+    margin-left: 240px;
+		display: inline-block;
+	}
+	
+	#navbar p {
+	  color: white;
+	  text-align: center;
+	}
+	
+	#navbar p.inline {
+	  display: inline-block;
+  }
+	#navbar p a {
+	  color: white;
 	}
 	
 	.logform {
@@ -295,9 +308,9 @@
 	}
 	
 	#logform_submit {
-		float: right;	
+  display: inline-block;
 		margin: 0;
-		margin-right: 240px;
+    margin-right: 40px;
 		background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
 	 	width: 36px;
 		height: 18px;
