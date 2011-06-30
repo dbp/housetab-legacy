@@ -91,7 +91,8 @@ newUser p name emails = do
   let (newsalt, newpass)  = (BS.pack s, BS.pack pwd')
   let user = (User emptyAuthUser { userPassword = Just (Encrypted newpass), userSalt = Just newsalt } 
                    (B8.pack name) 
-                   (map B8.pack emails) 
+                   (B8.pack $ head emails)
+                   Nothing
                    emptyResult 
                    (Just token) 
                    Nothing

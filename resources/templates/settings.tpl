@@ -45,12 +45,7 @@
 				  </p></div> 
 			</div>
 			<div id="subnav3"><p>Update Account Settings</p></div>
-			<form action="">
-				<p>Old Password:</p><input type="text" name="fname" class="setform" value="" />
-				<p>New Password:</p><input type="text" name="lname" class="setform" value="" />
-				<p>Contact Email:</p><input type="text" name="lname" class="setform" value="" />
-				<input type="image" src="/img/Icons/submit_b.png" name="lname" value="" />
-			</form>
+      <apply template="/account/change_settings"></apply>
 		</div>
 		
   </bind>

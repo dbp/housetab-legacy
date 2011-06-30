@@ -188,7 +188,7 @@
 	
 	.enform1 .display {
     width: 96px;
-    height: 16px
+    height: 18px
 	}
 	
 	.enform2 input {
@@ -209,12 +209,12 @@
 	
 	.enform5 input {
 		width: 60px;
-		height: 16px
+		height: 20px
 	}
 	
 	.enform6 .display {
 		width: 124px;
-		height: 16px
+		height: 18px
 	}
 	
 	.enform_submit {

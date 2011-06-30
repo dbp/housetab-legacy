@@ -204,9 +204,15 @@
 
 	}	
 	
+	.settings-form .field {
+	  position: relative;
+	  display: inline-block;
+	  vertical-align: top;
+	}
+	
 	.setform {
 		width: 144px;
-		height: 12px;
+		height: 18px;
 		vertical-align: top;
 	}
 	

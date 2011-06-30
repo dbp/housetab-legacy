@@ -39,7 +39,7 @@ import            System.Locale (defaultTimeLocale)
 import            Application
 import            State
 import            Lib
-import            Mail (mailActivation)
+import            Mail (mailActivation, mailEmailChange)
 import            Views.Site
 import            Views.Result
 import            Views.Account
@@ -115,7 +115,7 @@ signupH = do
       case au of
         Nothing -> redirect "/signup" -- something went wrong in db... oops
         Just au' -> do --setSessionUserId $ userId au'
-                       mailActivation token (accountName user) (accountEmails user)
+                       mailActivation token (accountName user) (accountEmail user)
                        renderHT "account/signup_success"
                    
 signupForm :: SnapForm Application T.Text HeistView SignupCreds
@@ -124,7 +124,6 @@ signupForm = mkSignupCreds
     <*> passwordForm
     <*> input "email" Nothing `validate` validEmail <++ errors
    where mkSignupCreds n (NewPassword p _) e  = SignupCreds (B8.pack n) (B8.pack p) (B8.pack e)
-
 
 activateAccountH :: Application ()
 activateAccountH = do
@@ -162,6 +161,7 @@ resetPasswordH = do
           case user' of
             Nothing -> renderHT "account/reset_error"
             Just user -> do
+              {-liftIO $ putStrLn "Building user"-}
               let n = fmap dropReset $ buildUser $ 
                         (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
                             <*> (Just user)
@@ -172,6 +172,55 @@ resetPasswordH = do
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
 
+
+changeSettingsForm :: User -> SnapForm Application T.Text HeistView NewSettings
+changeSettingsForm user = mkSettings
+    <$> input "current" Nothing `validate` (checkPassword user) <++ errors
+    <*> ((`validate` matchingPasswords) $ (<++ errors) $ NewPassword
+          <$> input "password" Nothing <++ errors  -- done here so that they can be blank
+          <*> input "confirm"  Nothing <++ errors )
+    <*> input "email" Nothing `validate` validEmail <++ errors
+  where mkSettings _ (NewPassword p _) e  = NewSettings (B8.pack p) (B8.pack e)
+        matchingPasswords = check "Passwords do not match." $ \(NewPassword p1 p2) -> p1 == p2
+        mkPW p1 p2 = NewPassword p1 p2
+  
+
+changeSettingsH :: User -> Application ()
+changeSettingsH user = do
+  r <- eitherSnapForm (changeSettingsForm user) "settings-form"
+  case r of
+    Left splices' -> 
+      heistLocal (bindSplices splices') $ renderHT "account/change_settings"
+    Right (NewSettings pass email) -> do
+      au <- case pass of
+        "" -> return $ Just (authUser user) -- no password, so they aren't trying to change it
+        _  -> saveAuthUser ((authUser user) {userPassword = Just (ClearText pass)}, additionalUserFields user) 
+      case (email,au) of
+        (e,_) | e == accountEmail user -> renderHT "account/change_password" -- or nothing, but it doesnt really matter
+        (_,Just auth) -> do 
+                token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
+                saveAuthUser (auth, additionalUserFields (user { accountEmailChange = Just (token, email)})) 
+                mailEmailChange token (accountName user) email
+                renderHT "account/change_email"
+        _ -> redirect "/settings"
+
+changeEmailH :: Application ()
+changeEmailH = do
+  token         <- getParam "token"
+  maccountName  <- getParam "account"
+  -- this is not the best user experience - better to present a message saying the token is missing, probably
+  guard $ all isJust [token,maccountName]
+  let accountName = fromJust maccountName
+  u <- liftM buildUser $ getUserExternal (EUId (M.fromList [("accountName", [accountName])]))
+  case u of
+    Nothing -> return ()
+    Just user | (fmap fst (accountEmailChange user)) == token -> do
+      saveAuthUser (authUser user, additionalUserFields (user { accountEmail =  snd $ fromJust $ accountEmailChange user
+                                                              , accountEmailChange = Nothing }))
+      redirect "/settings" 
+    _ -> redirect "/settings" 
+    
+  
        
 tutorialDeactivate :: User -> Application ()
 tutorialDeactivate user = do let u = user { tutorialActive = False }

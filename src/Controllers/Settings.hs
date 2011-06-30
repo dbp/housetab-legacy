@@ -22,7 +22,7 @@ import            Data.Time.Format
 import            System.Locale (defaultTimeLocale)
 
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing, mapMaybe)
+import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing, mapMaybe, listToMaybe)
 import qualified  Data.Bson as B
 import            Data.List (sortBy)
 import            Data.List.Split
@@ -68,6 +68,7 @@ settingsH user = do
    (heistLocal $ (bindSplices 
     [ ("result",           (renderResult  $ currentResult user))
     , ("totalShares",      textSplice $ T.pack $ show $ getTotalShares today people)
+    , ("email-value",      textSplice $ TE.decodeUtf8 $ accountEmail user)
     , ("history",          historySplice)
     , ("historyPage",      textSplice $ "1")
     ])) $ renderHT "settings"

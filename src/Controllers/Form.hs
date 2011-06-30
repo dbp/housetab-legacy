@@ -15,14 +15,19 @@ import qualified  Data.Text as T
 
 import qualified  Data.Map as M
 
+import            Snap.Auth
+
 import            Data.Text (Text)
 import            Models.Entry
 import            Control.Applicative
 import            Control.Monad
 import            Text.Templating.Heist
 
+import            Snap.Auth
+
 import            Application
 
+import            Models.Account
 import            Models.Site
 
 import            Views.Site
@@ -53,4 +58,11 @@ mongoObjectIdMany = transformEither (\a -> maybe (Left "Invalid Object Id List S
 
 -- | regex validation sucks, so don't even try.
 validEmail :: Validator Application Text String
-validEmail = check "Must be a vaid email, like info@housetab.org" $ \e -> '@' `elem` e && '.' `elem` e
+validEmail = check "Must be a valid email, like info@housetab.org" $ \e -> '@' `elem` e && '.' `elem` e
+
+checkPassword :: User -> Validator Application Text String
+checkPassword user = checkM "Incorrect password." $ \password ->
+  do res <- performLogin (EUId (M.fromList [("accountName", [accountName user])])) (B8.pack password) False
+     case res of
+       Left _ -> return False -- not the right credentials
+       Right _ -> return True

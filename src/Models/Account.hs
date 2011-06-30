@@ -26,16 +26,18 @@ import            Lib
 import            Models.Result
 import            Models.Person
 import            Models.Entry
+import            Models.Site
 
 data User = User
-  { authUser        :: AuthUser
-  , accountName     :: BS.ByteString
-  , accountEmails   :: [BS.ByteString]
-  , currentResult    :: Result
-  , accountReset    :: Maybe BS.ByteString -- reset token
-  , accountActivate :: Maybe BS.ByteString -- activation token
-  , tutorialActive  :: Bool
-  , recordHistory   :: Bool
+  { authUser           :: AuthUser
+  , accountName        :: BS.ByteString
+  , accountEmail       :: BS.ByteString
+  , accountEmailChange :: Maybe (BS.ByteString, BS.ByteString) -- token, new email
+  , currentResult      :: Result
+  , accountReset       :: Maybe BS.ByteString -- reset token
+  , accountActivate    :: Maybe BS.ByteString -- activation token
+  , tutorialActive     :: Bool
+  , recordHistory      :: Bool
   }
 
 data SignupCreds = SignupCreds { suName :: BS.ByteString
@@ -45,22 +47,24 @@ data SignupCreds = SignupCreds { suName :: BS.ByteString
 
 data NewPassword = NewPassword String String
 
+data NewSettings = NewSettings BS.ByteString BS.ByteString
                      
 getTotalSpent :: User -> Double
 getTotalSpent u = sum $ map (\(_,s,_) -> s) $ people (currentResult u)
 
 
 makeUser token (SignupCreds name password email) =
-  (User emptyAuthUser { userPassword = Just (ClearText password) } name [email] emptyResult Nothing (Just token) True True)
+  (User emptyAuthUser { userPassword = Just (ClearText password) } name email Nothing emptyResult Nothing (Just token) True True)
 
 additionalUserFields :: User -> Document
-additionalUserFields u = [ "accountName"      =: accountName u
-                         , "accountEmails"    =: accountEmails u
-                         , "currentResult"    =: currentResult u
-                         , "accountReset"     =: accountReset u -- reset token
-                         , "accountActivate"  =: accountActivate u -- activation token
-                         , "tutorialActive"   =: tutorialActive u
-                         , "recordHistory"    =: recordHistory u
+additionalUserFields u = [ "accountName"        =: accountName u
+                         , "accountEmail"       =: accountEmail u
+                         , "accountEmailChange" =: (liftM untuple $ accountEmailChange u)
+                         , "currentResult"      =: currentResult u
+                         , "accountReset"       =: accountReset u -- reset token
+                         , "accountActivate"    =: accountActivate u -- activation token
+                         , "tutorialActive"     =: tutorialActive u
+                         , "recordHistory"      =: recordHistory u
                          ]
 
 
@@ -72,16 +76,17 @@ currentUser = do  u <- currentAuthUser
                   return resp 
                   
 buildUser :: (Maybe (AuthUser, Document)) -> Maybe User
-buildUser u = do fields    <- liftM snd u
-                 auth      <- liftM fst u
-                 name      <- B.lookup "accountName"       fields
-                 emails    <- B.lookup "accountEmails"     fields
-                 current   <- B.lookup "currentResult"     fields
-                 reset     <- B.lookup "accountReset"      fields      
-                 activate  <- B.lookup "accountActivate"   fields      
-                 tutorial  <- B.lookup "tutorialActive"    fields      
-                 history   <- B.lookup "recordHistory"     fields      
-                 return $ User auth name emails current reset activate tutorial history
+buildUser u = do fields       <- liftM snd u
+                 auth         <- liftM fst u
+                 name         <- B.lookup "accountName"         fields
+                 email        <- B.lookup "accountEmail"        fields
+                 emailchange  <- B.lookup "accountEmailChange"  fields
+                 current      <- B.lookup "currentResult"       fields
+                 reset        <- B.lookup "accountReset"        fields      
+                 activate     <- B.lookup "accountActivate"     fields      
+                 tutorial     <- B.lookup "tutorialActive"      fields      
+                 history      <- B.lookup "recordHistory"       fields      
+                 return $ User auth name email (tuple =<< emailchange) current reset activate tutorial history
  
 recalculateTotals :: User -> Application User
 recalculateTotals u = do 

@@ -65,6 +65,7 @@ site = logAccess $
              , ("/tutorial/deactivate",         requireUserBounce' $ tutorialDeactivate)
              , ("/tutorial/activate",           requireUserBounce' $ tutorialActivate)
              , ("/settings",                    ifTop $ requireUserBounce' settingsH)
+             , ("/settings/update",             requireUserBounce' changeSettingsH)
              , ("/history/page/:page",          requireUserBounce' historyPageH)
              , ("/history/activate",            ifTop $ requireUserBounce' activateHistory)
              , ("/history/deactivate",          ifTop $ requireUserBounce' deactivateHistory)
@@ -74,6 +75,7 @@ site = logAccess $
              , ("/login",                       method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)
              , ("/logout",                      method GET $ noRequireUser $ logoutHandler redirTo)
              , ("/activate",                    noRequireUser $ activateAccountH)
+             , ("/changeemail",                 noRequireUser $ changeEmailH)
              , ("/reset",                       noRequireUser $ resetPasswordH)
              ]
        <|> serveDirectory "resources/static"
