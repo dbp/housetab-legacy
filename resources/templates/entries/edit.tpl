@@ -50,8 +50,9 @@
       <input name="date" type="text" value="$(date-value)" class="inp" />
     </div>
   	<div class="col7 col">
+  	  <bind tag="peopleshow"><lookupPeopleShow value="$(for-value)"/></bind>
       <div class="errors"><for-errors><error/></for-errors></div>
-      <box-field-multi name="for" value="$(for-value)" display="$(for-value)" class="inp">
+      <box-field-multi name="for" value="$(for-value)" display="$(peopleshow)" class="inp">
       <people>
         <box-option value="$(personId)">
           <personName/>
