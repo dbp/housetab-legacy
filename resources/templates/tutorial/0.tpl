@@ -1,5 +1,5 @@
 <apply template="base">
   <p>
-    To start the HouseTab Tutorial, visit the settings page. You can disable the tutorial by clicking Stop Tutorial, and start it again on the Settings page.
+    To start the HouseTab Tutorial, visit the <a href="/settings">Settings</a> page. You can disable the tutorial by clicking End Tutorial, and start it again on the <a href="/settings">Settings</a> page.
   </p>
 </apply>

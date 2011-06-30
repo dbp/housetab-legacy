@@ -114,7 +114,10 @@ shareErrorsBlank = [("date-errors", blackHoleSplice)
                    ]
 
 showShares :: User -> Person -> Application ()
-showShares user person = heistLocal (bindSplices (shareErrorsBlank ++ (renderPerson person))) $ renderHT "people/share/show"
+showShares user person = do
+  today <- liftM localDay $ liftIO getLocalTime
+  let yesterday = [("date-value", textSplice $ T.pack $ show $ dayToDate $ addDays (-1) today)]
+  heistLocal (bindSplices (shareErrorsBlank ++ (renderPerson person) ++ yesterday)) $ renderHT "people/share/show"
 
 
 addShare :: User -> Person -> Application ()

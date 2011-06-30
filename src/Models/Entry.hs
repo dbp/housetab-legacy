@@ -114,3 +114,5 @@ instance Val Date where
 emptyDate = Date 0 0 0
 
 dateToDay (Date y m d) = fromGregorian y (fromInteger m) (fromInteger d)
+dayToDate d = mkDate (toGregorian d)
+    where mkDate (year, month, day) = Date year (toInteger month) (toInteger day)
