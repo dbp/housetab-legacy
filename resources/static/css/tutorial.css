@@ -19,10 +19,27 @@
 
 #tutorial-1, #tutorial-2 {
   position: absolute;
+
+  width: 40px;
+  height: 40px;
+}
+
+#tutorial-1 {
+  background: transparent url("/img/Other/step1.png") no-repeat center center;
   top: -10px;
-  right: -10px;
-  width: 30px;
-  height: 30px;
-  background-color: red;
-  color: white;
+  left: 160px;
+}
+
+#tutorial-2 {
+  background: transparent url("/img/Other/step2.png") no-repeat center center;
+}
+
+#tutorial-2.a {
+  top: 0px;
+  left: -40px;
+}
+
+#tutorial-2.b {
+  top: -10px;
+  left: 160px;
 }

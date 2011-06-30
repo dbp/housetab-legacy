@@ -8,12 +8,10 @@
   
   <tutorial step="1">
     <div id="tutorial-1">
-      1
     </div>
   </tutorial>
   <tutorial step="2">
-    <div id="tutorial-2">
-      2
+    <div id="tutorial-2" class="b">
     </div>
   </tutorial>
 </div-async>

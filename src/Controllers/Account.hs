@@ -110,7 +110,7 @@ signupH = do
       heistLocal (bindSplices splices') $ renderHT "account/signup"
     Right creds -> do  
       token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
-      let user = makeUser token creds
+      let user = (makeUser token creds) { tutorialActive = True }
       au <- saveAuthUser (authUser user, additionalUserFields user) 
       case au of
         Nothing -> redirect "/signup" -- something went wrong in db... oops

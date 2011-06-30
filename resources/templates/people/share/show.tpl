@@ -1,4 +1,4 @@
-<div-async name="settings-$(personId)-shares" class="shares-box">
+<div-async name="settings-$(personId)-shares" class="shares-box showing">
   <a-async href="/people/$(personId)/shares/hide">hide shares</a-async>
 
   <apply template="add"></apply>

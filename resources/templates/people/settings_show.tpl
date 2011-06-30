@@ -1,10 +1,5 @@
-<div-async name="settings-$(personId)">
+<div-async name="settings-$(personId)" class="sub">
   <show notblank="$(personId)">
-    <tutorial step="2">
-      <div id="tutorial-2">
-        2
-      </div>
-    </tutorial>
     <h2>
       <apply template="name"></apply>
     </h2>
