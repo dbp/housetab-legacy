@@ -108,13 +108,13 @@ loginSuccess = do u <- currentUser
 
 unDoc (Doc fs) = fs
 
--- Save user and redirect as appropriate
+
 signupH :: Application ()
 signupH = do
   r <- eitherSnapForm signupForm "signup-form"
   case r of
     Left splices' -> 
-      heistLocal (bindSplices splices') $ renderHT "account/signup"
+      heistLocal (bindSplices splices') $ renderHT "account/signup_form"
     Right creds -> do  
       token <- liftIO $ getStdGen >>= return . B8.pack . take 15 . randomRs ('a','z')
       let user = (makeUser token creds) { tutorialActive = True }

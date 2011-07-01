@@ -77,7 +77,10 @@ site = do
              , ("/account/delete",              method POST $ requireUserBounce' deleteAccountH)
              , ("/account/forgot",              method GET $ renderHT "account/forgot")
              , ("/account/forgot",              method POST $ noRequireUser forgotPasswordH)
-             , ("/signup",                      noRequireUser $ signupH)
+             , ("/signup",                      renderHT "account/signup")
+             , ("/signup/form",                 noRequireUser $ signupH)
+             -- if they are logged in already, redirect to entries
+             , ("/login",                       requireUser mzero $ redirect "/entries#navbar")
              , ("/login",                       method GET $ noRequireUser $ loginH)
              , ("/login",                       method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)
              , ("/logout",                      method GET $ noRequireUser $ logoutHandler redirTo)

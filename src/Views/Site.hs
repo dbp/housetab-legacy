@@ -29,7 +29,7 @@ import Models.Person
 
 moneyShow :: Double -> String
 moneyShow m = (if m<0 then "-$" else "$") ++ ((reverse . intercalate "," . splitEvery 3 . reverse) dollars) ++ "." ++ cents
-  where mstr = (show . abs . floor . (* 100.0)) m
+  where mstr = if m == 0 then "000" else (show . abs . floor . (* 100.0)) m
         dollars = reverse $ drop 2 $ reverse mstr
         cents = reverse $ take 2 $ reverse mstr
 

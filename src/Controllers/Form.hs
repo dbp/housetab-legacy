@@ -35,10 +35,10 @@ import            Views.Site
 
 
 nonEmpty :: Validator Application Text String
-nonEmpty = check "String must not be empty." $ \s -> not $ null s
+nonEmpty = check "Must not be empty." $ \s -> not $ null s
     
 lenOne :: Validator Application Text String
-lenOne = check "String must be a single character." $ \s -> length s == 1
+lenOne = check "Must be a single character." $ \s -> length s == 1
 
 
 validDate :: Validator Application Text Date

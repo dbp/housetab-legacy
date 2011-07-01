@@ -47,7 +47,7 @@ data User = User
 data SignupCreds = SignupCreds { suName :: BS.ByteString
                                , suPassword :: BS.ByteString
                                , suEmail :: BS.ByteString
-                               }
+                               } deriving Show
 
 data NewPassword = NewPassword String String
 
