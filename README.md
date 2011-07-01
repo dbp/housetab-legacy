@@ -7,12 +7,13 @@ Anyone is free to install this on their own server, do anything with any of the 
 ## Install
 
 This should be cabal installable, once you install some extra libraries that are not on hackage (at least at the time of this writing). They are:
-https://github.com/snapframework/snap-auth/
-https://github.com/ozataman/snap-extension-mongodb
-https://github.com/dbp/heist-async
-https://github.com/dbp/digestive-functors-snap-heist
-https://github.com/dbp/email-postmark
-https://github.com/dbp/snap-logging-mongodb
+
+    https://github.com/snapframework/snap-auth/
+    https://github.com/ozataman/snap-extension-mongodb
+    https://github.com/dbp/heist-async
+    https://github.com/dbp/digestive-functors-snap-heist
+    https://github.com/dbp/email-postmark
+    https://github.com/dbp/snap-logging-mongodb
 
 Beyond that, the only other thing you need running is MongoDB. It is developed with 1.8, but we are not doing anything particularly fancy, so I would assume it would work with earlier versions as well. We assume it is cunning on the default port. The generated binary is "housetab" and takes all the regular commandline options that snap servers do. 
 
@@ -20,10 +21,11 @@ Beyond that, the only other thing you need running is MongoDB. It is developed w
 
 ### API
 I would really like to build in some API support to allow people to bring data with them and take it if they decide to go. In an earlier version of this app, this functionality was presented in a textarea on the site, but the fact that if someone hit "load data" and had the field empty, it would wipe out all their info, I decided that was a little too dangerous. Some possible API endpoints would be:
-/export/all -- would give all entries, info on people, etc, in machine readable format (probably haskell Show for lists/tuples)
-/export/STARTDATE/ENDDATE -- would just give entries / shares for people for a time range
-/import -- would take in entries / shares and add them into the account
-/load -- would wipe out everything in the current account and replace it with what is uploaded
+
+    /export/all -- would give all entries, info on people, etc, in machine readable format (probably haskell Show for lists/tuples)
+    /export/STARTDATE/ENDDATE -- would just give entries / shares for people for a time range
+    /import -- would take in entries / shares and add them into the account
+    /load -- would wipe out everything in the current account and replace it with what is uploaded
 
 ### Per category shares
 The system now supports (well, enforces) entering entries in by category, but all it is is a little more metadata - it doesn't actually allow you to do anything differently. The intent was to allow people to put in shares by category - so they would have an overall share, but then they could override it per category, but that hasn't been built yet
