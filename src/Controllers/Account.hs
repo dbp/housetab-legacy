@@ -151,31 +151,30 @@ passwordForm = (`validate` matchingPasswords) $ (<++ errors) $ NewPassword
 
 resetPasswordH :: Application ()
 resetPasswordH = do
-  token         <- getParam "token"
+  mtoken        <- getParam "token"
   maccountName  <- getParam "account"  -- will this work?: liftM fromJust $ getParam "account"
-  -- this is not the best user experience - better to present a message saying the token is missing, probably
-  guard $ all isJust [token,maccountName]
-  let accountName = fromJust maccountName
-  r <- eitherSnapForm passwordForm "password-reset-form"
-  case r of
-    Left splices' -> 
-      heistLocal (bindSplices splices') $ renderHT "account/reset"
-    Right (NewPassword pw _) -> do  
-      muser <- withDB $ findOne (select ["accountName" =: accountName, "accountReset" =: token] "users")
-      case muser of
-        Left _ -> renderHT "account/reset_error"
-        Right user' -> 
-          case user' of
-            Nothing -> renderHT "account/reset_error"
-            Just user -> do
-              {-liftIO $ putStrLn "Building user"-}
-              let n = fmap dropReset $ buildUser $ 
-                        (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
-                            <*> (Just user)
-              maybe (renderHT "account/reset_error") 
-                    (\u -> do saveAuthUser (authUser u, additionalUserFields u)
-                              renderHT "account/reset_success") n
-              
+  case (mtoken,maccountName) of
+    (Just token, Just accountName) -> do
+      r <- eitherSnapForm passwordForm "password-reset-form"
+      case r of
+        Left splices' -> heistLocal (bindSplices splices') $ renderHT "account/reset"
+        Right (NewPassword pw _) -> do  
+          muser <- withDB $ findOne (select ["accountName" =: accountName, "accountReset" =: Just token] "users")
+          case muser of
+            Left _ -> renderHT "account/reset_error"
+            Right user' -> 
+              case user' of
+                Nothing -> renderHT "account/reset_error"
+                Just user -> do
+                  {-liftIO $ putStrLn "Building user"-}
+                  let n = fmap dropReset $ buildUser $ 
+                            (,) <$> (fmap (setPass (B8.pack pw)) (docToAuthUser user)) 
+                                <*> (Just user)
+                  maybe (renderHT "account/reset_error") 
+                        (\u -> do saveAuthUser (authUser u, additionalUserFields u)
+                                  renderHT "account/reset_success") n   
+    _ -> renderHT "account/reset_error"
+     
  where dropReset u = u { accountReset = Nothing }
        setPass p au = au {userPassword = Just $ ClearText p}
 
