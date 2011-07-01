@@ -698,3 +698,7 @@ button.b {
 button.b:hover {
   background-image: url("/img/Icons/submit_b_mo.png");
 }
+
+#navbar #subnav1 p a, #navbar #subnav2 p a {
+  color: black;
+}

@@ -91,7 +91,7 @@ noRequireUser handler = do
 
 redirTo :: Application ()
 redirTo = do r <- getParam "redirectTo"
-             redirect $ fromMaybe "/entries" r
+             redirect $ fromMaybe "/entries#navbar" r
 
 -- Make sure you have a 'password' field in there
 loginH :: Application ()
