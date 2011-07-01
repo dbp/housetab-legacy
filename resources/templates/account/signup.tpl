@@ -41,7 +41,7 @@
   				  <div class="errors"><email-errors><error/> </email-errors></div>
   				  <input type="text" name="email" class="suform" value="" />
           </div>
-  				<button type="submit" id="suform_submit" />
+  				<button type="submit" class="b" />
   			</form-async>
   		</div-async>
   </bind>

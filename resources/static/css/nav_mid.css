@@ -217,16 +217,6 @@
 		height: 18px
 	}
 	
-	.enform_submit {
-	  background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
-		float: right;	
-		margin: 0;
-		width: 36px;
-		height: 18px;
-		border: 0;
-		cursor: pointer;
-	}
-	
 	.entry-form .category .display {
 	  background-position: center left;
 	  background-repeat: no-repeat;
@@ -286,7 +276,7 @@
 	
 	
 	#loginform {
-    margin-left: 240px;
+    margin-left: 220px;
 		display: inline-block;
 	}
 	
@@ -307,14 +297,8 @@
 		height: 16px
 	}
 	
-	#logform_submit {
-  display: inline-block;
-		margin: 0;
+	#loginform button.b {
     margin-right: 40px;
-		background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
-	 	width: 36px;
-		height: 18px;
-		border: 0; 
-		cursor: pointer;
 	}
+
 	

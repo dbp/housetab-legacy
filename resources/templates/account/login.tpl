@@ -31,7 +31,7 @@
   	  	<form method="POST" id="loginform">
   	  		<p>Account:</p><input type="text" name="accountName" class="logform" value="" />
   	  		<p>Password:</p><input type="password" name="password" class="logform" value="" />
-  	  		<button type="submit" id="logform_submit"/>    	  	
+  	  		<button type="submit" class="b"/>    	  	
   	  	</form>
   	  	<p class="inline"><a-async href="/account/forgot">forgot password?</a-async></p>
   	  </div-async>

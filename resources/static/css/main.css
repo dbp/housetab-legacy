@@ -683,3 +683,18 @@ a {
 .entry-form {
   position: relative;
 }
+
+button.b {
+  background: transparent url("/img/Icons/submit_b.png") no-repeat  center center;
+  display: inline-block;
+	margin: 0;
+	width: 36px;
+	height: 18px;
+	border: 0;
+	cursor: pointer;
+
+}
+
+button.b:hover {
+  background-image: url("/img/Icons/submit_b_mo.png");
+}

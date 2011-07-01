@@ -24,7 +24,8 @@
   <div class="errors"><email-errors><error/> </email-errors></div>
 	<input type="text" name="email" class="setform" value="$(email-value)" />
 </div>
+
+  <button class="b" type="submit" />
 	
-	<input type="image" src="/img/Icons/submit_b.png" name="" value="" />
 </form-async>
 </div-async>

@@ -68,6 +68,6 @@
     </box-field-multi>
   </div>
 
-	<button type="submit" class="enform_submit"/>
+	<button type="submit" class="b"/>
   </form-async>
 </div-async>

@@ -19,9 +19,21 @@
   width: 167px;
 }
 
-#history .col1 {
-  width: 50px;
-  font-weight: bold;
+#history .col1 .icon {
+  width: 24px;
+  height: 21px;
+}
+
+#history .col1 .icon.add {
+  background: transparent url("/img/Icons/add.png") no-repeat center center;
+}
+
+#history .col1 .icon.edit {
+  background: transparent url("/img/Icons/edit_mo.png") no-repeat center center;
+}
+
+#history .col1 .icon.delete {
+  background: transparent url("/img/Icons/delete_mo.png") no-repeat center center;
 }
 
 #history .heading .col1 {

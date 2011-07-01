@@ -32,7 +32,7 @@
     				  <div class="errors"><confirm-errors><error/> </confirm-errors></div>
     				  <input type="password" name="confirm" class="suform" value="" />
     				</div>
-     				<button type="submit" id="suform_submit" />
+     				<button type="submit" class="b" />
     			</form-async>
     		</div-async>
     </bind>

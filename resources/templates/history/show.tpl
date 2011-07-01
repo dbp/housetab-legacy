@@ -7,7 +7,7 @@
   </div>
 
 	<div class="col1 col">
-	  <type/>
+	  <div class="icon $(type)" />
   </div>
 	<div class="col2 col">
 	  <show Add="$(type)" Delete="$(type)">

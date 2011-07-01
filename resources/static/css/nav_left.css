@@ -251,16 +251,3 @@
 		height: 16px;
 	}
 	
-	#suform_submit {
-		float: right;	
-		margin: 0;
-		margin-right: 96px;
-		background-image: url("/img/Icons/submit_b.png");
-		border: 0;
-		width: 36px;
-		height: 18px;
-	}
-	
-	#suform_submit:hover {
-	  cursor: pointer;
-	}

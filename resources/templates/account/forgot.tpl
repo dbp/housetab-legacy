@@ -5,6 +5,6 @@
 	<form-async method="POST" id="loginform" action="/account/forgot">
 		<p>Enter Account:</p><input type="text" name="account" class="logform" value="" />
 		<p>or Email:</p><input type="text" name="email" class="logform" value="" />
-		<button type="submit" id="logform_submit"/>    	  	
+		<button type="submit" class="b"/>    	  	
 	</form-async>
 </div-async>
