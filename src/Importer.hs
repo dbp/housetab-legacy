@@ -96,7 +96,7 @@ newUser p name emails = do
                    emptyResult 
                    (Just token) 
                    Nothing
-                   True
+                   False -- existing users do not need to go through the tutorial
                    True)
   d <- addTimeStamps $ authUserToDoc $ authUser user
   let d' = d `merge` (additionalUserFields user)

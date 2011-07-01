@@ -5,7 +5,7 @@
 	  <bind tag="imgSrc">
       <catImage cat="$(entryCategory)" />
     </bind>
-    <img src="$(imgSrc)"/>
+    <img src="$(imgSrc)" alt="$(entryCategory)" title="$(entryCategory)"/>
   </div>
 	<div class="col2 col">
     <a-async href="/entries/delete/$(index)" class="delete"></a-async>
