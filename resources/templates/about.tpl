@@ -10,7 +10,7 @@
   		<h1>HOUSETAB</h1>
   		<img src="/img/Glyphs/glyph_above.png" />
   		<h3>a project of</h3>
-  		<p>Position Studios</p>
+  		<p><a href="http://positionstudios.com" target="_blank">Position Studios</a></p>
   	</div>
   </bind>
  

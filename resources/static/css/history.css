@@ -44,6 +44,45 @@
   width: 100px;
 }
 
+#history .col2 .category {
+  width: 48px;
+  height: 21px;
+}
+
+.category.alcohol {
+  background-image: url("/img/Categories/alcohol.png");
+}
+.category.cash {
+  background-image: url("/img/Categories/cash.png");
+}
+.category.entertainment {
+  background-image: url("/img/Categories/entertainment.png");
+}
+.category.furnishings {
+  background-image: url("/img/Categories/furnishings.png");
+}
+.category.groceries {
+  background-image: url("/img/Categories/groceries.png");
+}
+.category.household {
+  background-image: url("/img/Categories/household.png");
+}
+.category.misc {
+  background-image: url("/img/Categories/misc.png");
+}
+.category.food {
+  background-image: url("/img/Categories/kitchen.png");
+}
+.category.rent {
+  background-image: url("/img/Categories/rent.png");
+}
+.category.toiletries {
+  background-image: url("/img/Categories/toiletries.png");
+}
+.category.utilities {
+  background-image: url("/img/Categories/utilities.png");
+}
+
 #history .col2 .more-box .showing {
   z-index: 0;
   position: relative;

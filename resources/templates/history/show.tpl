@@ -11,26 +11,17 @@
   </div>
 	<div class="col2 col">
 	  <show Add="$(type)" Delete="$(type)">
-	    <bind tag="imgSrc">
-        <catImage cat="$(category)" />
-      </bind>
-      <img src="$(imgSrc)"/>
+      <div class="category $(category)"/>
     </show>
     <show Edit="$(type)">
-      <bind tag="imgSrc">
-        <catImage cat="$(category)" />
-      </bind>
       <show blank="$(category-old)">
-        <img src="$(imgSrc)"/>
+        <div class="category $(category)"/>
       </show>
       <show notblank="$(category-old)">
 	      <more-box>
-          <img src="$(imgSrc)"/>
+          <div class="category $(category)"/>
             <more>
-              <bind tag="imgSrc">
-                <catImage cat="$(category-old)" />
-              </bind>
-              <img src="$(imgSrc)"/>
+              <div class="category $(category-old)"/>
             </more>
         </more-box>
       </show>
