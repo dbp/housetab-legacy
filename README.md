@@ -22,7 +22,8 @@ Beyond that, the only other thing you need running is MongoDB. It is developed w
 ### API
 I would really like to build in some API support to allow people to bring data with them and take it if they decide to go. In an earlier version of this app, this functionality was presented in a textarea on the site, but the fact that if someone hit "load data" and had the field empty, it would wipe out all their info, I decided that was a little too dangerous. Some possible API endpoints would be:
 
-    /export/all -- would give all entries, info on people, etc, in machine readable format (probably haskell Show for lists/tuples)
+    /export/all -- would give all entries, info on people, etc, in machine readable format 
+                -- (probably haskell Show for lists/tuples)
     /export/STARTDATE/ENDDATE -- would just give entries / shares for people for a time range
     /import -- would take in entries / shares and add them into the account
     /load -- would wipe out everything in the current account and replace it with what is uploaded
