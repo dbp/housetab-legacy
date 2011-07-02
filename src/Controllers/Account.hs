@@ -37,7 +37,6 @@ import            System.Locale (defaultTimeLocale)
 
 
 import            Application
-import            State
 import            Lib
 import            Mail (mailActivation, mailEmailChange, mailResetPassword)
 import            Views.Site

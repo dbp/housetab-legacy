@@ -10,6 +10,8 @@ import qualified  Data.Bson as B
 import Test.QuickCheck (Arbitrary(..), arbitrary, elements, listOf, listOf1, choose, quickCheck)
 import Text.Printf (printf)
 
+import Debug.Trace
+
 import qualified Data.ByteString.Char8 as B8
 
 data Purchase = Purchase { purchaser :: Person
@@ -67,9 +69,10 @@ pickSpent purchases (p, a) = (p, spent {- - paybacks-}, a - spent)
           paybacks = count $ filter (\pur -> (length (payers pur) == 1) && (head (payers pur) == p) && (purchaser pur /= p)) purchases
               
 
-addMissing :: [Person] -> Result -> Result
-addMissing house (Result personResult date) = Result (personResult ++ (map (\p -> (p,0,0)) missing)) date
+addMissing :: [Purchase] -> [Person] -> Result -> Result
+addMissing ps house (Result personResult date) = Result (personResult ++ (map (\p -> pickSpent ps (p,0)) missing)) date
     where missing = filter (\p -> notElem p (map (\(p,_,_) -> p) personResult)) house
 
 run :: [Person] -> [HouseTabEntry] -> Result
-run house s = addMissing house $ processPurchases $ purchasify house s
+run house s = addMissing purchases house $ processPurchases purchases
+  where purchases = purchasify house s

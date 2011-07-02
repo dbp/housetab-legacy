@@ -38,7 +38,6 @@ import            Data.Time.LocalTime
 import            Data.Time.Clock
 
 import            Application
-import            State
 import            Lib
 import            Mail (mailActivation)
 import            Utils

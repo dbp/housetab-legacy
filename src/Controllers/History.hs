@@ -37,7 +37,6 @@ import            Data.Text (Text)
 import            Text.Templating.Heist
 
 import            Application
-import            State
 import            Lib
 import            Mail (mailActivation)
 import            Utils
