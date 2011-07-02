@@ -32,9 +32,9 @@
 
   <bind tag="navbar">
     <div id="navbarcontents1">
-  		<a href="/settings" id="settings"></a>
+  		<a href="/settings#navbar" id="settings"></a>
 			<div id="sel_entries"></div>
-  		<a href="/about" id="about"></a>
+  		<a href="/about#navbar" id="about"></a>
   		<a href="/logout" id="logout"></a>
   	</div>
   	<div id="navbarcontents2">

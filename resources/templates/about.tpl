@@ -23,8 +23,8 @@
   <bind tag="navbar">
   		<div id="navbarcontents1">
   		  <ifLoggedIn>
-  			  <a href="/settings" id="settings"></a>
-  			  <a href="/entries" id="entries"></a>
+  			  <a href="/settings#navbar" id="settings"></a>
+  			  <a href="/entries#navbar" id="entries"></a>
   			  <div id="sel_about"></div>
   			  <a href="/logout" id="logout"></a>
         </ifLoggedIn>

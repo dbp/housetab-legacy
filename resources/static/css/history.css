@@ -19,6 +19,10 @@
   color: black;
 }
 
+#history {
+  min-height: 200px;
+}
+
 #history .col {
   float: left;
 }
