@@ -454,20 +454,20 @@
 /*    padding-top: 3px;*/
 	}
 	
-	.col1 {
+	.col1, #purchases .purchase .col1 {
 		width: 48px;
 		padding: 0;
 		height: 21px;
 		margin: 0;
 	}
 	
-	.col1 img {
+  .col1 img {
     margin-bottom: -2px;
   }
 	
-	.col2 {
+	.col2, #purchases .purchase .col2 {
 		width: 47px;
-		padding: none;
+    padding-top: 0px;
 	}
 	
 	.col3 {
@@ -478,7 +478,11 @@
 		width: 263px;
 	}
 	
+	.col4 .more-box {
+	  width: 100%;
+	}
 	.col4 .showing {
+	  width: 100%;
 	  text-align: center;
 		padding-left: 3px;
 	}

@@ -22,6 +22,10 @@
   background: transparent url("/img/Other/point.png") no-repeat center center;
 }
 
+.more-box.delete-box .more .point {
+  background-image: url("/img/Other/point_red.png");
+}
+
 
 .more-box.delete-box .more {
   border: 2px solid #C42700;

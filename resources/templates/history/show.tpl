@@ -47,17 +47,28 @@
   </div>
 	<div class="col4 col $(what-class)">
 	  <show Add="$(type)" Delete="$(type)">
-	    <what/>
+	    <more-box>
+        <take n="35" val="$(what)" />
+        <more>
+          <what/>
+        </more>
+  	  </more-box>
     </show>
     <show Edit="$(type)">
       <show blank="$(what-old)">
-        <what/>
+        <more-box>
+          <take n="35" val="$(what)" />
+          <more>
+            <what/>
+          </more>
+    	  </more-box>
       </show>      
       <show notblank="$(what-old)">
         <more-box>
-          <what/>
+          <take n="35" val="$(what)" />
           <more>
-            <what-old/>
+            New: <what/><br>
+            Old: <what-old/>
           </more>
         </more-box>
       </show>
