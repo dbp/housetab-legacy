@@ -401,6 +401,9 @@
 		position: relative;
 	}
 
+  #purchases .purchase .col .box .close {
+    float: right;
+  }
 
 	#purchases .purchase .col input, #purchases .purchase .col .display {
 	  border: 1px solid #555;
@@ -484,7 +487,11 @@
     margin-left: 0px;
 	}
 	
-	.col1 .more {
+	#purchases .purchase .col1 .box {
+	  left: -50px;
+	  
+	}
+ .col1 .more {
 	  width: 110px;
 	  left: -35px;
 /*    top: 7  0px;*/
