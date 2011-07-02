@@ -485,6 +485,11 @@
 		width: 263px;
 	}
 	
+	.col4 .more {
+	  left: 65px;
+	  width: 120px;
+	}
+	
 	.col4 .more-box {
 	  width: 100%;
 	}
@@ -493,6 +498,8 @@
 	  text-align: center;
 		padding-left: 3px;
 	}
+	
+  .col4 .
 	
 	.col5 {
 		width: 88px;

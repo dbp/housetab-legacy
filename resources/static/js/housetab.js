@@ -133,15 +133,20 @@ bean.add(document, 'DOMContentLoaded', function () {
      // close all other more-boxes
      v(qwery(".more-box .more")).each(function(i) {
        bonzo(i).css("display", "none");
+       bonzo(bonzo(i).previous()).removeClass("open");
      });
      // now show this one
      m.css("display", "block");
+     // and add open class to the showing div
+     bonzo(elem).addClass("open");
    } else {
      m.css("display", "none");
+     bonzo(elem).removeClass("open");
    }
  });
  declare("click", ".more-box .more", true, function (elem){
    bonzo(elem).css("display", "none");
+   bonzo(bonzo(elem).previous()).removeClass("open");
  });
  
 });

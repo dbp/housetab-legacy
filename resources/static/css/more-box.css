@@ -22,6 +22,10 @@
   background: transparent url("/img/Other/point.png") no-repeat center center;
 }
 
+.more-box.delete-box .showing.open .delete {
+  background-image: url("/img/Icons/delete_sel.png");
+}
+
 .more-box.delete-box .more .point {
   background-image: url("/img/Other/point_red.png");
 }
