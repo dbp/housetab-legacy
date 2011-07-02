@@ -652,6 +652,10 @@ form.add-share button, #purchases .entry-form button, .edit-person button {
 	position: relative;
 }
 
+form.add-share button {
+  background-color: white;
+}
+
 form.add-share button, #purchases .entry-form button {
 	margin-right: -40px;
 }
@@ -680,6 +684,7 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
   background-color: white;
   padding: 5px;
   font-size: 14px;
+  text-align: right;
 }
 
 .shares-box.hidden {
@@ -689,7 +694,7 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
 
 
 .shares-box.showing {
-/*  z-index: 20;*/
+  z-index: 20;
   position: relative;
 }
 
