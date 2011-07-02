@@ -13,5 +13,6 @@
         <apply template="settings_show"></apply>
       </div>
     </result>
+    <div class="clearfix"/>
   </div>
 </div-async>

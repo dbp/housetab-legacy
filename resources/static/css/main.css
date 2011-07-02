@@ -185,6 +185,7 @@
 	#payments-table {
 		width: 864px;
 		margin: 0px auto;
+		padding-bottom: 1px;
 	}
 	.people-table {
     position: relative;
