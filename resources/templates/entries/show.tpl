@@ -15,14 +15,11 @@
 	    <div class="delete"/>
 	    <more>Are you sure you want to delete this entry?
 	      <form-async action="/entries/delete/$(index)" method="POST">
-          <button type="submit" title="">Delete</button>
+          <button type="submit" title=""></button>
         </form-async>
-        <button class="close">Cancel</button>
       </more>
     </more-box>
-    <!-- <a-async href="/entries/delete/$(index)" class="delete"></a-async> -->
 	  <a-async href="/entries/edit/$(index)" class="edit"></a-async>
-	  <div-async name="delete-$(index)" style="display: none;"></div-async>
 	</div>
 	<div class="col3 col"><lookupName id="$(entryBy)"/></div>
 	<div class="col4 col">

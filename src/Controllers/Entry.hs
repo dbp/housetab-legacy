@@ -86,7 +86,21 @@ entriesPage ps n user = do entries <- getHouseTabEntries n (authUser user)
                            return (renderEntries ps entries)
 
 
-
+showEntry :: User -> Application ()
+showEntry user = do
+  do i <- getParam "id"
+     let mbhtid = userId $ authUser user
+     when (isNothing mbhtid) $ redirect "/entries"
+     let (UserId htid) = fromJust mbhtid
+     case i >>= bs2objid of
+      Just eid -> do
+        mentry <- getHouseTabEntry eid
+        people <- getHouseTabPeople (authUser user)
+        case mentry of
+          Just entry -> heistLocal (bindSplices (renderEntry people entry)) $ renderHT "entries/show"
+          _ -> redirect "/entries"
+      _ -> redirect "/entries"
+               
 addEntry :: User -> Application ()
 addEntry user = do
          let mbhtid = userId $ authUser user

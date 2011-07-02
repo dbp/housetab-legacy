@@ -37,7 +37,7 @@
         <div id="subnav2b"><more-box class="delete-box">
 			    Delete Account
 			    <more>
-			      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit">Yes</button></form> <button class="close">No</button>
+			      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit"></button></form>
 			    </more>
 			  </more-box>
 			  </div>
@@ -84,7 +84,6 @@
               <historyOff>
                 <a-async href="/history/activate">Yes</a-async>
               </historyOff>
-              <button class="close">Cancel</button>
             </more>
           </more-box>
 			</div>

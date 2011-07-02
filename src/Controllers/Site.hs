@@ -60,6 +60,7 @@ site = do
              , ("/entries",                     ifTop $ requireUserBounce' entriesH)
              , ("/entries/page/:page",          requireUserBounce' entriesPageH)
              , ("/entries/add",                 requireUserBounce' $ addEntry)              
+             , ("/entries/show/:id",            requireUserBounce' $ showEntry)              
              , ("/entries/edit/:id",            requireUserBounce' $ editEntry)              
              , ("/entries/delete/:id",          requireUserBounce' $ deleteEntry)              
              , ("/people/add",                  requireUserBounce' $ addPerson)

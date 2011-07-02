@@ -18,9 +18,15 @@
 	</div>
 		
     <div class="col2 col">
-      <a-async href="/entries/delete/$(index)" class="delete"></a-async>
-      <a-async href="/entries/edit/$(index)" class="edit"></a-async>
-      <div-async name="delete-$(index)" style="display: none;"></div-async>
+      <!-- <more-box class="delete-box"> -->
+  	    <div class="delete"/>
+        <!-- <more>Are you sure you want to delete this entry?
+          <form-async action="/entries/delete/$(id-value)" method="POST">
+            <button type="submit" title=""></button>
+          </form-async>
+        </more>
+      </more-box>       -->
+      <a-async href="/entries/show/$(id-value)" class="edit selected"></a-async>
     </div>
     
   	<div class="col3 col">

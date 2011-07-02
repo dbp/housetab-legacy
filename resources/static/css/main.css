@@ -379,7 +379,7 @@
 	/*List of Purchases Table and Account History Table*/
 	
 	#purchases {
-	  margin-top: 1px;
+	  margin-top: 0px;
 		margin-left: 48px;
 		font-size: 15px;
 		width: 868px;
@@ -400,6 +400,19 @@
 		padding-top: 3px;
 		position: relative;
 	}
+
+	#purchases .purchase .col input, #purchases .purchase .col .display {
+	  border: 1px solid #555;
+	  margin-bottom: 2px;
+	}
+	
+	 #purchases .purchase .col .display {
+	   font-size: 13px;
+	   padding-left: 5px;
+	   padding-right: 5px;
+	   height: 16px;
+ 	  margin-bottom: 2px;
+	 }
 	
   #purchases .purchase .deleted {
     border-top: 1px solid red;
@@ -445,7 +458,7 @@
     float: left;
   }
 		
-	.edit:hover {
+	.edit:hover, .edit.selected {
 		background-image: url("/img/Icons/edit_mo.png");
 		cursor: pointer;
 	}
@@ -459,6 +472,11 @@
 		padding: 0;
 		height: 23px;
 		margin: 0;
+	}
+	
+	#purchases .purchase .col1 .display {
+	  width: 35px;
+    height: 20px;
 	}
 	
 	.col1 .more {
@@ -479,6 +497,11 @@
 	
 	.col3 {
 		width: 119px;
+	}
+	
+	.col3 .display {
+	  width: 97px;
+	  margin-left: 5px;
 	}
 	
 	.col4 {
@@ -506,7 +529,7 @@
 		padding-right: .5em;
 	}
 	
-	#purchases .purchase .col4 input {
+	#purchases .purchase .col5 input {
 	  width: 80px;
 	}
 	
@@ -516,11 +539,20 @@
 		padding-right: .5em;
 	}
 	
+	#purchases .purchase .col6 input {
+	  width: 80px;
+	}
+	
 	.col7 {
 		text-align: left;
 		width: 192px;
 		border-right: none;
 	}
+	.col7 .display {
+	  width: 130px;
+	  margin-left: 5px;
+	}
+	
 	.col7 .showing {
 	  padding-left: .5em;
 	}
@@ -675,7 +707,7 @@
 
 
 /* Misc stuff */
-form.add-share button, #purchases .entry-form button, .edit-person button {
+form.add-share button, #purchases .entry-form button, .edit-person button, .delete-box button  {
   background: transparent url("/img/Icons/submit.png") no-repeat  center center;
  	width: 36px;
 	height: 18px;
@@ -683,6 +715,10 @@ form.add-share button, #purchases .entry-form button, .edit-person button {
 	cursor: pointer;
 	float: right;
 	position: relative;
+}
+
+#purchases .entry-form .delete-box button {
+  margin-right: 0px;
 }
 
 form.add-share button {
