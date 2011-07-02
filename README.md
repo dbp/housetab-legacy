@@ -15,7 +15,7 @@ This should be cabal installable, once you install some extra libraries that are
     https://github.com/dbp/email-postmark
     https://github.com/dbp/snap-logging-mongodb
 
-Beyond that, the only other thing you need running is MongoDB. It is developed with 1.8, but we are not doing anything particularly fancy, so I would assume it would work with earlier versions as well. We assume it is cunning on the default port. The generated binary is "housetab" and takes all the regular commandline options that snap servers do. 
+Beyond that, the only other thing you need running is MongoDB. We are using 1.8, but are not doing anything particularly fancy, so I would assume it would work with earlier versions as well. We assume it is running on the default port. The generated binary is "housetab" and takes all the regular commandline options that snap servers do (ie, --port, etc). 
 
 ## Tests
 
@@ -40,7 +40,7 @@ It was pointed out in the development of this that there is no reason why this h
 
 # Code demographics 
 
-(courtesy of cloc, treating Heist as HTML and only including app specific javascript)
+(courtesy of [cloc](http://cloc.sourceforge.net/), treating Heist as HTML and only including app specific javascript)
 
     -------------------------------------------------------------------------------
     Language                     files          blank        comment           code
