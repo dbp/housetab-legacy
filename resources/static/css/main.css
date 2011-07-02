@@ -382,7 +382,7 @@
 	  margin-top: 1px;
 		margin-left: 48px;
 		font-size: 15px;
-		width: 853px;
+		width: 860px;
 		min-height: 200px;
 	}
 
@@ -393,10 +393,11 @@
 	#purchases .purchase .col {
 		border-top: 1px solid #A3CCE5;
 		border-right: 1px solid #A3CCE5;
-    height: 23px;
+    height: 20px;
 		text-align: center;
 		margin: 0;
 		padding: 0;
+		padding-top: 3px;
 		position: relative;
 	}
 	
@@ -449,15 +450,15 @@
 		cursor: pointer;
 	}
 	
+	.col, .col .showing {
+/*    padding-top: 3px;*/
+	}
+	
 	.col1 {
 		width: 48px;
 		padding: 0;
 		height: 21px;
 		margin: 0;
-	}
-
-	.col1.edit {
-    width: 94px;
 	}
 	
 	.col1 img {
@@ -465,10 +466,65 @@
   }
 	
 	.col2 {
-		width: 45px;
+		width: 47px;
 		padding: none;
 	}
-	.col2 .delete-box .more {
+	
+	.col3 {
+		width: 119px;
+	}
+	
+	.col4 {
+		width: 263px;
+	}
+	
+	.col4 .showing {
+	  text-align: center;
+		padding-left: 3px;
+	}
+	
+	.col5 {
+		width: 88px;
+		text-align: right;
+		padding-right: .5em;
+	}
+	
+	.col6 {
+		width: 88px;
+		text-align: right;
+		padding-right: .5em;
+	}
+	
+	.col7 {
+		text-align: left;
+		width: 184px;
+		border-right: none;
+	}
+	.col7 .showing {
+	  padding-left: .5em;
+	}
+	
+/*  
+  .col1 {
+    width: 48px;
+    padding: 0;
+    height: 21px;
+    margin: 0;
+  }
+
+  .col1.edit {
+    width: 94px;
+  }
+  
+  .col1 img {
+    margin-bottom: -2px;
+  }
+  
+  .col2 {
+    width: 45px;
+    padding: none;
+  }
+*/	.col2 .delete-box .more {
 	  width: 100px;
 	  left: -45px;
 	}
@@ -477,47 +533,47 @@
     display: inline-block;
   } */
 	
-	.col3 {
-		width: 110px;
-	}
-	
-	.col4 {
-		width: 261px;
-	}
-	.col4  .showing {
-		padding: 3px;
-	}
-	
+/*  .col3 {
+    width: 110px;
+  }
+  
+  .col4 {
+    width: 261px;
+  }
+  .col4  .showing {
+    padding: 3px;
+  }
+*/	
 	#purchases .purchase.entry-form .col4 input {
 	  width: 250px;
 	}
-	
-	.col5 {
-		width: 86px;
-	}
-	
+/*  
+  .col5 {
+    width: 86px;
+  }
+*/	
 	#purchases .purchase .col5 {
 	  text-align: right;
 		padding-right: .5em;
 	}
 	
-	.col6, .col6 input {
-		width: 87px;
-	}
-	#purchases .purchase  .col6 {
+/*  .col6, .col6 input {
+    width: 87px;
+  }
+*/	#purchases .purchase  .col6 {
 		text-align: right;
 		padding-right: .5em;
 	}
 	
-	#purchases .col7 {
-	  width: 182px;
+/*  #purchases .col7 {
+    width: 182px;
   }
-  #purchases .purchase .col7 {
-	  border-right: 0;
+*/  #purchases .purchase .col7 {
+    border-right: 0;
     text-align: left;
-		padding-left: .5em;
-	}
-	
+/*    padding-left: .5em;*/
+  }
+  
 	#purchases .purchase .col7 .more {
     min-width: 100px;
     padding-left: 15px;
