@@ -7,5 +7,5 @@
 </div-async-append>
 
 <div-async name="entries-next">
-  <a-async href="/entries/page/$(entriesPage)" class="more">More</a-async>
+  <a-async href="/entries/page/$(entriesPage)" class="more-items">More</a-async>
 </div-async>

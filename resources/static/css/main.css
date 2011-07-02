@@ -461,6 +461,12 @@
 		margin: 0;
 	}
 	
+	.col1 .more {
+	  width: 110px;
+	  left: -35px;
+/*    top: 70px;*/
+	}
+	
   .col1 img {
     margin-bottom: -2px;
   }
@@ -787,7 +793,7 @@ button.b:hover {
   color: black;
 }
 
-.more {
+.more-items {
   font-family: "adobe caslon pro";
 	font-weight: normal;
 	color: #5082A0;

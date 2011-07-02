@@ -5,7 +5,10 @@
 	  <bind tag="imgSrc">
       <catImage cat="$(entryCategory)" />
     </bind>
-    <img src="$(imgSrc)" alt="$(entryCategory)" title="$(entryCategory)"/>
+    <more-box>
+      <img src="$(imgSrc)" alt="$(entryCategory)" title="$(entryCategory)"/>
+      <more><catName cat="$(entryCategory)"/></more>
+    </more-box>
   </div>
 	<div class="col2 col">
 	  <more-box class="delete-box">
