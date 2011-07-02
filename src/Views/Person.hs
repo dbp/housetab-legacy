@@ -8,6 +8,7 @@ import qualified  Data.Text.Encoding as TE
 import qualified  Data.Text as T
 import            Data.Maybe (fromMaybe, maybeToList, listToMaybe, mapMaybe)
 import            Data.List (sortBy)
+import            Data.Ord (comparing)
 import qualified  Data.ByteString.Char8 as B8
 import qualified  Text.XmlHtml as X
 import            Snap.Extension.DB.MongoDB (bs2objid, objid2bs)
@@ -34,7 +35,7 @@ renderPerson (Person pid htid name shares) =
    [("personId",             textSplice $ TE.decodeUtf8 (maybe "" objid2bs pid))
    ,("htid",                 textSplice $ TE.decodeUtf8 $ objid2bs htid)
    ,("personName",           textSplice $ TE.decodeUtf8 $ name)
-   ,("personShares",         sharesSplice shares)
+   ,("personShares",         sharesSplice (reverse $ sortBy (comparing sDate) shares))
    ]
       
 
