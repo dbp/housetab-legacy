@@ -16,7 +16,7 @@
 	
 	
 	h2 {
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-weight: normal;
 		font-size: 16px;
 		margin: 0;
@@ -237,7 +237,7 @@
 	.shares a {
 		text-decoration: none;
 		color: black;
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 	}
 	
 	.shares a:hover {
@@ -350,7 +350,7 @@
 	}
 	
 	#bt2 p{
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-size: 18px;
 		text-align: center;
 	}
@@ -369,7 +369,7 @@
 	}
 	
 	#bt3 p{
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-size: 18px;
 		text-align: right;
 		color: #5082A0;
@@ -415,7 +415,7 @@
   }
 	
 	#purchases .heading, #history .heading {
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-weight: normal;
 		color: #5082A0;
 		font-size: 16px;
@@ -500,6 +500,10 @@
 		padding-right: .5em;
 	}
 	
+	#purchases .purchase .col4 input {
+	  width: 80px;
+	}
+	
 	.col6 {
 		width: 88px;
 		text-align: right;
@@ -515,74 +519,28 @@
 	  padding-left: .5em;
 	}
 	
-/*  
-  .col1 {
-    width: 48px;
-    padding: 0;
-    height: 21px;
-    margin: 0;
-  }
-
-  .col1.edit {
-    width: 94px;
-  }
-  
-  .col1 img {
-    margin-bottom: -2px;
-  }
-  
-  .col2 {
-    width: 45px;
-    padding: none;
-  }
-*/	.col2 .delete-box .more {
+	.col2 .delete-box .more {
 	  width: 100px;
 	  left: -45px;
 	}
-/*  .col2 .delete-box form {
-    color: black;
-    display: inline-block;
-  } */
 	
-/*  .col3 {
-    width: 110px;
-  }
-  
-  .col4 {
-    width: 261px;
-  }
-  .col4  .showing {
-    padding: 3px;
-  }
-*/	
 	#purchases .purchase.entry-form .col4 input {
 	  width: 250px;
 	}
-/*  
-  .col5 {
-    width: 86px;
-  }
-*/	
+	
 	#purchases .purchase .col5 {
 	  text-align: right;
 		padding-right: .5em;
 	}
 	
-/*  .col6, .col6 input {
-    width: 87px;
-  }
-*/	#purchases .purchase  .col6 {
+	#purchases .purchase  .col6 {
 		text-align: right;
 		padding-right: .5em;
 	}
 	
-/*  #purchases .col7 {
-    width: 182px;
-  }
-*/  #purchases .purchase .col7 {
+  #purchases .purchase .col7 {
     border-right: 0;
     text-align: left;
-/*    padding-left: .5em;*/
   }
   
 	#purchases .purchase .col7 .more {
@@ -610,7 +568,7 @@
 		}
 	
 	#faq_head p{
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-size: 16px;
 		text-align: center;
 		margin-top: .25em;
@@ -650,7 +608,7 @@
 	}
 	
 	#bottom p {
-		font-family: "adobe caslon pro";
+		font-family: "times new roman";
 		font-size: 14px;
 		color: #A3CCE5;
 		margin: 0;
@@ -795,7 +753,7 @@ button.b:hover {
 }
 
 .more-items {
-  font-family: "adobe caslon pro";
+  font-family: "times new roman";
 	font-weight: normal;
 	color: #5082A0;
 	font-size: 16px;
