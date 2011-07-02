@@ -69,7 +69,7 @@
   			
   		<h2 id="faq4"><img src="/img/Glyphs/acorn.png" />How do I pay someone back directly?</h2>
 
-  			<p>You can record one person directly paying another by putting the payer as the person who bought the item (the payback) and the payee as the ONLY splitter. We’ve included the category “Cash” for this purpose. A little less intuitively, but still easy, you can do the opposite as well - if someone does me a favor (like lets me use their car), I can give them some money for gas by putting them as the buyer and me as the only splitter, as I am acting as though they directly paid me (though the “payment” is pretty ephemeral).</p> 
+  			<p>You can record one person directly paying another by putting the payer as the person who bought the item (the payback) and the payee as the ONLY user. We’ve included the category “Cash” for this purpose. A little less intuitively, but still easy, you can do the opposite as well - if someone does me a favor (like lets me use their car), I can give them some money for gas by putting them as the buyer and me as the only user, as I am acting as though they directly paid me (though the “payment” is pretty ephemeral).</p> 
   			<p>Both of these work not because of some special rules, but based on the same calculations described in the FAQ <a href="#faq3">“How are the totals calculated”</a> - the thing to keep in mind (if you are trying to convince yourself that it works) is that it the case of only one User, the shares are irrelevant (ie, 10 shares / 10 shares is 100% just like 30 shares / 30 shares is).</p>
 
   		<h2 id="faq5"><img src="/img/Glyphs/acorn.png" />Isn't this really insecure?</h2>
@@ -82,7 +82,7 @@
 
   		<h2 id="faq6"><img src="/img/Glyphs/acorn.png" />I want to contribute, how can I help?</h2>
 
-  			<p>This is open source software written in the purely functional programming language Haskell with the framework <a href="http://snapframework.com" target="_blank">Snap</a> and the <a href="http://mongodb.org">MongoDB</a> database - feel free to grab the <a href="http://darcsden.com/position/housetab">source</a>, make changes and send patches to <a href="mailto:daniel@positionstudios.com">daniel@positionstudios.com</a>, or the committer email address, and I'll integrate them in if they are useful. </p>
+  			<p>This is open source software written in the purely functional programming language Haskell with the framework <a href="http://snapframework.com" target="_blank">Snap</a> and the <a href="http://mongodb.org" target="_blank">MongoDB</a> database - feel free to grab the <a href="http://darcsden.com/position/housetab" target="_blank">source</a>, make changes and send patches to <a href="mailto:daniel@positionstudios.com">daniel@positionstudios.com</a>, or the committer email address, and I'll integrate them in if they are useful. </p>
 
   			<p>If you are not a programmer, you can also support the project by <a href="https://www.wepay.com/donate/99127" targen="_blank">donating</a>.</p>
 

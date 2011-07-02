@@ -5,7 +5,7 @@ import qualified  Data.ByteString as BS
 import qualified  Data.ByteString.Char8 as B8
 import            Data.Bson (cast',val, Val(..), ObjectId(..))
 import            Text.Printf (printf)
-import            Data.List (nub, sort, sortBy, delete)
+import            Data.List (nub, sort, sortBy, delete, null, elemIndex)
 import            Data.Ord (comparing)
 import qualified  Data.Text.Encoding as TE
 import            Data.Maybe (fromJust)
@@ -16,6 +16,7 @@ import            Models.Result
 import            Models.Site (emptyObjectId)
 import            Views.Site (categoryList)
 import            Lib
+import            Utils
 
 instance Arbitrary BS.ByteString where
     arbitrary = BS.pack `fmap` arbitrary
@@ -109,7 +110,18 @@ prop_dothesplit_sum :: Purchase -> Bool
 prop_dothesplit_sum p = (ammount p) `almostEq` (sum $ map snd ls)
   where ls = doTheSplit p 
   
-
+prop_findreplace_first :: [Int] -> Bool
+prop_findreplace_first l = head (findReplace (const True) 1 l) == 1
+prop_findreplace_last :: [Int] -> Bool
+prop_findreplace_last l = 2 `elem` (findReplace (== 1) 2 newL)
+  where newL = l ++ [1]
+prop_findreplace_index :: [Int] -> Bool
+prop_findreplace_index l = if null l then True else elemIndex fl newL >= elemIndex 2 (findReplace (== fl) 2 newL)
+  where fl = head l
+        newL = rotate l
+        rotate l = (drop half l) ++ (take half l)
+        half = (length l `div` 2)
+        
 tests  = [("date.cast'.val/id", quickCheck (prop_bson_id :: Date -> Bool))
          ,("entry.cast'.val/id", quickCheck (prop_bson_id :: HouseTabEntry -> Bool))
          ,("person.cast'.val/id", quickCheck (prop_bson_id :: Person -> Bool))
@@ -117,6 +129,9 @@ tests  = [("date.cast'.val/id", quickCheck (prop_bson_id :: Date -> Bool))
          ,("lib.run.owed.sum/zero", quickCheck prop_run_owed_eq_zero)
          ,("lib.run.spent.sum/total", quickCheck prop_run_spent_eq_total)
          ,("dothesplit.sum/ammount", quickCheck prop_dothesplit_sum)
+         ,("findreplace.first", quickCheck prop_findreplace_first)
+         ,("findreplace.last", quickCheck prop_findreplace_last)
+         ,("findreplace.index", quickCheck prop_findreplace_index)
          ]
 
 main = mapM_ (\(s,a) -> printf "%-25s: " s >> a) tests

@@ -17,6 +17,10 @@ This should be cabal installable, once you install some extra libraries that are
 
 Beyond that, the only other thing you need running is MongoDB. It is developed with 1.8, but we are not doing anything particularly fancy, so I would assume it would work with earlier versions as well. We assume it is cunning on the default port. The generated binary is "housetab" and takes all the regular commandline options that snap servers do. 
 
+## Tests
+
+There are some QuickCheck tests of the core algorithm functionality as well as the database marshalling. These are all in the Test.hs module, which has a main function that will run them all. They could definitely use expansion, but already caught one longstanding bug!
+
 ## Roadmap
 
 ### API
@@ -36,12 +40,12 @@ It was pointed out in the development of this that there is no reason why this h
 
 # Code demographics 
 
-(courtesy of cloc, treating Heist as HTML and only including my own javascript)
+(courtesy of cloc, treating Heist as HTML and only including app specific javascript)
 
     -------------------------------------------------------------------------------
     Language                     files          blank        comment           code
     -------------------------------------------------------------------------------
-    Haskell                         30            449             85           2240
+    Haskell                         29            444             82           2226
     Heist                           59            153             11           1067
     Javascript                       2              4             17            114
  
