@@ -227,12 +227,12 @@
 	  padding-left: 40px;
 	}
 	
-	.category .option {
+	.category .box-field .box .option {
 	  background-position: center left;
 	  background-repeat: no-repeat;
 	  padding-left: 45px;
-	  height: 30px;
-	  display: inline-block;
+	  padding-top: 0px;
+	  height: 20px;
 	}
 		
   .category .alcohol, .category #alcohol {
