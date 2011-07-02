@@ -587,6 +587,11 @@
 		padding-right: .5em;
 	}
 	
+	#purchases .heading .col7 {
+	  margin-left: 10px;
+	  width: 182px;
+  }
+  
   #purchases .purchase .col7 {
     border-right: 0;
     text-align: left;
