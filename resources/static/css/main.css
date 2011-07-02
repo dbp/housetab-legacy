@@ -121,13 +121,11 @@
 	
 	#abovecontents {
 		width: 960px;
-/*    height: 192px;*/
 		margin-top: 0;
 		margin-left: auto;
 		margin-right: auto;
 		background-image: url("/img/Backgrounds/grid.png");
-/*    position: relative;
-*/	}
+	}
 	
 	#abovecontents_lo {
 		width: 960px;
@@ -148,6 +146,7 @@
 		display: inline-block;
 		vertical-align: top;
 		margin-top: 24px;
+		margin-bottom: -96px;
 	}
 	
 	#copy p {

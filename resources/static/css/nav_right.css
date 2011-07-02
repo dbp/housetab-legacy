@@ -23,6 +23,11 @@
 	#abovecontents p{
 		width: 576px;
 		margin-left: 192px;
+		margin-bottom: -40px;
+	}
+	
+	#topcontents {
+	  height: 120px;
 	}
 	
 	

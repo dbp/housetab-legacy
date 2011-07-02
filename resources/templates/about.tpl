@@ -1,22 +1,19 @@
 <apply template="base">
  
- 
   <bind tag="heading">
     <link rel="stylesheet" type="text/css" href="/css/nav_right.css" />
   </bind>
  
   <bind tag="top">
-  	<div id="topcontents">
   		<h1>HOUSETAB</h1>
   		<img src="/img/Glyphs/glyph_above.png" />
   		<h3>a project of</h3>
   		<p><a href="http://positionstudios.com" target="_blank">Position Studios</a></p>
-  	</div>
   </bind>
  
   <bind tag="above">
   	<div id="abovecontents">
-  		<p>Housetab.org is a site that allows groups of people to create collective 'house tabs', where they can record expenses that are shared by more than one person in the group, and flexibly make sure costs are being shared equitably. You can imagine the need for it if you live in a house (or organization) that buys groceries as a group, pay bills as a group, etc, and have to keep track of who owes who what.</p>
+  		<p class="about">Housetab.org is a site that allows groups of people to create collective 'house tabs', where they can record expenses that are shared by more than one person in the group, and flexibly make sure costs are being shared equitably. You can imagine the need for it if you live in a house (or organization) that buys groceries as a group, pay bills as a group, etc, and have to keep track of who owes who what.</p>
   	</div>
   </bind>
   
