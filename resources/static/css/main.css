@@ -190,6 +190,18 @@
     position: relative;
 	}
 	
+	.people-table .person .edit-name {
+	  display: inline-block;
+	  width: 24px;
+	  height: 21px;
+	  background: transparent url("/img/Icons/edit.png") no-repeat center center;
+	}
+	
+	.people-table .person .edit-name:hover {
+	  background-image: url("/img/Icons/edit_mo.png");
+  }
+	
+	
 	.person {
 		width: 143px;
 		height: 95px;
