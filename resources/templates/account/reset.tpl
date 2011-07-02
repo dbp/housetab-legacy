@@ -19,7 +19,7 @@
 
         <div-async name="reset-box" id="navbarcontents2">
          	<div id="subnav">
-             <!-- <div id="subnav_signup"></div> -->
+             <div id="subnav_reset"></div>
          	</div>
          	<div id="subnav3"><p>Reset your password</p></div>
          	<form method="POST" id="signupform">
