@@ -1,6 +1,6 @@
 <div-async name="tutorial" id="tutorial">
   <div class="content">
-    Thanks for viewing the tutorial. If you want to view the tutorial again, visit the <a href="/settings">Settings</a> page and click Start Tutorial.
+    Thanks for viewing the tutorial. If you want to view the tutorial again, visit the <a href="/settings#navbar">Settings</a> page and click Start Tutorial.
     </div>  
 </div-async>
 

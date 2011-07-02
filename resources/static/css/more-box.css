@@ -8,9 +8,16 @@
 
 .more-box .more {
   position: absolute;
-  top: 120%;
+  top: 130%;
   padding: 5px;
   border: 1px solid black;
   background-color: white;
   z-index: 100;
+}
+
+.more-box .more .point {
+  width: 100%;
+  height: 16px;
+  margin-top: -17px;
+  background: transparent url("/img/Other/point.png") no-repeat center center;
 }

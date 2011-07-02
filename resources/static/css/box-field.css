@@ -30,13 +30,20 @@
 
 .box-field .box, .box-field-multi .box {
   position: absolute;
-  top: 30px;
+  top: 33px;
   left: 0px;
   background-color: white;
   border: 1px solid gray;
   padding: 5px;
   color: black;
   z-index: 100;
+}
+
+.box-field .box .point, .box-field-multi .box .point {
+  width: 100%;
+  height: 16px;
+  margin-top: -17px;
+  background: transparent url("/img/Other/point.png") no-repeat center center;
 }
 
 .box-field .box .option, .box-field-multi .box .option {

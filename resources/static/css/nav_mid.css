@@ -191,6 +191,10 @@
     height: 18px
 	}
 	
+	.enform1 .box-field .box {
+	  left: -25px;
+	}
+	
 	.enform2 input {
 		width: 184px;
     height: 20px
@@ -200,6 +204,10 @@
 	.enform3 .display {
 		width: 48px;
 		height: 16px
+	}
+	
+	.enform3 .box-field .box {
+	  left: -55px;
 	}
 	
 	.enform4 input {
@@ -215,6 +223,10 @@
 	.enform6 .display {
 		width: 124px;
 		height: 18px
+	}
+	
+	.enform6 .box-field-multi .box {
+	  left: -10px;
 	}
 	
 	.entry-form .category .display {

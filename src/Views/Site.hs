@@ -129,7 +129,8 @@ boxFieldGen typ sel extra = do node <- getParamNode
                                    let displayClass = T.concat ["display ", fromMaybe "" $ X.getAttribute "display-class" node]
                                    let children = [ X.Element "input" [("type","hidden"),("name",name),("value",value)] []
                                                   , X.Element "div" [("class",displayClass)] [X.TextNode display]
-                                                  , X.Element "div" [("class","box"),("style","display:none;")] (extra ++ (X.elementChildren node))
+                                                  , X.Element "div" [("class","box"),("style","display:none;")] 
+                                                    ([X.Element "div" [("class","point")] []] ++ extra ++ (X.elementChildren node))
                                                   ]
                                    return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]
 
@@ -147,7 +148,7 @@ moreBox :: Monad m => Splice m
 moreBox = do node <- getParamNode
              let children = X.elementChildren node
              let more = case filter isMore children of
-                          (x:xs) -> [X.Element "div" [("class","more"), ("style","display:none;")] (X.elementChildren x)]
+                          (x:xs) -> [X.Element "div" [("class","more"), ("style","display:none;")] ([X.Element "div" [("class","point")] []] ++ (X.elementChildren x))]
                           _ -> []
              let showing = X.Element "div" [("class","showing")] $ filter (not.isMore) children
              let klass = T.concat ["more-box ",(fromMaybe "" $ X.getAttribute "class" node)]
