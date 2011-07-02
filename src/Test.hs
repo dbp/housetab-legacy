@@ -113,7 +113,7 @@ prop_dothesplit_sum p = (ammount p) `almostEq` (sum $ map snd ls)
 tests  = [("date.cast'.val/id", quickCheck (prop_bson_id :: Date -> Bool))
          ,("entry.cast'.val/id", quickCheck (prop_bson_id :: HouseTabEntry -> Bool))
          ,("person.cast'.val/id", quickCheck (prop_bson_id :: Person -> Bool))
-         {-,("result.cast'.val/id", quickCheck (prop_bson_id :: Result -> Bool))-}
+         ,("result.cast'.val/id", quickCheck (prop_bson_id :: Result -> Bool))
          ,("lib.run.owed.sum/zero", quickCheck prop_run_owed_eq_zero)
          ,("lib.run.spent.sum/total", quickCheck prop_run_spent_eq_total)
          ,("dothesplit.sum/ammount", quickCheck prop_dothesplit_sum)
