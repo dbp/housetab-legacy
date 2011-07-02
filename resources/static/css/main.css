@@ -382,7 +382,7 @@
 	  margin-top: 1px;
 		margin-left: 48px;
 		font-size: 15px;
-		width: 860px;
+		width: 868px;
 		min-height: 200px;
 	}
 
@@ -457,23 +457,24 @@
 	.col1, #purchases .purchase .col1 {
 		width: 48px;
 		padding: 0;
-		height: 21px;
+		height: 23px;
 		margin: 0;
 	}
 	
 	.col1 .more {
 	  width: 110px;
 	  left: -35px;
-/*    top: 70px;*/
+/*    top: 7  0px;*/
 	}
 	
-  .col1 img {
-    margin-bottom: -2px;
+  .col1 .more-box {
+    margin-bottom: -4px;
   }
 	
 	.col2, #purchases .purchase .col2 {
 		width: 47px;
     padding-top: 0px;
+    height: 23px;
 	}
 	
 	.col3 {
@@ -507,7 +508,7 @@
 	
 	.col7 {
 		text-align: left;
-		width: 184px;
+		width: 192px;
 		border-right: none;
 	}
 	.col7 .showing {

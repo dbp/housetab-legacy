@@ -3,28 +3,26 @@
   <input type="hidden" name="id" value="$(id-value)" />
   <div class="clearfix"/>
 
-  <div class="col1 col">
+  <div class="col1 col category">
 	  <div class="errors"><category-errors><error/> </category-errors></div>
 	  <bind tag="category-display">
 	    <catName cat="$(category-value)" />
     </bind>
-	  <box-field name="category" value="$(category-value)" display="$(category-display)" class="inp">
+	  <box-field name="category" value="$(category-value)" display="" display-class="$(category-value)" class="inp">
       <categories>
         <box-option value="$(cat)" id="$(cat)">
-        <catName cat="$(cat)"/>
+        <catName cat="$(cat)" />
         </box-option><br>
       </categories>
     </box-field>
 	</div>
-	
-	<div class="col2 col"></div>
-	
-    <!-- <div class="col2 col">
+		
+    <div class="col2 col">
       <a-async href="/entries/delete/$(index)" class="delete"></a-async>
       <a-async href="/entries/edit/$(index)" class="edit"></a-async>
       <div-async name="delete-$(index)" style="display: none;"></div-async>
     </div>
-     -->
+    
   	<div class="col3 col">
   	  <bind tag="by-display">
   	    <lookupName id="$(by-value)" />
