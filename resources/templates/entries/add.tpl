@@ -34,9 +34,6 @@
 	    <catName cat="$(category-value)" />
     </bind>
 	  <box-field name="category" value="$(category-value)" display="$(category-display)" display-class="$(category-value)">
-	  <box-option value="" id="">
-	    Close
-    </box-option>
       <categories>
         <box-option value="$(cat)" id="$(cat)">
         <catName cat="$(cat)"/>
