@@ -786,3 +786,10 @@ button.b:hover {
 #navbar #subnav1 p a, #navbar #subnav2 p a {
   color: black;
 }
+
+.more {
+  font-family: "adobe caslon pro";
+	font-weight: normal;
+	color: #5082A0;
+	font-size: 16px;
+}

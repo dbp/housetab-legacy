@@ -55,6 +55,7 @@ bean.add(document, 'DOMContentLoaded', function () {
           bean.fire(i,"click");
         }
       });
+      bonzo(allt).addClass("selected");
       elem.setAttribute("data-all-selected",1);
     } else {
       // all selected, so empty
@@ -65,6 +66,7 @@ bean.add(document, 'DOMContentLoaded', function () {
           // already unselected, so do nothing
         }
       });
+      bonzo(allt).removeClass("selected");
       elem.setAttribute("data-all-selected",0);
     }
   });
@@ -107,8 +109,10 @@ bean.add(document, 'DOMContentLoaded', function () {
     allt = elem.parentNode.childNodes[1];
     if (newsels.length === num_people) {
       allt.setAttribute("data-all-selected",1);
+      bonzo(allt).addClass("selected");
     } else {
       allt.setAttribute("data-all-selected",0);
+      bonzo(allt).removeClass("selected");
     }
     d.innerHTML = display(newsels);
   });

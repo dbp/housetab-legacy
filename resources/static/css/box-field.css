@@ -66,11 +66,13 @@
 .box-field-multi .box .all-toggle {
   width: 100px;
   text-align: center;
+  color: #555;
   border-bottom: 1px solid black;
 }
 
-.box-field-multi .box .all-toggle:hover {
+.box-field-multi .box .all-toggle:hover, .box-field-multi .box .all-toggle.selected {
   cursor: pointer;
+  color: black;
 }
 
 .errors {
