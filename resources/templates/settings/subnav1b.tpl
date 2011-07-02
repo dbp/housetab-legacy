@@ -1,5 +1,5 @@
-<div-async name="subnav2-settings" id="subnav2">
-  <p><a href="#below">See Account History</a> | 
+<div-async name="subnav1b-settings" id="subnav1b">
+  <p>
     <tutorialOn><a-async href="/tutorial/deactivate">Stop Tutorial</a-async></tutorialOn>
     <tutorialOff><a-async href="/tutorial/activate">Start Tutorial</a-async></tutorialOff>
   </p>

@@ -34,16 +34,17 @@
     <apply template="settings/navbar1"></apply>
 		<div id="navbarcontents2">
 			<div id="subnav">
-				<div id="subnav_settings"></div>
-				<div id="subnav1"><p><a href="#top">See User Settings</a> | </p>
-				  <more-box>
-				    Delete Account
-				    <more>
-				      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit">Yes</button></form> <button class="close">No</button>
-				    </more>
-				  </more-box>
-				  </div>
-          <apply template="settings/subnav2"></apply>
+        <div id="subnav2b"><more-box>
+			    Delete Account
+			    <more>
+			      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit">Yes</button></form> <button class="close">No</button>
+			    </more>
+			  </more-box>
+			  </div>
+        <div id="subnav_settings"></div>
+        <div id="subnav1"><p><a href="#top">See User Settings</a></p></div>
+        <div id="subnav2"><p><a href="#below">History of Changes</a></p></div> 
+        <apply template="settings/subnav1b"></apply>
 			</div>
 			<div id="subnav3"><p>Update Account Settings</p></div>
       <apply template="/account/change_settings"></apply>
