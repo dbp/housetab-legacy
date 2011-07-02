@@ -27,7 +27,7 @@ mailActivation token account email = do
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
   {-liftIO $ putStrLn "Sending activation email [fake]"-}
-  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Welcome to HouseTab. Now activate your account." "activation" (BS.concat $ msg server portNum)) [email]
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" (BS.concat ["Welcome to HouseTab, ", account, ". Now activate your account."]) "activation" (BS.concat $ msg server portNum)) [email]
     where msg s p = ["Welcome to HouseTab. "
                   ,"All you need to do to complete your registration is activate your account by clicking on the link below.\n\n"
                   ,"Please activate your account by visiting "
@@ -45,7 +45,7 @@ mailEmailChange token account email = do
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
   {-liftIO $ putStrLn "Sending email change email [fake]"-}
-  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Confirm your new email address on HouseTab." "emailchange" (BS.concat $ msg server portNum)) [email]
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" (BS.concat ["Confirm your new email address on HouseTab, ", account, "."]) "emailchange" (BS.concat $ msg server portNum)) [email]
     where msg s p = ["You just changed your email account on HouseTab to this one. "
                   ,"To confirm that this is indeed your email account, please visit the following link.\n\n"
                   ,"http://"
@@ -64,7 +64,7 @@ mailResetPassword account email token = do
   server  <- liftM rqServerName getRequest
   portNum <- liftM rqServerPort getRequest
   {-liftIO $ putStrLn "Sending password reset email [fake]"-}
-  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" "Reset your password on HouseTab." "reset" (BS.concat $ msg server portNum)) [email]
+  liftIO $ mapM (postmark postmarkToken "messages@housetab.org" (BS.concat ["Reset your password on HouseTab, ",account,"."]) "reset" (BS.concat $ msg server portNum)) [email]
     where msg s p = ["You just requested to reset your password on HouseTab. "
                   ,"To do that, please visit the following link.\n\n"
                   ,"http://"

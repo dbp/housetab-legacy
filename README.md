@@ -33,3 +33,15 @@ The system now supports (well, enforces) entering entries in by category, but al
 
 ### Multiple currencies
 It was pointed out in the development of this that there is no reason why this has to deal with money at all - anything that serves as a currency could use it, with time being an obvious example. People can enter in work they do for a group or for each other, and the balance of labor is recorded. That of course works right now, so long as you make an account that only deals in time, and ignore the dollar signs. What would be neat is to have a way to have multiple currencies on the same account at the same time. Then the question becomes whether there should be two totally different balances (so the two currencies exist in one account just to make it more convenient than having two accounts, but doesn't add any functionality), or whether there should be some equivalency, ie, labor is worth $15/hr, so if I pay for less things, but do a lot more collective work, we balance out. That's an open question, but it is a pretty interesting idea, and brings up some really interesting ideas of where HouseTab could go... 
+
+# Code demographics 
+
+(courtesy of cloc, treating Heist as HTML and only including my own javascript)
+
+    -------------------------------------------------------------------------------
+    Language                     files          blank        comment           code
+    -------------------------------------------------------------------------------
+    Haskell                         30            449             85           2240
+    Heist                           59            153             11           1067
+    Javascript                       2              4             17            114
+ 

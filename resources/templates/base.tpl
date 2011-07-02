@@ -75,9 +75,10 @@
           <below/>
       
           <div id="bottom">
-            <p>a project of <a href="http://positionstudios.com" target="_blank">position studios</a> | powered by <a href="http://snapframework.com" target="_blank">snap</a>. 
-              grab the source: 
-              <a href="http://darcsden.com/position/housetab" target="_blank">darcsden.com/position/housetab</a>
+            <p>a project of <a href="http://positionstudios.com" target="_blank">position studios</a> | powered by <a href="http://snapframework.com" target="_blank">snap</a> |
+              grab the  
+              <a href="http://darcsden.com/position/housetab" target="_blank">source</a>
+              | issues? <a href="http://darcsden.com/position/housetab/issues" target="_blank">file them here</a>
             </p>
             <br>
           </div>
