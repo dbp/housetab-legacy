@@ -522,6 +522,13 @@
     text-align: left;
 		padding-left: .5em;
 	}
+	
+	#purchases .purchase .col7 .more {
+    min-width: 100px;
+    padding-left: 15px;
+    line-height: 20px;
+  }
+	
 
 	
 	/*Frequently Asked Questions section of the About Us page*/
