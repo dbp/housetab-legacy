@@ -93,6 +93,11 @@ bean.add(document, 'DOMContentLoaded', function () {
  declare("click", ".more-box .showing", true, function (elem){
    m = bonzo(bonzo(elem).next());
    if (m.css("display") === "none") {
+     // close all other more-boxes
+     v(qwery(".more-box .more")).each(function(i) {
+       bonzo(i).css("display", "none");
+     });
+     // now show this one
      m.css("display", "block");
    } else {
      m.css("display", "none");
