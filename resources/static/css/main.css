@@ -733,6 +733,18 @@ form.add-share button, #purchases .entry-form button, .edit-person button, .dele
 	position: relative;
 }
 
+#purchases .purchase .col .delete-box .more {
+  text-align: left;
+}
+
+#purchases .purchase .col .delete-box .more:hover {
+  cursor: auto;
+}
+
+#purchases .purchase .col .delete-box form {
+  margin-top: -15px;
+}
+
 #purchases .entry-form .delete-box button {
   margin-right: 0px;
 }
@@ -761,7 +773,7 @@ form.add-share .value {
   width: 30px;
 }
 
-form.add-share button:hover, #purchases .entry-form button:hover, .edit-person button:hover {
+form.add-share button:hover, #purchases .entry-form button:hover, .edit-person button:hover, .delete-box button:hover {
   background-image: url("/img/Icons/submit_mo.png");
 }
 
