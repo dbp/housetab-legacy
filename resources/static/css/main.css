@@ -481,6 +481,7 @@
 	#purchases .purchase .col1 .display {
 	  width: 35px;
     height: 20px;
+    margin-left: 0px;
 	}
 	
 	.col1 .more {

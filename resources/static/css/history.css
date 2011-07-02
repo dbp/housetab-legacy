@@ -5,14 +5,6 @@
    color: #C42700;
    margin: 0;
    margin-top: 36px;
-/*       
-   }
-  background-color: red;
-  color: white;
-  width: 300px;
-  padding: 5px;
-  margin: 10px;
-  float: right;*/
 }
 
 .more-box.delete-history .more {
@@ -59,6 +51,7 @@
 #history .col2 .category {
   width: 48px;
   height: 21px;
+  margin: 0px auto;  
 }
 
 .category.alcohol {
@@ -104,9 +97,18 @@
   position: relative;
 }
 
+#history .col2 .more {
+  left: 23px;
+}
+
 
 #history .col3 {
   width: 100px;
+  text-align: center;
+}
+
+#history .col3 .more {
+  left: 23px;
 }
 
 
@@ -114,9 +116,25 @@
   width: 150px;
 }
 
-#history .col7 {
-  width: 100px;
+#history .col4 .more {
+  left:   10px;
 }
+
+#history .col5 .more {
+  left: 40px;
+}
+
+
+#history .col7 {
+  width: 180px;
+  text-align: center; 
+}
+
+#history .col7 .more {
+  left: 50px;
+  width: 80px;
+}
+
 
 .history-edit .col.nm {
   color: #CCC;
