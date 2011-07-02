@@ -21,15 +21,20 @@ bean.add(document, 'DOMContentLoaded', function () {
     // set up the selections, based on what is already selected
     h = bonzo(elem).previous()[0]; // the hidden input
     sels = h.getAttribute("value").split(",");
-    v(bonzo(elem).next()[0].childNodes).each(function(n) {
-      if (n.hasAttribute && n.hasAttribute("data-box-value")) {
-        if (sels.indexOf(n.getAttribute("data-box-value")) != -1) {
-          if (!bonzo(n).hasClass("selected")) {
-            bonzo(n).addClass("selected");
-          }
-        } else {
-          bonzo(n).removeClass("selected");
+    opts = v(bonzo(elem).next()[0].childNodes).toArray().filter(function(n){return n.hasAttribute && n.hasAttribute("data-box-value")});
+    allt = bonzo(elem).next()[0].childNodes[1];
+    if (sels.length === opts.length) {
+      allt.setAttribute("data-all-selected",1);
+    } else {
+      allt.setAttribute("data-all-selected",0);
+    }
+    v(opts).each(function(n) {
+      if (sels.indexOf(n.getAttribute("data-box-value")) != -1) {
+        if (!bonzo(n).hasClass("selected")) {
+          bonzo(n).addClass("selected");
         }
+      } else {
+          bonzo(n).removeClass("selected");
       }
     });
     m = bonzo(bonzo(elem).next());
@@ -39,9 +44,30 @@ bean.add(document, 'DOMContentLoaded', function () {
       m.css("display", "none");
     }
   });
-  // declare("click", ".box-field-multi .box .close", true, function (elem) {
-  //   bonzo(elem.parentNode).hide();
-  // });
+  declare("click", ".box-field-multi .box .all-toggle", true, function (elem) {
+    opts = v(elem.parentNode.childNodes).toArray().filter(function(i){return i.nodeType === 1 && i.hasAttribute("data-box-value")});
+    if (elem.hasAttribute("data-all-selected") && elem.getAttribute("data-all-selected") === "0") {
+      // not all selected, so set all to be
+      v(opts).each(function(i){
+        if (bonzo(i).hasClass("selected")) {
+          // do nothing, already selected
+        } else {
+          bean.fire(i,"click");
+        }
+      });
+      elem.setAttribute("data-all-selected",1);
+    } else {
+      // all selected, so empty
+      v(opts).each(function(i){
+        if (bonzo(i).hasClass("selected")) {
+          bean.fire(i,"click");
+        } else {
+          // already unselected, so do nothing
+        }
+      });
+      elem.setAttribute("data-all-selected",0);
+    }
+  });
   declare("click", ".box-field-multi .box .option", true, function (elem) {
     e = bonzo(elem);
     d = bonzo(elem.parentNode).previous()[0]; // display
@@ -59,14 +85,13 @@ bean.add(document, 'DOMContentLoaded', function () {
         return get_name(selected[0]) + " & " + (selected.length - 1) + " others.";
       }
     };
+    var newsels;
     if (e.hasClass("selected")) {
       // remove from list
       e.removeClass("selected");
       sels = h.getAttribute("value").split(",");
       // strip out the element, using valentine
-      var newsels = v(sels).filter(function(i){return i!==elem.getAttribute("data-box-value")});
-      h.setAttribute("value",newsels.join(","));
-      d.innerHTML = display(newsels);
+      newsels = v(sels).filter(function(i){return i!==elem.getAttribute("data-box-value")});
     } else {
       // add to list
       e.addClass("selected");
@@ -76,10 +101,16 @@ bean.add(document, 'DOMContentLoaded', function () {
       } else {
         sels = val.split(",");
       }
-      var newsels = sels.concat([elem.getAttribute("data-box-value")]);
-      h.setAttribute("value",newsels.join(","));
-      d.innerHTML = display(newsels);
+      newsels = sels.concat([elem.getAttribute("data-box-value")]);
     }
+    h.setAttribute("value",newsels.join(","));
+    allt = elem.parentNode.childNodes[1];
+    if (newsels.length === num_people) {
+      allt.setAttribute("data-all-selected",1);
+    } else {
+      allt.setAttribute("data-all-selected",0);
+    }
+    d.innerHTML = display(newsels);
   });
   
   // generic close boxs (num is how far up to go)

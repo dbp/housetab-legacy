@@ -113,7 +113,13 @@ boxField :: Monad m => Splice m
 boxField = boxFieldGen "box-field" id [X.Element "div" [("class","close")] [X.TextNode "X"]]
 
 boxFieldMulti :: Monad m => Splice m
-boxFieldMulti = boxFieldGen "box-field-multi" id [X.Element "div" [("class","close")] [X.TextNode "X"]]
+boxFieldMulti = do
+  node <- getParamNode
+  let allprompt = case X.getAttribute "allprompt" node of
+                    Nothing -> "ALL"
+                    Just a -> a
+  boxFieldGen "box-field-multi" id [ X.Element "div" [("class", "all-toggle")] [X.TextNode allprompt]
+                                   , X.Element "div" [("class","close")] [X.TextNode "X"]]
   {-where countSelected t = T.concat [T.pack (show (if T.length t == 0 then 0 else length (T.splitOn "," t)))
                                    ," selected."
                                    ]-}
@@ -132,7 +138,7 @@ boxFieldGen typ sel extra = do node <- getParamNode
                                                   , X.Element "div" [("class","box"),("style","display:none;")] 
                                                     ([X.Element "div" [("class","point")] []] ++ extra ++ (X.elementChildren node))
                                                   ]
-                                   return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value"]).fst) $ X.elementAttrs node) children]
+                                   return [X.setAttribute "class" klass $ X.Element "div" (filter ((flip notElem ["name","value","display","allprompt"]).fst) $ X.elementAttrs node) children]
 
 boxOption :: Monad m => Splice m
 boxOption = do node <- getParamNode

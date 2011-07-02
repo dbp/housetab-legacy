@@ -59,7 +59,7 @@
 	  <p>Users:</p>
     <div class="errors"><for-errors><error/></for-errors></div>
     <bind tag="peopleshow"><lookupPeopleShow value="$(for-value)"/></bind>
-    <box-field-multi name="for" value="$(for-value)" display="$(peopleshow)" class="">
+    <box-field-multi name="for" value="$(for-value)" display="$(peopleshow)" allprompt="ALL USERS" class="">
     <people>
       <box-option value="$(personId)">
         <personName/>

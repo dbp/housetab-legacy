@@ -63,6 +63,16 @@
   color: black;
 }
 
+.box-field-multi .box .all-toggle {
+  width: 100px;
+  text-align: center;
+  border-bottom: 1px solid black;
+}
+
+.box-field-multi .box .all-toggle:hover {
+  cursor: pointer;
+}
+
 .errors {
   position: absolute;
   top: 25px;
