@@ -13,10 +13,15 @@
 
 #history {
   min-height: 200px;
+  margin-left: 48px;
 }
 
 #history .col {
   float: left;
+}
+
+#history .col {
+  text-align: center;
 }
 
 #history .col0 {
@@ -45,7 +50,7 @@
 }
 
 #history .col2 {
-  width: 100px;
+  width: 50px;
 }
 
 #history .col2 .category {
@@ -98,7 +103,7 @@
 }
 
 #history .col2 .more {
-  left: 23px;
+  left: -5px;
 }
 
 
@@ -121,7 +126,7 @@
 }
 
 #history .col5 .more {
-  left: 40px;
+  left: 15px;
 }
 
 
