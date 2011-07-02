@@ -32,7 +32,12 @@ bean.add(document, 'DOMContentLoaded', function () {
         }
       }
     });
-    bonzo(bonzo(elem).next()).show(); // show the box
+    m = bonzo(bonzo(elem).next());
+    if (m.css("display") === "none") {
+      m.css("display", "block");
+    } else {
+      m.css("display", "none");
+    }
   });
   // declare("click", ".box-field-multi .box .close", true, function (elem) {
   //   bonzo(elem.parentNode).hide();

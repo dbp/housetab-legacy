@@ -16,8 +16,16 @@
   height: 20px;
 }
 
-.box .option.selected {
-  background-color: gray;
+.box .close:hover {
+  cursor: pointer;
+} 
+
+.box-field-multi .box .option {
+  background: transparent url("/img/Icons/checkbox.png") no-repeat center left;
+}
+
+.box-field-multi .box .option.selected {
+  background-image: url("/img/Icons/checkbox_sel.png");
 }
 
 .box-field .box, .box-field-multi .box {
@@ -33,6 +41,9 @@
 
 .box-field .box .option, .box-field-multi .box .option {
   cursor: pointer;
+  width: 120px;
+  height: 20px;
+  margin: 3px;
 }
 
 .errors {

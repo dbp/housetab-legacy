@@ -4,7 +4,7 @@
       <apply template="name"></apply>
     </h2>
     <p>shares: <personCurrentShare/></p>
-    <p><personCurrentPercent/>%</p>
+    <p class="percent"><personCurrentPercent/>%</p>
     <apply template="share/hide"></apply>
   </show>
 </div-async>

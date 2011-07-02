@@ -269,10 +269,10 @@
     background-image: url("/img/Categories/utilities.png");
   }
   
-	.category .box-field .box {
-	  width: 250px;
-	  left: -20px;
-  }
+/*  .category .box-field .box {
+    width: 250px;
+    left: -20px;
+  }*/
 	
 	
 	#loginform {

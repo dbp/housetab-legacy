@@ -222,11 +222,15 @@
 		margin-bottom: 3px;
 	}
 	
-	.balance {
+	.person .balance {
 		text-align: right;
 		margin-right: 6px;
 		font-size: 18px;
 		}
+		
+	.person .percent {
+	  margin-top: 5px;
+	}
 	
 	.shares a {
 		text-decoration: none;
@@ -377,6 +381,7 @@
 		margin-left: 48px;
 		font-size: 15px;
 		width: 853px;
+		min-height: 200px;
 	}
 
 	#purchases .purchase {
@@ -644,6 +649,7 @@ form.add-share button, #purchases .entry-form button, .edit-person button {
 	border: 0; 
 	cursor: pointer;
 	float: right;
+	position: relative;
 }
 
 form.add-share button, #purchases .entry-form button {
@@ -674,12 +680,17 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
   background-color: white;
   padding: 5px;
   font-size: 14px;
+}
+
+.shares-box.hidden {
+  background-color: transparent;
 /*  margin-bottom: 10px;
 */}
 
+
 .shares-box.showing {
 /*  z-index: 20;*/
-position: relative;
+  position: relative;
 }
 
 a {
