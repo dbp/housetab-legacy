@@ -34,7 +34,7 @@
     <apply template="settings/navbar1"></apply>
 		<div id="navbarcontents2">
 			<div id="subnav">
-        <div id="subnav2b"><more-box>
+        <div id="subnav2b"><more-box class="delete-box">
 			    Delete Account
 			    <more>
 			      Are you SURE you want to delete your account? This CANNOT be undone, and there will be NO way or recovering any of your information. <form method="POST" action="/account/delete"><button type="submit">Yes</button></form> <button class="close">No</button>
@@ -67,7 +67,7 @@
 			<div id="bt3">
 				<h3>today's date</h3>
 				<p><currentDateLong/></p>
-          <more-box class="delete-history">
+          <more-box class="delete-history delete-box">
   				<historyOn>
             Delete All History and Stop Recording.
           </historyOn>

@@ -480,21 +480,14 @@
 		width: 45px;
 		padding: none;
 	}
-	
-	.col2 .delete-box {
-	  position: absolute;
-	  top: 20px;
-	  border: 1px solid red;
-	  background-color: white;
-	  padding: 5px;
-	  width: 150px;
-	  z-index: 100;
+	.col2 .delete-box .more {
+	  width: 100px;
+	  left: -45px;
 	}
-	
-	.col2 .delete-box form {
-	  color: black;
-	  display: inline-block;
-  }	
+/*  .col2 .delete-box form {
+    color: black;
+    display: inline-block;
+  } */
 	
 	.col3 {
 		width: 110px;
