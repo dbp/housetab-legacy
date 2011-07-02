@@ -6,7 +6,7 @@
 
 
   <bind tag="above">
-
+    <div class="height-block"/>
   </bind>
 
   <bind tag="navbar">

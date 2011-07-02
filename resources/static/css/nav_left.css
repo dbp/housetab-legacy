@@ -3,9 +3,10 @@
 	/*Main Navigation*/
 	
 	
-	#abovecontents {
-/*    min-height: 220px;
-*/	}
+	.height-block {
+    min-height: 220px;
+    width: 100%;
+	}
 	
 	#sel_settings {
 		float: left;
