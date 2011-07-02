@@ -1,6 +1,6 @@
 <apply template="base">
   <p>
-    Now keep settings shares, or move on to the next step of the tutorial:
+    Continue adding users and setting shares, or move on to the next step of the tutorial:
   </p>
   
   <p>
