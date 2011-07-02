@@ -91,6 +91,8 @@
   top: 25px;
   background-color: white;
   padding: 0;
-  color: black;
+  color: #C42700;
+  font-size: 15px;
+  text-align: left;
   width: 100px;
 }
