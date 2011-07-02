@@ -5,7 +5,7 @@
 	}
 	
 	h1 {
-		font-family: 'adobe caslon pro';
+		font-family: "times new roman";
 		font-weight: normal;
 		font-size: 16px;
 		text-align: center;
@@ -723,7 +723,11 @@
 
 
 /* Misc stuff */
-form.add-share button, #purchases .entry-form button, .edit-person button, .delete-box button  {
+a.button {
+  display: block;
+}
+
+form.add-share button, #purchases .entry-form button, .edit-person button, .delete-box button, a.button  {
   background: transparent url("/img/Icons/submit.png") no-repeat  center center;
  	width: 36px;
 	height: 18px;
@@ -773,7 +777,7 @@ form.add-share .value {
   width: 30px;
 }
 
-form.add-share button:hover, #purchases .entry-form button:hover, .edit-person button:hover, .delete-box button:hover {
+form.add-share button:hover, #purchases .entry-form button:hover, .edit-person button:hover, .delete-box button:hover, a.button:hover {
   background-image: url("/img/Icons/submit_mo.png");
 }
 

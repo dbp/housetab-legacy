@@ -16,6 +16,10 @@
   margin-left: 48px;
 }
 
+#history .col1 .icon {
+  cursor: auto;
+}
+
 #history .col {
   float: left;
 }

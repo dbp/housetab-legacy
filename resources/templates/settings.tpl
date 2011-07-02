@@ -79,10 +79,10 @@
               <historyOn>You cannot undo this.</historyOn>
               <br><br>
               <historyOn>
-                <a-async href="/history/deactivate">Yes</a-async>
+                <a-async href="/history/deactivate" class="button"></a-async>
               </historyOn>
               <historyOff>
-                <a-async href="/history/activate">Yes</a-async>
+                <a-async href="/history/activate" class="button"></a-async>
               </historyOff>
             </more>
           </more-box>
