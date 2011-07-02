@@ -4,7 +4,7 @@
       <show notblank="$(personId)">
 	      <h2><personName/></h2>
         <p>spent <personSpent/></p>
-        <p class="percent"><personCurrentShare/>%</p>
+        <p class="percent"><personCurrentShare/></p>
         <p class="balance"><personOwes/></p>
       </show>
     </div>

@@ -414,7 +414,7 @@
     clear: both;
   }
 	
-	#purchases .heading {
+	#purchases .heading, #history .heading {
 		font-family: "adobe caslon pro";
 		font-weight: normal;
 		color: #5082A0;

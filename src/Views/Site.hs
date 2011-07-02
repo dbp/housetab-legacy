@@ -110,7 +110,7 @@ categoryName = do node <- getParamNode
                      Just id' -> return $ maybeToList $ fmap X.TextNode $ M.lookup id' catNames
 
 boxField :: Monad m => Splice m
-boxField = boxFieldGen "box-field" id []
+boxField = boxFieldGen "box-field" id [X.Element "div" [("class","close")] [X.TextNode "X"]]
 
 boxFieldMulti :: Monad m => Splice m
 boxFieldMulti = boxFieldGen "box-field-multi" id [X.Element "div" [("class","close")] [X.TextNode "X"]]
