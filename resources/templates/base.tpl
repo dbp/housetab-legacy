@@ -41,16 +41,16 @@
         <ifLoggedIn>
       	<div id="abovecontents">
           <above/>
-          <div class="clearfix"/>
         </div>
         </ifLoggedIn>
         <ifGuest>
           <div id="abovecontents">
             <above/>
-            <div class="clearfix"/>
           </div>
         </ifGuest>
       </div>
+      <div class="clearfix"/>
+      
     </show>
     
     <show notblank="$(navbar)">

@@ -4,7 +4,7 @@
   </p>
   
   <p>
-    3. Go to the entries page.
+    <span class="num">3.</span> Go to the entries page.
   </p>
 </apply>
 

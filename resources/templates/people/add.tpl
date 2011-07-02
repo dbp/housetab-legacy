@@ -15,7 +15,3 @@
     </div>
   </tutorial>
 </div-async>
-
-<tutorial step="2">
-  <apply template="/tutorial/2"></apply>
-</tutorial>

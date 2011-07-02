@@ -4,6 +4,6 @@
   </p>
   
   <p>
-    1. Add at least one user to your account.
+    <span class="num">1.</span> Add at least one user to your account.
   </p>
 </apply>

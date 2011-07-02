@@ -4,6 +4,6 @@
   </p>
   
   <p>
-    4. Add your first purchase.
+    <span class="num">4.</span> Add your first purchase.
   </p>
 </apply>

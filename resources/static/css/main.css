@@ -196,6 +196,8 @@
 		border-right: 1px solid #424242;
 		border-bottom: 1px solid #424242;
 		float: left;
+/*    position: relative;
+    z-index: 2;*/
 	}
 		
 	.person.last {
