@@ -192,7 +192,12 @@
 	}
 	
 	.enform1 .box-field .box {
-	  left: -25px;
+	  left: 0px;
+	  width: 80px;
+	}
+	
+	.enform1 .box-field .box .option {
+	  padding-left: 5px;
 	}
 	
 	.enform2 input {
