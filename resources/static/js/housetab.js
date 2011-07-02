@@ -24,8 +24,10 @@ bean.add(document, 'DOMContentLoaded', function () {
     opts = v(bonzo(elem).next()[0].childNodes).toArray().filter(function(n){return n.hasAttribute && n.hasAttribute("data-box-value")});
     allt = bonzo(elem).next()[0].childNodes[1];
     if (sels.length === opts.length) {
+      bonzo(allt).addClass("selected");
       allt.setAttribute("data-all-selected",1);
     } else {
+      bonzo(allt).removeClass("selected");
       allt.setAttribute("data-all-selected",0);
     }
     v(opts).each(function(n) {
