@@ -9,4 +9,5 @@
       </show>
     </div>
   </result>
+  <div class="clearfix"/>
 </div-async>
