@@ -61,7 +61,7 @@
 			</div>
 			
 			<div id="bt3">
-				<h3>today's date is</h3>
+				<h3>today's date</h3>
 				<p><currentDateLong/></p>
 			</div>
 		</div>

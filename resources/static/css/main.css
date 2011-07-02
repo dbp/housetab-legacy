@@ -92,10 +92,6 @@
 		position: relative;
 	}
 	
-	#adduser h2 {
-		margin-left: 124px;
-	}
-	
 	#adduser p {
 		font-size: 15px;
 	}
@@ -324,12 +320,22 @@
 		height: 144px;
 	}
 	
+	#bt1b {
+		margin: 0;
+		background-image: url("/img/Other/telescope.png");
+		float: left;
+		width: 144px;
+		height: 144px;
+	}
+	
+	
 	#bt2 {
 		margin: 0;
 		float: left;
 		width: 576px;
 		height: 144px;
 	}
+	
 	
 	#bt2 img {
 		margin: 0;

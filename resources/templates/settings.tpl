@@ -53,7 +53,7 @@
   
   <bind tag="below">
     <div id="belowtop">
-			<div id="bt1">
+			<div id="bt1b">
 			</div>
 			
 			<div id="bt2">
@@ -64,8 +64,28 @@
 			</div>
 			
 			<div id="bt3">
-				<h3>today's date is</h3>
+				<h3>today's date</h3>
 				<p><currentDateLong/></p>
+          <more-box class="delete-history">
+  				<historyOn>
+            Delete All History and Stop Recording.
+          </historyOn>
+          <historyOff>
+            Turn on History Recording
+          </historyOff>
+            <more>
+              Are you sure you want to do this? 
+              <historyOn>You cannot undo this.</historyOn>
+              <br><br>
+              <historyOn>
+                <a-async href="/history/deactivate">Yes</a-async>
+              </historyOn>
+              <historyOff>
+                <a-async href="/history/activate">Yes</a-async>
+              </historyOff>
+              <button class="close">Cancel</button>
+            </more>
+          </more-box>
 			</div>
 		</div>
 
