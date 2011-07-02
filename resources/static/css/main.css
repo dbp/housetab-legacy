@@ -401,17 +401,21 @@
 		position: relative;
 	}
 
+
 	#purchases .purchase .col input, #purchases .purchase .col .display {
 	  border: 1px solid #555;
-	  margin-bottom: 2px;
+/*    margin-bottom: 5px;*/
+	  display: block;
+	  height: 16px;
+	  margin-left: 5px;
 	}
 	
 	 #purchases .purchase .col .display {
 	   font-size: 13px;
 	   padding-left: 5px;
 	   padding-right: 5px;
-	   height: 16px;
- 	  margin-bottom: 2px;
+     height: 14px;
+/*     margin-bottom: 2px;*/
 	 }
 	
   #purchases .purchase .deleted {
@@ -501,7 +505,6 @@
 	
 	.col3 .display {
 	  width: 97px;
-	  margin-left: 5px;
 	}
 	
 	.col4 {
@@ -725,7 +728,7 @@ form.add-share button {
   background-color: white;
 }
 
-form.add-share button, #purchases .entry-form button {
+#purchases .entry-form button {
 	margin-right: -40px;
 }
 
@@ -765,6 +768,34 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
 .shares-box.showing {
   z-index: 20;
   position: relative;
+  border: 1px solid black;
+  margin: 0px 5px;
+}
+
+.shares-box h5 {
+  margin: 0px;
+  font-weight: normal;
+  border-bottom: 1px solid black;
+  text-align: left;
+  font-size: 1em;
+}
+
+.shares-box form {
+  text-align: left;
+  margin: 5px 5px;
+}
+
+.shares-box form button {
+  float: none;
+}
+
+.shares-box input {
+  border: 1px solid black;
+}
+
+.shares-box .share {
+  font-size: 13px;
+  margin: 3px 0px;
 }
 
 a {

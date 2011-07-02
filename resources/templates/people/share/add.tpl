@@ -3,7 +3,8 @@
     <share-errors><error/><br></share-errors>
     <date-errors><error/><br></date-errors>
     <input name="share" type="text" value="$(share-value)"  class="value" title="value"/>
-    as of
+    as of<br>
+    
     <input name="date" type="text" value="$(date-value)" class="date" title="date"/>
     <button type="submit" title=""/>
   </form-async>

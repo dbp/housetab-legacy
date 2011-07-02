@@ -108,8 +108,8 @@ hideShares :: User -> Person -> Application ()
 hideShares user person = heistLocal (bindSplices (renderPerson person)) $ renderHT "people/share/hide"
 
 shareErrorsBlank = [("date-errors", blackHoleSplice)
-                   ,("value-errors", blackHoleSplice)
-                   ,("value-value", textSplice "")
+                   ,("share-errors", blackHoleSplice)
+                   ,("share-value", textSplice "")
                    ]
 
 showShares :: User -> Person -> Application ()
