@@ -81,7 +81,7 @@
 
   			<p>This is open source software written in the purely functional programming language Haskell with the framework <a href="http://snapframework.com" target="_blank">Snap</a> and the <a href="http://mongodb.org" target="_blank">MongoDB</a> database - feel free to grab the <a href="http://darcsden.com/position/housetab" target="_blank">source</a>, make changes and send patches to <a href="mailto:daniel@positionstudios.com">daniel@positionstudios.com</a>, or the committer email address, and I'll integrate them in if they are useful. </p>
 
-  			<p>If you are not a programmer, you can also support the project by <a href="https://www.wepay.com/donate/99127" targen="_blank">donating</a>.</p>
+  			<p>If you are not a programmer, you can also support the project by <a href="https://www.wepay.com/donate/99127" target="_blank">donating</a>.</p>
 
   		</div>
 
