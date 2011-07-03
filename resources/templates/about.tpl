@@ -13,7 +13,7 @@
  
   <bind tag="above">
   	<div id="abovecontents">
-  		<p class="about">Housetab.org is a site that allows groups of people to create collective &ldquo;house tabs&rdquo;, where they can record expenses that are shared by more than one person in the group, and flexibly make sure costs are being shared equitably. You can imagine the need for it if you live in a house (or organization) that buys groceries as a group, pay bills as a group, etc, and have to keep track of who owes who what.</p>
+  		<p class="about">Housetab.org is a site that allows groups of people to create collective &lsquo;house tabs&rsquo;, where they can record expenses that are shared by more than one person in the group, and flexibly make sure costs are being shared equitably. You can imagine the need for it if you live in a house (or organization) that buys groceries as a group, pay bills as a group, etc, and have to keep track of who owes who what.</p>
   	</div>
   </bind>
   
