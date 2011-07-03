@@ -45,7 +45,7 @@ It was pointed out in the development of this that there is no reason why this h
     -------------------------------------------------------------------------------
     Language                     files          blank        comment           code
     -------------------------------------------------------------------------------
-    Haskell                         29            444             82           2226
-    Heist                           59            153             11           1067
-    Javascript                       2              4             17            114
+    Haskell                         29            445             82           2251
+    Heist                           59            149              9           1111
+    Javascript                       2              4             21            162
  
