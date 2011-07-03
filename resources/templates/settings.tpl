@@ -43,7 +43,7 @@
 			  </div>
         <div id="subnav_settings"></div>
         <div id="subnav1"><p><a href="#top">See User Settings</a></p></div>
-        <div id="subnav2"><p><a href="#below">History of Changes</a></p></div> 
+        <div id="subnav2"><p><a href="#below">Account History</a></p></div> 
         <apply template="settings/subnav1b"></apply>
 			</div>
 			<div id="subnav3"><p>Update Account Settings</p></div>
@@ -58,7 +58,7 @@
 			</div>
 			
 			<div id="bt2">
-				<h1>LIST OF CHANGES</h1>
+				<h1>ACCOUNT HISTORY</h1>
 				<img src="/img/Glyphs/glyph_below.png" />
 				<h3>for the account of</h3>
 				<p><accountName/></p>
