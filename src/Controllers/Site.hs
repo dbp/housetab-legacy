@@ -83,7 +83,7 @@ site = do
              -- if they are logged in already, redirect to entries
              , ("/login",                       requireUser mzero $ redirect "/entries#navbar")
              , ("/login",                       method GET $ noRequireUser $ loginH)
-             , ("/login",                       method POST $ noRequireUser $ loginHandler "password" Nothing (const loginH) loginSuccess)
+             , ("/login",                       method POST $ noRequireUser $ loginHandler "password" Nothing (const loginFailure) loginSuccess)
              , ("/logout",                      method GET $ noRequireUser $ logoutHandler redirTo)
              , ("/activate",                    noRequireUser $ activateAccountH)
              , ("/changeemail",                 noRequireUser $ changeEmailH)

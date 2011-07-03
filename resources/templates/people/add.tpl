@@ -1,6 +1,10 @@
 <div-async name="add-person" class="addPerson" id="adduser">
   <form-async action="/people/add" method="POST">
-    <name-errors><error/> </name-errors>
+    <name-errors>
+      <div class="error">
+        <error/>
+      </div>
+    </name-errors>
     <h2><label for="name">Add a new user:</label></h2>
     <input name="name" type="text" value="$(name-value)" />
     <button type="submit" title="" class="addform_submit" />

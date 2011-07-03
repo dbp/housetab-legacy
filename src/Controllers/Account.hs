@@ -96,6 +96,9 @@ redirTo = do r <- getParam "redirectTo"
 loginH :: Application ()
 loginH = renderHT "account/login"
 
+loginFailure :: Application ()
+loginFailure = heistLocal (bindSplice "failure" (textSplice "yes")) $ renderHT "account/login"
+
 loginSuccess :: Application ()
 loginSuccess = do u <- currentUser
                   recalculateTotals (fromJust u)

@@ -296,7 +296,13 @@
 	#loginform {
     margin-left: 220px;
 		display: inline-block;
+		position: relative;
 	}
+	
+	#loginform .errors {
+	  width: 250px;
+	  left: 120px;
+  }
 	
 	#navbar p {
 	  color: white;

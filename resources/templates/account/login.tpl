@@ -30,6 +30,9 @@
   	  	<div id="subnav3"><p>Log in Below</p></div>
   	  	<form method="POST" id="loginform">
   	  		<p>Account:</p><input type="text" name="accountName" class="logform" value="" />
+  	  		<show notblank="$(failure)">
+  	  		  <div class="errors">Incorrect username or password.</div>
+          </show>
   	  		<p>Password:</p><input type="password" name="password" class="logform" value="" />
   	  		<button type="submit" class="b"/>    	  	
   	  	</form>

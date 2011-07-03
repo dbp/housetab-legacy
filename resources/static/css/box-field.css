@@ -96,3 +96,8 @@
   text-align: left;
   width: 100px;
 }
+
+.error {
+  color: #C42700;
+  font-size: 15px;
+}

@@ -782,6 +782,10 @@ form.add-share button:hover, #purchases .entry-form button:hover, .edit-person b
   background-image: url("/img/Icons/submit_mo.png");
 }
 
+#payments-table .edit-person form {
+  margin-bottom: 0;
+}
+
 .shares-box {
   background-color: white;
   padding: 5px;
