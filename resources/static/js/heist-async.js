@@ -50,8 +50,12 @@
     lct = e.target || e.srcElement;
 
     if (lct && lct.nodeName === "BUTTON") {
-      bonzo(lct).addClass("processing");
-      return;
+      if (bonzo(lct).hasClass("processing")) {
+        return false; // this button has already been submitted
+      } else {
+        bonzo(lct).addClass("processing");
+        return;
+      }
     }
 
     var elem = nearest(lct, 'A') || htm,
