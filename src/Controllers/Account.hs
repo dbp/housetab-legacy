@@ -129,7 +129,7 @@ signupH = do
                    
 signupForm :: SnapForm Application T.Text HeistView SignupCreds
 signupForm = mkSignupCreds
-    <$> input "name" Nothing `validate` nonEmpty <++ errors
+    <$> input "name" Nothing `validate` nonEmpty `validate` noSpaces `validate` uniqueUser <++ errors
     <*> passwordForm
     <*> input "email" Nothing `validate` validEmail <++ errors
    where mkSignupCreds n (NewPassword p _) e  = SignupCreds (B8.pack n) (B8.pack p) (B8.pack e)

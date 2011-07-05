@@ -13,7 +13,11 @@ import            Data.Bson
 import            Data.List.Split
 import qualified  Data.Text as T
 
+import            Snap.Extension.DB.MongoDB
+
 import qualified  Data.Map as M
+
+import            Data.Maybe (isNothing)
 
 import            Snap.Auth
 
@@ -66,3 +70,13 @@ checkPassword user = checkM "Incorrect password." $ \password ->
      case res of
        Left _ -> return False -- not the right credentials
        Right _ -> return True
+
+noSpaces :: Validator Application Text String
+noSpaces = check "Cannot have spaces" $ \word -> not $ ' ' `elem` word
+       
+uniqueUser :: Validator Application Text String
+uniqueUser = checkM "Username already taken, please choose another" $ \user ->
+  do ex <- withDB $ findOne $ select ["accountName" =: user] "users"
+     case ex of
+       Left _ -> return False -- something went wrong, play it on the safe side
+       Right r -> return $ isNothing r
