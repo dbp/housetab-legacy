@@ -198,10 +198,8 @@
 	}
 	
 	#subnav3 {
-
-		height: 21px;
+		height: 19px;
 		margin: 0;
-
 	}
 	
 	#subnav3 p {
@@ -220,7 +218,7 @@
 		background-image: url("/img/Icons/submit.png");
 		border: 0;
 		width: 36px;
-		height: 18px;	
+    height: 18px; 
 	}
 	
 	#adduser .addform_submit:hover {
@@ -233,7 +231,7 @@
 		margin: 0;
 		text-align: center;
 		color: white;
-		height: 20px;
+		height: 23px;
 	}
 	
 	#navbarcontents2 form p {
@@ -242,9 +240,7 @@
 		display: inline-block;
 		margin: 0;
 		margin-right: 5px;
-		vertical-align: top;
-		margin-top: 1px;
-
+		vertical-align: middle;
 	}	
 	
 	.settings-form .field {
