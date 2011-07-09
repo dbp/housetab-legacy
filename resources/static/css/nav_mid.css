@@ -152,10 +152,8 @@
 	}
 	
 	#subnav3 {
-
-		height: 21px;
+		height: 19px;
 		margin: 0;
-
 	}
 	
 	#navbar #subnav3 p {
@@ -180,7 +178,7 @@
 		font-family: "times new roman";
 		font-size: 15px;
 		display: inline-block;
-		vertical-align: top;
+		vertical-align: middle;
 		position: relative;
 		margin: 0;
 /*    margin-right: 5px;
@@ -318,7 +316,6 @@
 	
 	.logform {
 		width: 144px;
-		height: 16px
 	}
 	
 	#loginform button.b {
