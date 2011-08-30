@@ -120,7 +120,10 @@ addEntry user = do
                    nu <- recalculateTotals user
                    entriesSplice <- entriesPage people 0 nu
                    tutorialStep user "4" "5"
-                   heistLocal (bindSplices [("entries",entriesSplice),("result",(renderResult  $ currentResult nu))]) $
+                   heistLocal (bindSplices 
+                        [("entries",entriesSplice)
+                        ,("result",(renderResult  $ currentResult nu))
+                        ,("for-value", textSplice $ T.intercalate "," $ map (TE.decodeUtf8 . objid2bs) $ mapMaybe pId people)]) $
                       renderHT "entries/add_success"                
  
 editEntry :: User -> Application ()
