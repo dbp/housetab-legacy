@@ -8,16 +8,17 @@
 */  background-color: white;
   color: black;
   height: 12px;
+  cursor: pointer;
 }
 
 .box .close {
   float: right;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 .box .close:hover {
-  cursor: pointer;
 } 
 
 .box-field-multi .box .option {
