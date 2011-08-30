@@ -65,7 +65,7 @@ instance MonadAuth Application where
 -- to worry about.
 applicationInitializer :: Initializer ApplicationState
 applicationInitializer = do
-    heist <- heistInitializer "resources/templates"
+    heist <- heistInitializer "resources/templates" id
     cookie <- cookieSessionStateInitializer $ defCookieSessionState
               { csKeyPath = "config/site-key.txt" 
               , csCookieName = "housetab-session" }
