@@ -19,7 +19,7 @@ import            Data.Aeson
 import qualified  Data.Vector as V
 
 import            Snap.Extension.Heist
-import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing)
+import            Data.Maybe (fromMaybe, fromJust, isJust, isNothing, mapMaybe)
 import qualified  Data.Bson as B
 import            Data.List (sortBy, sort, group, groupBy)
 import            Data.Ord (comparing)
@@ -33,6 +33,7 @@ import            Text.Digestive.Validate
 import            Text.Digestive.Transform
 import            Data.Text (Text)
 import            Text.Templating.Heist
+import qualified  Text.XmlHtml as X
 
 import            Data.Time.Calendar
 import            Data.Time.LocalTime
@@ -56,18 +57,18 @@ showCharts user = do entries <- getHouseTabEntriesAll (authUser user)
                      (heistLocal $ (bindSplices
                       ([ ("result",           (renderResult  $ currentResult user))
                        , ("totalSpent",       textSplice $ T.pack $ moneyShow $ getTotalSpent user)
-                       , ("categories",       categoryData categories)
+                       , ("category-data",       categoryData categories)
                        , ("entriesPage",      textSplice $ "1")
                        , ("for-value",        textSplice $ T.intercalate "," $ map (TE.decodeUtf8 . objid2bs) $ mapMaybe pId people)
                        ]))) $ renderHT "charts"
 
 calculateCategoryTotals :: [HouseTabEntry] -> [(BS.ByteString,Double)]
 calculateCategoryTotals entries = 
-    normalize $ foldr totals [] $ groupBy cmp $ sortBy (comparing fst) $ map (\e -> (eCategory e,eHowMuch e)) entries
-  where cmp e1 e2 = (fst e1) == (fst e2))
+    normalize $ foldr totals [] $ groupBy cmp $ sortBy (comparing fst) $ map (\e -> (eCategory e,eHowmuch e)) entries
+  where cmp e1 e2 = (fst e1) == (fst e2)
         totals [] b = b
         totals ((cat,n):xs) b = (cat,sum (n:(map snd xs))):b
         normalize ls = let total = sum (map snd ls) in map (\(c,n) -> (c,n/total * 100)) ls
         
 categoryData :: [(BS.ByteString,Double)] -> Splice Application
-categoryData cs = [X.Element "script" [("type","text/javascript")] [X.TextNode ("var cat-data = " + (show $ map snd cs) + ";"), X.TextNode ("var cat-legend = " + (show $ map ((B.append "%% ").fst) cs) + ";")]]
+categoryData cs = return [X.Element "script" [("type","text/javascript")] [X.TextNode $ T.pack ("var cat_data = " ++ (show $ map snd cs) ++ ";"), X.TextNode $ T.pack ("var cat_legend = " ++ (show $ map ((BS.append "%% ").fst) cs) ++ ";")]]

@@ -6,7 +6,7 @@
     <script type="text/javascript" src="/js/raphael-min.js"></script>
     <script type="text/javascript" src="/js/g.raphael-min.js"></script>
     <script type="text/javascript" src="/js/g.pie-min.js"></script>
-    <category-data/>
+    <category-data></category-data>
     <script type="text/javascript">
         window.onload = function() {
             // Creates canvas 640 × 480 at 10, 50
@@ -14,7 +14,8 @@
             // Creates pie chart at with center at 320, 200,
             // radius 100 and data: [55, 20, 13, 32, 5, 1, 2]
             // Add legend to piechart.
-            var pie = r.g.piechart(300, 240, 90, cat-data, {legend:cat-legend, legendpos: "west"});
+            var pie = r.g.piechart(300, 240, 90, cat_data, {legend:cat_legend, legendpos: "west"});
+r.text(320, 100, "Total By Category").attr({ font: "20px sans-serif" });
         }
     </script>
     
