@@ -123,6 +123,7 @@ addEntry user = do
                    heistLocal (bindSplices 
                         [("entries",entriesSplice)
                         ,("result",(renderResult  $ currentResult nu))
+                        , ("entriesPage",      textSplice $ "1")
                         ,("for-value", textSplice $ T.intercalate "," $ map (TE.decodeUtf8 . objid2bs) $ mapMaybe pId people)]) $
                       renderHT "entries/add_success"                
  

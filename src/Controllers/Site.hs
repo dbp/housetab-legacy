@@ -45,6 +45,7 @@ import            Snap.Logging.MongoDB
 import            Views.Site
 import            Controllers.Account
 import            Controllers.Entry
+import			  Controllers.Chart
 import            Controllers.Person
 import            Controllers.History
 import            Controllers.Settings
@@ -62,7 +63,8 @@ site = do
              , ("/entries/add",                 requireUserBounce' $ addEntry)              
              , ("/entries/show/:id",            requireUserBounce' $ showEntry)              
              , ("/entries/edit/:id",            requireUserBounce' $ editEntry)              
-             , ("/entries/delete/:id",          requireUserBounce' $ deleteEntry)              
+             , ("/entries/delete/:id",          requireUserBounce' $ deleteEntry)
+			 , ("/charts",						requireUserBounce' $ showCharts)           
              , ("/people/add",                  requireUserBounce' $ addPerson)
              , ("/people/list",                 requireUserBounce $ listPeople)
              , ("/people/:person",              requireUserBounce' $ personH)
