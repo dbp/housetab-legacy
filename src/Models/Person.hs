@@ -17,6 +17,8 @@ import            Data.Typeable
 import qualified  Data.Map as M
 import            Data.Maybe (catMaybes, listToMaybe, isNothing, fromMaybe)
 import            Data.List.Split (splitOn)
+import            Data.List (sortBy)
+import            Data.Ord (comparing)
 import            Control.Monad
 import            Control.Monad.Trans
 import            Control.Monad.Reader
