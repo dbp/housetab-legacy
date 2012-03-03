@@ -9,7 +9,6 @@
     <category-data></category-data>
     <script type="text/javascript">
         window.onload = function() {
-            // Creates canvas 640 × 480 at 10, 50
             var r = Raphael('category-chart');
             // Creates pie chart at with center at 320, 200,
             // radius 100 and data: [55, 20, 13, 32, 5, 1, 2]

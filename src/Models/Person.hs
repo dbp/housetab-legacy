@@ -83,5 +83,5 @@ instance Val Person where
       h <- B.lookup "htid"   fields
       n <- B.lookup "name"   fields
       s <- B.lookup "shares" fields
-      return (Person i h n s)
+      return (Person i h n (sortBy (comparing sDate) s))
     cast' _ = Nothing
